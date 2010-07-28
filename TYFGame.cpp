@@ -22,6 +22,7 @@
 
 #include "TYFGame.h"
 #include "TYFPlayer.h"
+#include "helper.h"
 #include "TYFUITemplate.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,15 +42,6 @@ using namespace std;
 //#define DEBUG 1
 
 /*
- * Univeral Random Number Getter.
- * Awesome. Pure Awesome.
- * */
-int random(int min, int max)
-{
-	return rand() % (max - min + 1) + min;
-}
-
-/*
  * constructor
  * */
 TYFGame::TYFGame(TYFUITemplate *UI)
@@ -64,6 +56,7 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->Time.Time = 15*60;
 	this->Time.Quarter = 0;
 	this->clockStopped = false;
+	this->TwoMinuteWarning = false;
 	
 	// init teams
 	this->Teams[0] = new TYFTeam("CHI");
@@ -104,7 +97,8 @@ PlayReturn TYFGame::nextPlay()
 			{
 				this->UI->endPlay(PLAY_SAFETY);
 				this->getOtherTeam()->scorePoints(2);
-				this->doKickOff();
+				this->setBallPosition(20);
+				this->doPunt();
 			}
 			
 			// first down check
@@ -162,16 +156,16 @@ void TYFGame::doAction()
 			// various Pass Length
 			this->doPass(PASS_NORMAL);
 			if (this->clockStopped)
-				this->advanceTime(random(10, 25));
+				this->advanceTime(random(10, 26));
 			else
-				this->advanceTime(random(20, 35));
+				this->advanceTime(random(20, 36));
 		}
 		else
 		{
 			this->doRun();
 			
 			if (this->clockStopped)
-				this->advanceTime(random(20, 35));
+				this->advanceTime(random(10, 23));
 			else
 				this->advanceTime(random(30, 45));
 		}
@@ -220,6 +214,16 @@ void TYFGame::advanceTime(int n)
 		{
 			this->Time.Time = 0;
 		}
+	}
+	bool isTwoMin = (((this->Time.Quarter == 2) || (this->Time.Quarter == 4)) && (this->Time.Time <= 2*60));
+	if (!isTwoMin)
+		this->TwoMinuteWarning = false;
+	else if (isTwoMin != this->TwoMinuteWarning)
+	{
+		this->UI->callTwoMinuteWarning();
+		this->TwoMinuteWarning = true;
+		this->Time.Time = 2*60;
+		this->stopClock();
 	}
 }
 
@@ -386,6 +390,28 @@ TYFTeam* TYFGame::getThisTeam()
 }
 
 /*
+ * determines if a player ran out of bounds on a play
+ * */
+bool TYFGame::isPlayOutOfBounds(PlayType type)
+{
+	if (type == PLAY_PASS)
+	{
+		if (this->TwoMinuteWarning)
+			return (random(0, 4) == 0);
+		else
+			return (random(0, 8) == 0);
+	}
+	else if (type == PLAY_RUN)
+	{
+		if (this->TwoMinuteWarning)
+			return (random(0, 3) == 0);
+		else
+			return (random(0, 6) == 0);
+	}
+	return false;
+}
+
+/*
  * Same as getThisTeam(), but the other team.
  * */
 TYFTeam* TYFGame::getOtherTeam()
@@ -425,7 +451,14 @@ void TYFGame::doPass(PassType type)
 			this->changeBallPossession();
 		}
 		else
+		{
 			this->UI->playPass(pass, PASS_OK);
+			if (this->isPlayOutOfBounds(PLAY_PASS))
+			{
+				this->UI->callOutOfBounds();
+				this->stopClock();
+			}
+		}
 	}
 }
 
@@ -617,6 +650,14 @@ void TYFGame::doRun()
 		// not recovered
 		if (!recovered)
 			this->changeBallPossession();
+	}
+	else
+	{
+		if (this->isPlayOutOfBounds(PLAY_RUN))
+		{
+			this->UI->callOutOfBounds();
+			this->stopClock();
+		}
 	}
 }
 

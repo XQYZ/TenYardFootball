@@ -24,10 +24,40 @@
 #include "TYFUITemplate.h"
 #include "TYFGame.h"
 #include "TYFTeam.h"
+#include "helper.h"
 #include <iostream>
 #include <iomanip>
 
 using namespace std;
+
+/*
+ * returns the position of the Ball in the "CHI 17" format
+ * */
+string TYFUIConsole::getBallPosition()
+{
+	GameInfo info = this->Game->getGameInfo();
+	
+	string str;
+	
+	if (info.Ball.Position == 50)
+		return "50yd line";
+	else if (info.Ball.Position < 50)
+	{
+		str = info.Scores[info.Ball.Possession].Name;
+		str.append(" ");
+		str.append(to_string(info.Ball.Position));
+	}
+	else
+	{
+		if (info.Ball.Possession == 0)
+			str = info.Scores[1].Name;
+		else
+			str = info.Scores[0].Name;
+		str.append(" ");
+		str.append(to_string(100 - info.Ball.Position));
+	}
+	return str;
+}
 
 /**
  * this is called before each play
@@ -53,17 +83,7 @@ void TYFUIConsole::beginPlay()
 			cout << "@";
 		cout << info.Scores[i].Name << " " << info.Scores[i].Points << " ";
 	}
-	cout << "- ";
-	if (info.Ball.Position == 50)
-		cout << "50yd line";
-	else if (info.Ball.Position < 50)
-		cout << info.Scores[info.Ball.Possession].Name << " " << info.Ball.Position;
-	else
-		if (info.Ball.Possession == 0)
-			cout << info.Scores[1].Name << " " << 100 - info.Ball.Position;
-		else
-			cout << info.Scores[0].Name << " " << 100 - info.Ball.Position;
-	cout << endl;
+	cout << "- " << this->getBallPosition() << endl;
 }
 
 /**
@@ -114,10 +134,12 @@ void TYFUIConsole::playFieldGoal(int distance, bool good)
 
 void TYFUIConsole::playPass(int distance, PASS_FLAG flag)
 {
-	cout << "Pass of " << distance << " yards" << endl;
+	
 	if (flag == PASS_INCOMPLETE)
 		cout << "Incomplete Pass" << endl;
-	else if (flag == PASS_INTERCEPTED)
+	else
+		cout << "Pass of " << distance << " yards" << endl;
+	if (flag == PASS_INTERCEPTED)
 		cout << "Ball intercepted!" << endl;
 }
 
@@ -143,4 +165,15 @@ void TYFUIConsole::playFumble(bool recovered)
 		cout << "Recovered!" << endl;
 	else
 		cout << "Recovered by the opposing team!" << endl;
+}
+
+void TYFUIConsole::callTwoMinuteWarning()
+{
+	cout << "Two Minute Warning!" << endl;
+}
+
+void TYFUIConsole::callOutOfBounds()
+{
+	GameInfo info = this->Game->getGameInfo();
+	cout << "Ran out of bounds at " << this->getBallPosition() << endl;
 }

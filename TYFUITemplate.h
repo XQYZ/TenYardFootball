@@ -43,4 +43,6 @@ class TYFUITemplate
 		virtual void playSack(int loss) {};
 		virtual void playRun(int distance) {};
 		virtual void playFumble(bool recovered) {};
+		virtual void callTwoMinuteWarning() {};
+		virtual void callOutOfBounds() {};
 };

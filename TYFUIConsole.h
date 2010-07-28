@@ -22,10 +22,15 @@
 
 #pragma once
 
+#include <string>
 #include "TYFUITemplate.h"
+
+using namespace std;
 
 class TYFUIConsole : public TYFUITemplate
 {
+	private:
+		string getBallPosition();
 	public:
 		void beginPlay();
 		void endPlay(PLAY_RESULT result);
@@ -37,4 +42,6 @@ class TYFUIConsole : public TYFUITemplate
 		void playSack(int loss);
 		void playRun(int distance);
 		void playFumble(bool recovered);
+		void callTwoMinuteWarning();
+		void callOutOfBounds();
 };

@@ -26,6 +26,7 @@
 
 enum PassType { PASS_LONG, PASS_NORMAL, PASS_SHORT };
 enum PlayReturn { PL_GAME_OVER, PL_OK };
+enum PlayType { PLAY_RUN, PLAY_PASS };
 
 struct GameTime
 {
@@ -76,20 +77,16 @@ class TYFGame
 		GameTime Time;
 		BallInfo Ball;
 		bool clockStopped;
+		bool TwoMinuteWarning;
 		TYFUITemplate *UI;
-	public:
-		TYFGame(TYFUITemplate *UI);
-		~TYFGame(void);
-		PlayReturn nextPlay();
 		
-		GameInfo getGameInfo();
-
 		bool isFumble();
 		bool isIncomplete(PassType type);
 		bool isIntercepted(int pass, PassType type);
 		bool isRecovered(int run);
 		bool isSacked(PassType type);
 		bool isStillRunning();
+		bool isPlayOutOfBounds(PlayType type);
 		int getDistanceToEndzone();
 		int getOffDefDifferences();
 		int pass(PassType type);
@@ -109,5 +106,10 @@ class TYFGame
 		void stopClock();
 		TYFTeam* getThisTeam();
 		TYFTeam* getOtherTeam();
+	public:
+		TYFGame(TYFUITemplate *UI);
+		~TYFGame(void);
+		PlayReturn nextPlay();
+		GameInfo getGameInfo();
 };
 
