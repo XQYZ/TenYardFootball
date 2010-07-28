@@ -72,87 +72,89 @@ TYFGame::TYFGame(TYFUITemplate *UI)
  * */
 PlayReturn TYFGame::nextPlay()
 {
-	this->UI->beginPlay();
-	// game not started yet? Kickoff firsts
-	if (this->Time.Quarter == 0)
-	{
-		this->Ball.Possession = this->firstKickoff;
-		this->doKickOff();
-		this->Time.Quarter = 1;
-		this->UI->endPlay(PLAY_NOTHING);
-		return PL_OK;
-	}
 	// 2nd half
-	else if ((this->Time.Quarter == 3) && (this->Time.Time == 15*60))
+	if ((this->Time.Quarter == 3) && (this->Time.Time == 15*60))
 	{
 		// the other team kicks now
-		if (this->firstKickoff == TEAM1)
-			this->Ball.Possession = TEAM2;
-		else
-			this->Ball.Possession = TEAM1;
+		this->Ball.Possession = !this->firstKickoff;
+		this->setBallPosition(20);
+		this->UI->beginPlay();
 		this->doKickOff();
-		this->UI->endPlay(PLAY_NOTHING);
-		return PL_OK;
-	}
-	// need a kickoff after a touchdown?
-	else if (this->needKickoff)
-	{
-		this->needKickoff = false;
-		this->doKickOff();
-		this->UI->endPlay(PLAY_NOTHING);
-		return PL_OK;
-	}
-	// need a punt after a safety?
-	else if (this->needKickoff)
-	{
-		this->needPunt = false;
-		this->doPunt();
 		this->UI->endPlay(PLAY_NOTHING);
 		return PL_OK;
 	}
 	else
-		if (this->isStillRunning())
+	{
+		this->UI->beginPlay();
+		// game not started yet? Kickoff firsts
+		if (this->Time.Quarter == 0)
 		{
-			this->doAction();
-			
-			// touchdown check
-			if (this->Ball.Position > 100)
-			{
-				this->getThisTeam()->scorePoints(7);
-				this->needKickoff = true;
-				this->UI->endPlay(PLAY_TOUCHDOWN);
-			}
-			
-			// safety check
-			else if (this->Ball.Position < 0)
-			{
-				this->getOtherTeam()->scorePoints(2);
-				this->setBallPosition(20);
-				this->needPunt = true;
-				this->UI->endPlay(PLAY_SAFETY);
-			}
-			
-			// first down check
-			else if (this->Ball.ToGo < 0)
-			{
-				this->Ball.Down = 1;
-				this->Ball.ToGo = 10;
-				this->UI->endPlay(PLAY_FIRST_DOWN);
-			}
-			
-			// turnover on downs check
-			else if (this->Ball.Down == 5)
-			{
-				this->changeBallPossession();
-				this->UI->endPlay(PLAY_TURNOVER_ON_DOWNS);
-			}
-			else
-				this->UI->endPlay(PLAY_NOTHING);
+			this->Ball.Possession = this->firstKickoff;
+			this->doKickOff();
+			this->Time.Quarter = 1;
+			this->UI->endPlay(PLAY_NOTHING);
+			return PL_OK;
+		}
+		// need a kickoff after a touchdown?
+		else if (this->needKickoff)
+		{
+			this->needKickoff = false;
+			this->doKickOff();
+			this->UI->endPlay(PLAY_NOTHING);
+			return PL_OK;
+		}
+		// need a punt after a safety?
+		else if (this->needKickoff)
+		{
+			this->needPunt = false;
+			this->doPunt();
+			this->UI->endPlay(PLAY_NOTHING);
 			return PL_OK;
 		}
 		else
-			// game is not running anymore
-			return PL_GAME_OVER;
+			if (this->isStillRunning())
+			{
+				this->doAction();
+				
+				// touchdown check
+				if (this->Ball.Position > 100)
+				{
+					this->getThisTeam()->scorePoints(7);
+					this->needKickoff = true;
+					this->UI->endPlay(PLAY_TOUCHDOWN);
+				}
+				
+				// safety check
+				else if (this->Ball.Position < 0)
+				{
+					this->getOtherTeam()->scorePoints(2);
+					this->setBallPosition(20);
+					this->needPunt = true;
+					this->UI->endPlay(PLAY_SAFETY);
+				}
+				
+				// first down check
+				else if (this->Ball.ToGo < 0)
+				{
+					this->Ball.Down = 1;
+					this->Ball.ToGo = 10;
+					this->UI->endPlay(PLAY_FIRST_DOWN);
+				}
+				
+				// turnover on downs check
+				else if (this->Ball.Down == 5)
+				{
+					this->changeBallPossession();
+					this->UI->endPlay(PLAY_TURNOVER_ON_DOWNS);
+				}
+				else
+					this->UI->endPlay(PLAY_NOTHING);
+				return PL_OK;
+			}
+			else
+				// game is not running anymore
+				return PL_GAME_OVER;
+	}
 }
 
 /**
@@ -407,10 +409,7 @@ void TYFGame::changeBallPossession()
 	#ifdef DEBUG
 		cout <<	"[DEBUG] Change Ball Possession" << endl;
 	#endif
-	if (this->Ball.Possession == 0)
-		this->Ball.Possession = 1;
-	else
-		this->Ball.Possession = 0;
+	this->Ball.Possession = !this->Ball.Possession;
 	this->Ball.Position = 100 - this->Ball.Position;
 	this->Ball.Down = 1;
 	this->Ball.ToGo = 10;
@@ -452,10 +451,7 @@ bool TYFGame::isPlayOutOfBounds(PlayType type)
  * */
 TYFTeam* TYFGame::getOtherTeam()
 {
-	if (this->Ball.Possession == 0)
-		return this->Teams[1];
-	else
-		return this->Teams[0];
+	return this->Teams[!this->Ball.Possession];
 }
 
 /*

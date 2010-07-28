@@ -49,10 +49,7 @@ string TYFUIConsole::getBallPosition()
 	}
 	else
 	{
-		if (info.Ball.Possession == 0)
-			str = info.Scores[1].Name;
-		else
-			str = info.Scores[0].Name;
+		str = info.Scores[!info.Ball.Possession].Name;
 		str.append(" ");
 		str.append(to_string(100 - info.Ball.Position));
 	}
