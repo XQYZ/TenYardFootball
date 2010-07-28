@@ -393,7 +393,10 @@ void TYFGame::doFieldGoal()
  * */
 bool TYFGame::isStillRunning()
 {
-	return (this->Time.Time > 0);
+	if (this->Time.Quarter == 4)
+		return (this->Time.Time > 0);
+	else
+		return true;
 }
 
 /*
