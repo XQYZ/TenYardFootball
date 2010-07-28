@@ -24,6 +24,9 @@
 
 #include "TYFTeam.h"
 
+#define TEAM1 0
+#define TEAM2 1
+
 enum PassType { PASS_LONG, PASS_NORMAL, PASS_SHORT };
 enum PlayReturn { PL_GAME_OVER, PL_OK };
 enum PlayType { PLAY_RUN, PLAY_PASS };
@@ -78,7 +81,10 @@ class TYFGame
 		BallInfo Ball;
 		bool clockStopped;
 		bool TwoMinuteWarning;
+		int firstKickoff;
 		TYFUITemplate *UI;
+		bool needKickoff;
+		bool needPunt;
 		
 		bool isFumble();
 		bool isIncomplete(PassType type);

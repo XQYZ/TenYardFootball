@@ -100,6 +100,7 @@ void TYFUIConsole::endPlay(PLAY_RESULT result)
 		cout << "Safety!" << endl;
 	else if (result == PLAY_TURNOVER_ON_DOWNS)
 		cout << "Turnover on Downs!" << endl;
+	cout << endl;
 }
 
 /**

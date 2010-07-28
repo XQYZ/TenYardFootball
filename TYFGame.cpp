@@ -48,8 +48,8 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 {
 	// CAN I HAZ RANDOM?
 	srand((int)time(NULL));
-
-	this->Ball.Possession = 0;
+	
+	this->firstKickoff = TEAM1;
 	this->Ball.Position = 20;
 	this->Ball.ToGo = 10;
 	this->Ball.Down = 1;
@@ -57,6 +57,8 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->Time.Quarter = 0;
 	this->clockStopped = false;
 	this->TwoMinuteWarning = false;
+	this->needKickoff = false;
+	this->needPunt = false;
 	
 	// init teams
 	this->Teams[0] = new TYFTeam("CHI");
@@ -74,8 +76,37 @@ PlayReturn TYFGame::nextPlay()
 	// game not started yet? Kickoff firsts
 	if (this->Time.Quarter == 0)
 	{
+		this->Ball.Possession = this->firstKickoff;
 		this->doKickOff();
 		this->Time.Quarter = 1;
+		this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
+	}
+	// 2nd half
+	else if ((this->Time.Quarter == 3) && (this->Time.Time == 15*60))
+	{
+		// the other team kicks now
+		if (this->firstKickoff == TEAM1)
+			this->Ball.Possession = TEAM2;
+		else
+			this->Ball.Possession = TEAM1;
+		this->doKickOff();
+		this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
+	}
+	// need a kickoff after a touchdown?
+	else if (this->needKickoff)
+	{
+		this->needKickoff = false;
+		this->doKickOff();
+		this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
+	}
+	// need a punt after a safety?
+	else if (this->needKickoff)
+	{
+		this->needPunt = false;
+		this->doPunt();
 		this->UI->endPlay(PLAY_NOTHING);
 		return PL_OK;
 	}
@@ -88,34 +119,35 @@ PlayReturn TYFGame::nextPlay()
 			if (this->Ball.Position > 100)
 			{
 				this->getThisTeam()->scorePoints(7);
-				this->doKickOff();
+				this->needKickoff = true;
 				this->UI->endPlay(PLAY_TOUCHDOWN);
 			}
 			
 			// safety check
 			else if (this->Ball.Position < 0)
 			{
-				this->UI->endPlay(PLAY_SAFETY);
 				this->getOtherTeam()->scorePoints(2);
 				this->setBallPosition(20);
-				this->doPunt();
+				this->needPunt = true;
+				this->UI->endPlay(PLAY_SAFETY);
 			}
 			
 			// first down check
 			else if (this->Ball.ToGo < 0)
 			{
-				this->UI->endPlay(PLAY_FIRST_DOWN);
 				this->Ball.Down = 1;
 				this->Ball.ToGo = 10;
+				this->UI->endPlay(PLAY_FIRST_DOWN);
 			}
 			
 			// turnover on downs check
-			if (this->Ball.Down == 5)
+			else if (this->Ball.Down == 5)
 			{
-				this->UI->endPlay(PLAY_TURNOVER_ON_DOWNS);
 				this->changeBallPossession();
+				this->UI->endPlay(PLAY_TURNOVER_ON_DOWNS);
 			}
-			cout << endl;
+			else
+				this->UI->endPlay(PLAY_NOTHING);
 			return PL_OK;
 		}
 		else
@@ -155,20 +187,9 @@ void TYFGame::doAction()
 		{
 			// various Pass Length
 			this->doPass(PASS_NORMAL);
-			if (this->clockStopped)
-				this->advanceTime(random(10, 26));
-			else
-				this->advanceTime(random(20, 36));
 		}
 		else
-		{
 			this->doRun();
-			
-			if (this->clockStopped)
-				this->advanceTime(random(10, 23));
-			else
-				this->advanceTime(random(30, 45));
-		}
 		this->Ball.Down++;
 	}
 }
@@ -202,6 +223,13 @@ int TYFGame::setBallPosition(int n)
  * */
 void TYFGame::advanceTime(int n)
 {
+	// the huddle doesn't take time as the clock is stopped
+	if (this->clockStopped)
+		n -= 10;
+	if (n < 3)
+		n = random(2, 4);
+	
+	// advance the time
 	this->Time.Time -= n;
 	if (this->Time.Time <= 0)
 	{
@@ -248,6 +276,7 @@ void TYFGame::doKickOff()
 	int r = this->getThisTeam()->getKicker()->getKickRating();
 	
 	int mod = 0;
+	// accuracy for various skill levels
 	switch(r)
 	{
 		case 1:
@@ -268,6 +297,7 @@ void TYFGame::doKickOff()
 	}
 	
 	int kick = 65 + mod;
+	this->advanceTime(random(15, 26));
 	this->advanceBall(kick);
 	this->UI->playKickOff(kick);
 	this->changeBallPossession();
@@ -288,7 +318,9 @@ void TYFGame::doPunt()
 {
 	int r = this->getThisTeam()->getKicker()->getKickRating();
 	
+	this->advanceTime(random(32, 56));
 	int mod = 0;
+	// accuracy for various skill levels
 	switch(r)
 	{
 		case 1:
@@ -327,7 +359,7 @@ void TYFGame::doFieldGoal()
 {
 	int r = this->getThisTeam()->getKicker()->getKickRating();
 	int dist = this->getDistanceToEndzone() + 17;
-	
+	this->advanceTime(random(17, 35));
 	int x = random(0, 100);
 	bool good = false;
 	if (dist < 20)
@@ -341,9 +373,10 @@ void TYFGame::doFieldGoal()
 	else if (dist < 55)
 		good = (x < 45 + r*2);
 	else if (dist < 60)
-		good = (x < 20 + r*2);
+		good = (x < 18 + r*2);
 	else if (dist < 70)
-		good = (x < 10 + r*2);
+		good = (x < 8 + r*2);
+	// anything longer is always failed. I mean seriously who would even try?
 	
 	this->UI->playFieldGoal(dist, good);
 	if (good)
@@ -428,22 +461,31 @@ TYFTeam* TYFGame::getOtherTeam()
 void TYFGame::doPass(PassType type)
 {
 	int pass = this->pass(type);
+	
+	// end zone pass (trim if too long)
+	if (this->getDistanceToEndzone() < pass)
+		pass = this->getDistanceToEndzone() + random(1, 10);
+	
 	if (this->isSacked(type))
 	{
 		int sack = this->sacked(type);
 		this->UI->playSack(-sack);
 		this->advanceBall(sack);
 		this->stopClock();
+		this->advanceTime(random(20, 30));
 	}
 	else if (this->isIncomplete(type))
 	{
 		this->UI->playPass(pass, PASS_INCOMPLETE);
 		this->stopClock();
+		this->advanceTime(random(20, 36));
 	}
 	else
 	{
 		this->advanceBall(pass);
 		bool intercepted = this->isIntercepted(pass, type);
+		
+		this->advanceTime(random(20, 36));
 		
 		if (intercepted)
 		{
@@ -637,12 +679,19 @@ bool TYFGame::isRecovered(int run)
 void TYFGame::doRun()
 {
 	int run = this->run();
+	
+	// end zone run (trim if too long)
+	if (this->getDistanceToEndzone() < run)
+		run = this->getDistanceToEndzone() + random(1, 10);
+	
 	this->UI->playRun(run);
 	
 	this->advanceBall(run);
+	this->advanceTime(random(30, 45));
 	
 	if (this->isFumble())
 	{
+		this->advanceTime(random(5, 10));
 		this->stopClock();
 		bool recovered = this->isRecovered(run);
 		this->UI->playFumble(recovered);
