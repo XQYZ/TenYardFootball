@@ -203,7 +203,7 @@ void TYFGame::doAction()
 				// we REALLY need those points
 				maxDistanceForFG = 50;
 			}
-			if (this->getDistanceToEndzone() <= maxDistanceForFG)
+			if (this->getDistanceToEndzone() + 10 <= maxDistanceForFG)
 				this->doFieldGoal();
 			else
 				this->doPunt();
@@ -437,7 +437,7 @@ void TYFGame::doPunt()
 void TYFGame::doFieldGoal()
 {
 	int r = this->getThisTeam()->getKicker()->getKickRating();
-	int dist = this->getDistanceToEndzone() + 17;
+	int dist = this->getDistanceToEndzone() + 10;
 	this->advanceTime(random(17, 35));
 	int x = random(0, 100);
 	bool good = false;
@@ -732,7 +732,7 @@ bool TYFGame::isFumble()
 {
 	int diff = this->getOffDefDifferences();
 	int rand = random(0, 100);
-	return (rand < 5 - diff);
+	return (rand < 3 - diff/2);
 }
 
 /*
