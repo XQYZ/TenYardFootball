@@ -25,22 +25,27 @@
 
 using namespace std;
 
+TYFPlayer::TYFPlayer(int rate)
+{
+	this->rate = rate;
+}
+
 int TYFPlayer::getRunRating()
 {
-	return 5;
+	return this->rate;
 }
 
 int TYFPlayer::getDefenseRating()
 {
-	return 5;
+	return this->rate;
 }
 
 int TYFPlayer::getOffenseRating()
 {
-	return 5;
+	return this->rate;
 }
 
 int TYFPlayer::getKickRating()
 {
-	return 5;
+	return this->rate;
 }

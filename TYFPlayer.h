@@ -24,7 +24,10 @@
 
 class TYFPlayer
 {
+	private:
+		int rate;
 	public:
+		TYFPlayer(int rate);
 		int getRunRating();
 		int getDefenseRating();
 		int getOffenseRating();

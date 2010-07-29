@@ -26,7 +26,6 @@
 #include "TYFUITemplate.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <iostream>
 #include <string>
 #include <iostream>
@@ -46,9 +45,7 @@ using namespace std;
  * */
 TYFGame::TYFGame(TYFUITemplate *UI)
 {
-	// CAN I HAZ RANDOM?
-	srand((int)time(NULL));
-	
+	// CAN I HAZ RANDOM?	
 	this->firstKickoff = TEAM1;
 	this->Ball.Position = 20;
 	this->Ball.ToGo = 10;
@@ -216,7 +213,7 @@ void TYFGame::doAction()
 	if (action)
 	{
 		int r = random(1, 10);
-		if (r < 6)
+		if (r <= 6)
 		{
 			if (this->getDistanceToFirstDown() >= 8)
 			{

@@ -32,7 +32,10 @@ TYFTeam::TYFTeam(string name)
 {
 	for (int i = 0; i < 50; i++)
 	{
-		this->Players[i] = new TYFPlayer();
+		if (name == "GB")
+			this->Players[i] = new TYFPlayer(1);
+		else
+			this->Players[i] = new TYFPlayer(4);
 	}
 	for (int i = 0; i < 11; i++)
 	{

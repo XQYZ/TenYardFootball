@@ -22,11 +22,13 @@
 
 #include <iostream>
 #include "TYFUIConsole.h"
+#include "TYFUIBenchmark.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
 	TYFUIConsole *UI = new TYFUIConsole();
+	//TYFUIBenchmark *UI = new TYFUIBenchmark();
 	UI->run();
 }

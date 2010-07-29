@@ -20,17 +20,15 @@
  *  THE SOFTWARE.
  * */
 
+#pragma once
+
+#include <string>
 #include "TYFUITemplate.h"
-#include "TYFGame.h"
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 using namespace std;
 
-TYFUITemplate::TYFUITemplate(void)
+class TYFUIBenchmark : public TYFUITemplate
 {
-	srand((int)time(NULL));
-	this->Game = new TYFGame(this);
-}
+	public:
+		void run();
+};
