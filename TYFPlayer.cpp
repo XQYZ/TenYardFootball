@@ -22,30 +22,60 @@
 
 #include "TYFPlayer.h"
 #include <iostream>
+#define TIXML_USE_STL
+#include "tinyxml.h" 
 
 using namespace std;
 
-TYFPlayer::TYFPlayer(int rate)
+TYFPlayer::TYFPlayer()
 {
-	this->rate = rate;
+
 }
 
 int TYFPlayer::getRunRating()
 {
-	return this->rate;
+	return this->Run;
 }
 
 int TYFPlayer::getDefenseRating()
 {
-	return this->rate;
+	return 5;
 }
 
 int TYFPlayer::getOffenseRating()
 {
-	return this->rate;
+	return 5;
 }
 
 int TYFPlayer::getKickRating()
 {
-	return this->rate;
+	return this->Kick;
+}
+
+int getValue(TiXmlElement *pParm, string name)
+{
+	return atoi(pParm->FirstChildElement(name)->GetText());
+}
+
+void TYFPlayer::loadPlayerFromXMLNode(TiXmlElement *pParm)
+{
+	this->LName       = pParm->FirstChildElement("name")->GetText();
+	this->FName       = pParm->FirstChildElement("firstname")->GetText();
+	this->Position    = pParm->FirstChildElement("position")->GetText();
+	this->Years       = getValue(pParm, "years");
+	this->Durability  = getValue(pParm, "durability");
+	this->Power       = getValue(pParm, "power");
+	this->Run         = getValue(pParm, "run");
+	this->Speed       = getValue(pParm, "speed");
+	this->Pass        = getValue(pParm, "pass");
+	this->Catch       = getValue(pParm, "catch");
+	this->RunBlock    = getValue(pParm, "runBlock");
+	this->PassBlock   = getValue(pParm, "passBlock");
+	this->RunDefense  = getValue(pParm, "runDef");
+	this->PassDefense = getValue(pParm, "passDef");
+	this->Punt        = getValue(pParm, "punt");
+	this->Blitz       = getValue(pParm, "blitz");
+	this->Kick        = getValue(pParm, "kick");
+	this->PuntReturn  = getValue(pParm, "puntRet");
+	this->KickReturn  = getValue(pParm, "kickRet");	
 }

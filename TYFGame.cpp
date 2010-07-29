@@ -60,8 +60,8 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needPunt = false;
 	
 	// init teams
-	this->Teams[0] = new TYFTeam("CHI");
-	this->Teams[1] = new TYFTeam("GB");
+	this->Teams[0] = new TYFTeam("Chicago Bears");
+	this->Teams[1] = new TYFTeam("Green Bay Packers");
 	
 	this->UI = UI;
 	

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "TYFPlayer.h"
 
 using namespace std;
@@ -35,12 +36,13 @@ class TYFTeam
 	public:
 		TYFTeam(string name);
 		~TYFTeam(void);
-		TYFPlayer *Players[50];
+		vector<TYFPlayer* > Players;
 		TYFPlayer *OnField[11];
 		int getDefenseRating();
 		int getOffenseRating();
 		void scorePoints(int n);
 		int getPoints();
+		void loadFromFile(string filename);
 		string getName();
 		TYFPlayer* getKicker();
 };

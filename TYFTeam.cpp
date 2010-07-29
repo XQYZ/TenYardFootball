@@ -22,6 +22,8 @@
 
 #include "TYFTeam.h"
 #include <iostream>
+#define TIXML_USE_STL
+#include "tinyxml.h" 
 
 using namespace std;
 
@@ -30,19 +32,50 @@ using namespace std;
  * */
 TYFTeam::TYFTeam(string name)
 {
-	for (int i = 0; i < 50; i++)
+	string filename = "teams/";
+	filename.append(name);
+	filename.append(".xml");
+	this->loadFromFile(filename);
+	/*for (int i = 0; i < 50; i++)
 	{
 		if (name == "GB")
 			this->Players[i] = new TYFPlayer(5);
 		else
 			this->Players[i] = new TYFPlayer(5);
-	}
+	}*/
 	for (int i = 0; i < 11; i++)
 	{
 		this->OnField[i] = this->Players[i];
 	}
 	this->score = 0;
 	this->name = name;
+}
+
+void TYFTeam::loadFromFile(string filename)
+{
+	TiXmlDocument XMLdoc(filename.c_str());
+	bool loadOkay = XMLdoc.LoadFile();
+	if (loadOkay)
+	{
+		TiXmlElement *pRoot, *pParm;
+		pRoot = XMLdoc.FirstChildElement("root");
+		if ( pRoot )
+		{
+			// Parse parameters
+			pParm = pRoot->FirstChildElement("player");
+			while ( pParm )
+			{
+				TYFPlayer* p = new TYFPlayer();
+				p->loadPlayerFromXMLNode(pParm);
+				this->Players.push_back(p);
+				pParm = pParm->NextSiblingElement("player");
+			}
+		}
+		else
+		{
+			cout << "Cannot find 'root' node" << endl;
+		}
+	}
 }
 
 /*

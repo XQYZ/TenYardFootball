@@ -21,15 +21,22 @@
  * */
 
 #pragma once
+#include <string>
+#define TIXML_USE_STL
+#include "tinyxml.h" 
+
+using namespace std;
 
 class TYFPlayer
 {
 	private:
-		int rate;
+		string FName, LName, Position;
+		int Years, Durability, Run, Pass, Catch, RunBlock, PassBlock, RunDefense, PassDefense, Blitz, Punt, Kick, PuntReturn, KickReturn, Speed, Power;
 	public:
-		TYFPlayer(int rate);
+		TYFPlayer();
 		int getRunRating();
 		int getDefenseRating();
 		int getOffenseRating();
 		int getKickRating();
+		void loadPlayerFromXMLNode(TiXmlElement *pParm);
 };
