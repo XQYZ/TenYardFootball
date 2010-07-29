@@ -215,7 +215,7 @@ void TYFGame::doAction()
 		int r = random(1, 10);
 		if (r < 6)
 		{
-			if (getDistanceToFirstDown() >= 8)
+			if (this->getDistanceToFirstDown() >= 8)
 			{
 				// long yardage 8-10 yards
 				if (this->Ball.Down == 1)
@@ -236,7 +236,7 @@ void TYFGame::doAction()
 						this->doPass(PASS_NORMAL);
 				}
 			}
-			else if (getDistanceToFirstDown() >= 4)
+			else if (this->getDistanceToFirstDown() >= 4)
 			{
 				// middle yardage 4-7 yards
 				r = random(1, 10);
@@ -261,7 +261,6 @@ void TYFGame::doAction()
 		}
 		else
 			this->doRun();
-		this->Ball.Down++;
 	}
 }
 
@@ -507,6 +506,9 @@ TYFTeam* TYFGame::getThisTeam()
  * */
 bool TYFGame::isPlayOutOfBounds(PlayType type)
 {
+	// don't run out of bounds on own or opposing endzone
+	if ((this->Ball.Position < 0) || (this->Ball.Position > 100))
+		return false;
 	if (type == PLAY_PASS)
 	{
 		if (this->TwoMinuteWarning)
@@ -550,12 +552,14 @@ void TYFGame::doPass(PassType type)
 		this->advanceBall(sack);
 		this->stopClock();
 		this->advanceTime(random(20, 30));
+		this->Ball.Down++;
 	}
 	else if (this->isIncomplete(type))
 	{
 		this->UI->playPass(pass, PASS_INCOMPLETE);
 		this->stopClock();
 		this->advanceTime(random(20, 36));
+		this->Ball.Down++;
 	}
 	else
 	{
@@ -577,6 +581,7 @@ void TYFGame::doPass(PassType type)
 				this->UI->callOutOfBounds();
 				this->stopClock();
 			}
+			this->Ball.Down++;
 		}
 	}
 }
@@ -784,6 +789,7 @@ void TYFGame::doRun()
 			this->UI->callOutOfBounds();
 			this->stopClock();
 		}
+		this->Ball.Down++;
 	}
 }
 
