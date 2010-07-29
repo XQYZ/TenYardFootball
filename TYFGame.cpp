@@ -114,6 +114,7 @@ PlayReturn TYFGame::nextPlay()
 		else
 			if (this->isStillRunning())
 			{
+				// if the game is still running, then do stuff
 				this->doAction();
 				
 				// touchdown check
@@ -134,7 +135,7 @@ PlayReturn TYFGame::nextPlay()
 				}
 				
 				// first down check
-				else if (this->Ball.ToGo < 0)
+				else if (this->getDistanceToFirstDown() < 0)
 				{
 					this->Ball.Down = 1;
 					this->Ball.ToGo = 10;
@@ -172,23 +173,91 @@ GameInfo TYFGame::getGameInfo()
 
 /*
  * some play action here
+ * this is basically the AI of TYF
  * */
 void TYFGame::doAction()
 {
+	bool action = true;
 	if (this->Ball.Down == 4)
 	{
-		if (this->getDistanceToEndzone() < 33)
-			this->doFieldGoal();
-		else
-			this->doPunt();
+		action = false;
+		// consider going for it
+		if ((this->getDistanceToFirstDown() <= 3) && (this->Ball.Position >= 50))
+		{
+			if (random(0, 3) == 0)
+				action = true;
+			if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
+			{
+				if (random(0, 2) == 0)
+					action = true;
+				if (this->Time.Quarter == 4)
+					action = true;
+			}
+		}
+		// not going for it after all
+		if (!action)
+		{
+			int maxDistanceForFG = 33;			
+			if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
+			{
+				// we REALLY need those points
+				maxDistanceForFG = 50;
+			}
+			if (this->getDistanceToEndzone() <= maxDistanceForFG)
+				this->doFieldGoal();
+			else
+				this->doPunt();
+		}
 	}
-	else
+	
+	if (action)
 	{
 		int r = random(1, 10);
 		if (r < 6)
 		{
-			// various Pass Length
-			this->doPass(PASS_NORMAL);
+			if (getDistanceToFirstDown() >= 8)
+			{
+				// long yardage 8-10 yards
+				if (this->Ball.Down == 1)
+				{
+					r = random(1, 10);
+					if (r <= 4)
+						this->doPass(PASS_SHORT);
+					else if (r <= 8)
+						this->doPass(PASS_NORMAL);
+					else
+						this->doPass(PASS_LONG);
+				}
+				else
+				{
+					if (random(0, 1) == 0)
+						this->doPass(PASS_LONG);
+					else
+						this->doPass(PASS_NORMAL);
+				}
+			}
+			else if (getDistanceToFirstDown() >= 4)
+			{
+				// middle yardage 4-7 yards
+				r = random(1, 10);
+				if (r <= 3)
+					this->doPass(PASS_LONG);
+				else if (r <= 8)
+					this->doPass(PASS_NORMAL);
+				else
+					this->doPass(PASS_SHORT);
+			}
+			else
+			{
+				// short yardage 0 - 3 yards
+				r = random(1, 10);
+				if (r <= 6)
+					this->doPass(PASS_SHORT);
+				else if (r <= 9)
+					this->doPass(PASS_NORMAL);
+				else
+					this->doPass(PASS_LONG);
+			}
 		}
 		else
 			this->doRun();
@@ -311,6 +380,15 @@ void TYFGame::doKickOff()
 int TYFGame::getDistanceToEndzone()
 {
 	return 100 - this->Ball.Position;
+}
+
+/*
+ * the distance a team needs to advance to score a first down
+ * this is really just for readability as it's stored in a private variable
+ * */
+int TYFGame::getDistanceToFirstDown()
+{
+	return this->Ball.ToGo;
 }
 
 /*

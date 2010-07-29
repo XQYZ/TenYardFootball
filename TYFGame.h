@@ -94,6 +94,7 @@ class TYFGame
 		bool isStillRunning();
 		bool isPlayOutOfBounds(PlayType type);
 		int getDistanceToEndzone();
+		int getDistanceToFirstDown();
 		int getOffDefDifferences();
 		int pass(PassType type);
 		int run();
