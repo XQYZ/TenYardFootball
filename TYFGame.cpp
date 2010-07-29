@@ -30,6 +30,8 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <vector>
+
 
 /**
 	Dear future me. Please forgive me. 
@@ -62,6 +64,80 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->Teams[1] = new TYFTeam("GB");
 	
 	this->UI = UI;
+	
+	//                                             name, pass,run,blitz
+	DefensiveFormations.push_back(new DefFormation("3-2",  2, -1, 1));
+	DefensiveFormations.push_back(new DefFormation("3-3",  1,  0, 0));
+	DefensiveFormations.push_back(new DefFormation("3-4",  0,  1, 2));
+	DefensiveFormations.push_back(new DefFormation("4-1",  3, -2, 2));
+	DefensiveFormations.push_back(new DefFormation("4-2",  2, -2, 1));
+	DefensiveFormations.push_back(new DefFormation("4-3",  0,  1, 0));
+	DefensiveFormations.push_back(new DefFormation("4-4", -3,  3, 0));
+	
+	//                                           pass,run,blz,hb,fb,wr,te
+	OffensiveFormations.push_back(new OffFormation( 3, -1,  1, 1, 0, 2, 2));
+	OffensiveFormations.push_back(new OffFormation( 3, -1, -1, 1, 0, 3, 1));
+	OffensiveFormations.push_back(new OffFormation( 2, -3, -2, 1, 0, 4, 0));
+	OffensiveFormations.push_back(new OffFormation( 2,  1,  1, 2, 0, 2, 1));
+	OffensiveFormations.push_back(new OffFormation( 1,  2,  2, 1, 1, 1, 2));
+	OffensiveFormations.push_back(new OffFormation( 2,  1,  1, 1, 1, 2, 1));
+	OffensiveFormations.push_back(new OffFormation( 3,  2, -2, 2, 1, 3, 0));
+	OffensiveFormations.push_back(new OffFormation( 1,  2,  1, 2, 1, 0, 2));
+	OffensiveFormations.push_back(new OffFormation( 0,  3,  2, 2, 1, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 1,  3,  2, 2, 1, 2, 0));
+}
+
+/*
+ * choose a Formation for the offense (badly, sadly)
+ * */
+void TYFGame::chooseOffFormation(PlayType type)
+{
+	if (type == PLAY_PASS)
+	{
+		do
+		{
+			this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
+		} while ((*this->OffensiveFormation).Pass <= 0);
+	}
+	else if (type == PLAY_RUN)
+	{
+		do
+		{
+			this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
+		} while ((*this->OffensiveFormation).Run <= 0);
+	}
+	else
+		this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
+	
+	#ifdef DEBUG
+		cout << "[DEBUG] " << this->matchupFormations(MATCH_PASS) << " " << this->matchupFormations(MATCH_RUN) << " " << this->matchupFormations(MATCH_BLITZ) << endl;
+	#endif
+}
+
+/*
+ * choose a Formation for the defense
+ * */
+void TYFGame::chooseDefFormation()
+{
+	this->DefensiveFormation = this->DefensiveFormations[random(0, this->DefensiveFormations.size() - 1)];
+}
+
+/*
+ * match up who "good" the Formations are for Running/Passing/Blitzing
+ * */
+int TYFGame::matchupFormations(MatchupType type)
+{
+	OffFormation Off = *this->OffensiveFormation;
+	DefFormation Def = *this->DefensiveFormation;
+	
+	if (type == MATCH_PASS)
+		return Off.Pass - Def.Pass;
+	else if (type == MATCH_RUN)
+		return Off.Run - Def.Run;
+	else if (type == MATCH_BLITZ)
+		return Off.Blitz - Def.Blitz;
+	else
+		return 0;
 }
 
 /**
@@ -177,6 +253,8 @@ GameInfo TYFGame::getGameInfo()
  * */
 void TYFGame::doAction()
 {
+	this->chooseDefFormation();
+	
 	bool action = true;
 	if (this->Ball.Down == 4)
 	{
@@ -396,6 +474,8 @@ int TYFGame::getDistanceToFirstDown()
  * */
 void TYFGame::doPunt()
 {
+	this->chooseOffFormation(PLAY_PUNT);
+	
 	int r = this->getThisTeam()->getKicker()->getKickRating();
 	
 	this->advanceTime(random(32, 56));
@@ -595,6 +675,8 @@ TYFTeam* TYFGame::getOtherTeam()
  * */
 void TYFGame::doPass(PassType type)
 {
+	this->chooseOffFormation(PLAY_PASS);
+	
 	int pass = this->pass(type);
 	
 	// end zone pass (trim if too long)
@@ -649,7 +731,12 @@ int TYFGame::pass(PassType type)
 {
 	int pass = 0;
 	int rand = random(0, 9);
-
+	
+	if (this->matchupFormations(MATCH_PASS) >= 4)
+		rand += random(0, this->matchupFormations(MATCH_PASS) - 3);
+	if (rand > 9)
+		rand = 9;
+	
 	// Short Passes
 	if (type == PASS_SHORT)
 	{
@@ -716,7 +803,7 @@ bool TYFGame::isIntercepted(int pass, PassType type)
  * */
 bool TYFGame::isIncomplete(PassType type)
 {
-	int diff = this->getOffDefDifferences();
+	int diff = this->getOffDefDifferences() + (this->matchupFormations(MATCH_PASS)/2);
 	int rand = random(0, 100);
 	
 	switch (type)
@@ -735,7 +822,7 @@ bool TYFGame::isIncomplete(PassType type)
  * */
 bool TYFGame::isSacked(PassType type)
 {
-	int diff = this->getOffDefDifferences();
+	int diff = this->getOffDefDifferences() + (this->matchupFormations(MATCH_BLITZ)/2);
 	int rand = random(0, 100);
 	
 	switch (type)
@@ -816,6 +903,7 @@ bool TYFGame::isRecovered(int run)
  * */
 void TYFGame::doRun()
 {
+	this->chooseOffFormation(PLAY_RUN);
 	int run = this->run();
 	
 	// end zone run (trim if too long)
@@ -909,6 +997,9 @@ int TYFGame::run()
 				run = random(20, 25);
 			break;
 	}
-
+	
+	if (this->matchupFormations(MATCH_RUN) >= 4)
+		run += random(0, this->matchupFormations(MATCH_RUN)*2);
+	
 	return run;
 }

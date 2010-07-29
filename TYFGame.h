@@ -23,6 +23,7 @@
 #pragma once
 
 #include "TYFTeam.h"
+#include <vector>
 
 #define TEAM1 0
 #define TEAM2 1
@@ -30,6 +31,7 @@
 enum PassType { PASS_LONG, PASS_NORMAL, PASS_SHORT };
 enum PlayReturn { PL_GAME_OVER, PL_OK };
 enum PlayType { PLAY_RUN, PLAY_PASS, PLAY_PUNT, PLAY_KICKOFF };
+enum MatchupType { MATCH_PASS, MATCH_RUN, MATCH_BLITZ };
 
 struct GameTime
 {
@@ -70,6 +72,35 @@ struct GameInfo
 	TeamScore Scores[2];
 };
 
+struct DefFormation
+{
+	string name;
+	int Pass, Run, Blitz;
+	DefFormation(string name, int Pass, int Run, int Blitz)
+	{
+		this->name = name;
+		this->Pass = Pass;
+		this->Run = Run;
+		this->Blitz = Blitz;
+	}
+};
+
+struct OffFormation
+{
+	int Pass, Run, Blitz;
+	int HB, FB, WR, TE;
+	OffFormation(int Pass, int Run, int Blitz, int HB, int FB, int WR, int TE)
+	{
+		this->Pass = Pass;
+		this->Run = Run;
+		this->Blitz = Blitz;
+		this->HB = HB;
+		this->FB = FB;
+		this->WR = WR;
+		this->TE = TE;
+	}
+};
+
 // forward declaration
 class TYFUITemplate;
 
@@ -79,6 +110,12 @@ class TYFGame
 		TYFTeam *Teams[2];
 		GameTime Time;
 		BallInfo Ball;
+		vector<DefFormation* > DefensiveFormations;
+		vector<OffFormation* > OffensiveFormations;
+		
+		DefFormation* DefensiveFormation;
+		OffFormation* OffensiveFormation;
+		
 		bool clockStopped;
 		bool TwoMinuteWarning;
 		int firstKickoff;
@@ -112,6 +149,11 @@ class TYFGame
 		void doRun();
 		void getBallPosition(int n);
 		void stopClock();
+		
+		void chooseOffFormation(PlayType type);
+		void chooseDefFormation();
+		int matchupFormations(MatchupType type);
+		
 		TYFTeam* getThisTeam();
 		TYFTeam* getOtherTeam();
 	public:
