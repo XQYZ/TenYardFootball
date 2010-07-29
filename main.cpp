@@ -30,5 +30,5 @@ int main(int argc, char *argv[])
 {
 	TYFUIConsole *UI = new TYFUIConsole();
 	//TYFUIBenchmark *UI = new TYFUIBenchmark();
-	//UI->run();
+	UI->run();
 }

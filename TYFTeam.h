@@ -28,13 +28,53 @@
 
 using namespace std;
 
+struct DefFormation
+{
+	string name;
+	int Pass, Run, Blitz;
+	int CB, LB, SA, DE, DT;
+	DefFormation(string name, int Pass, int Run, int Blitz, int CB, int LB, int SA, int DE, int DT)
+	{
+		this->name = name;
+		this->Pass = Pass;
+		this->Run = Run;
+		this->Blitz = Blitz;
+		this->CB = CB;
+		this->LB = LB;
+		this->SA = SA;
+		this->DE = DE;
+		this->DT = DT;
+	}
+};
+
+struct OffFormation
+{
+	int Pass, Run, Blitz;
+	int HB, FB, WR, TE, OG, OT, QB, CE;
+	OffFormation(int Pass, int Run, int Blitz, int HB, int FB, int WR, int TE, int OG, int OT, int QB, int CE)
+	{
+		this->Pass = Pass;
+		this->Run = Run;
+		this->Blitz = Blitz;
+		this->HB = HB;
+		this->FB = FB;
+		this->WR = WR;
+		this->TE = TE;
+		this->OG = OG;
+		this->OT = OT;
+		this->QB = QB;
+		this->CE = CE;
+	}
+};
+
 class TYFTeam
 {
 	private:
 		int score;
 		string name;
+		string shortname;
 	public:
-		TYFTeam(string name);
+		TYFTeam(string name, string shortname);
 		~TYFTeam(void);
 		vector<TYFPlayer* > Players;
 		TYFPlayer *OnField[11];
@@ -43,6 +83,12 @@ class TYFTeam
 		void scorePoints(int n);
 		int getPoints();
 		void loadFromFile(string filename);
+		void setupDefFormation(DefFormation form);
+		void setupOffFormation(OffFormation form);
+		void setupPuntFormation();
+		void setupFieldGoalFormation();
+		void setupKickoffFormation();
+		void addPlayer(TYFPlayer *p, string pos, int* formvar);
 		string getName();
 		TYFPlayer* getKicker();
 };

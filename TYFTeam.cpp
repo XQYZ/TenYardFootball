@@ -30,27 +30,24 @@ using namespace std;
 /*
  * create a team
  * */
-TYFTeam::TYFTeam(string name)
+TYFTeam::TYFTeam(string name, string shortname)
 {
 	string filename = "teams/";
 	filename.append(name);
 	filename.append(".xml");
 	this->loadFromFile(filename);
-	/*for (int i = 0; i < 50; i++)
-	{
-		if (name == "GB")
-			this->Players[i] = new TYFPlayer(5);
-		else
-			this->Players[i] = new TYFPlayer(5);
-	}*/
 	for (int i = 0; i < 11; i++)
 	{
 		this->OnField[i] = this->Players[i];
 	}
 	this->score = 0;
 	this->name = name;
+	this->shortname = shortname;
 }
 
+/*
+ * load the team from a xml file
+ * */
 void TYFTeam::loadFromFile(string filename)
 {
 	TiXmlDocument XMLdoc(filename.c_str());
@@ -99,7 +96,7 @@ int TYFTeam::getPoints()
  * */
 string TYFTeam::getName()
 {
-	return this->name;
+	return this->shortname;
 }
 
 /*
@@ -135,5 +132,128 @@ int TYFTeam::getOffenseRating()
  * */
 TYFPlayer* TYFTeam::getKicker()
 {
-	return this->OnField[0];
+	for (int i = 0; i < 11; i++)
+		if ((this->OnField[i]->Position == "KI") || (this->OnField[i]->Position == "PU"))
+			return this->OnField[i];
+	return NULL;
+}
+
+/*
+ * Add Player p to the current field players if he's palying on the 'pos' Position and if
+ * the 'formvar' count variable is not yet zero
+ * */
+void TYFTeam::addPlayer(TYFPlayer *p, string pos, int* formvar)
+{
+	if ((p->Position == pos) && (*formvar > 0))
+	{
+		int c = 0;
+		while (this->OnField[c] != NULL)
+			c++;
+		this->OnField[c] = p;
+		//cout << c << " " << p->LName << " " << p->Position << *formvar << endl;
+		*formvar -= 1;
+	}
+}
+
+/*
+ * align the team in a defense formation
+ * */
+void TYFTeam::setupDefFormation(DefFormation form)
+{
+	for (int i = 0; i < 11; i++)
+		this->OnField[i] = NULL;
+	
+	for (int i = 0; i <= this->Players.size() - 1; i++)
+	{
+		this->addPlayer(this->Players[i], "CB", &form.CB);
+		this->addPlayer(this->Players[i], "LB", &form.LB);
+		this->addPlayer(this->Players[i], "SA", &form.SA);
+		this->addPlayer(this->Players[i], "DE", &form.DE);
+		this->addPlayer(this->Players[i], "DT", &form.DT);
+	}
+}
+
+/*
+ * align the team in an offense formation
+ * */
+void TYFTeam::setupOffFormation(OffFormation form)
+{
+	for (int i = 0; i < 11; i++)
+		this->OnField[i] = NULL;
+	
+	for (int i = 0; i <= this->Players.size() - 1; i++)
+	{
+		this->addPlayer(this->Players[i], "HB", &form.HB);
+		this->addPlayer(this->Players[i], "FB", &form.FB);
+		this->addPlayer(this->Players[i], "WR", &form.WR);
+		this->addPlayer(this->Players[i], "TE", &form.TE);
+		this->addPlayer(this->Players[i], "OG", &form.OG);
+		this->addPlayer(this->Players[i], "OT", &form.OT);
+		this->addPlayer(this->Players[i], "QB", &form.QB);
+		this->addPlayer(this->Players[i], "CE", &form.CE);
+	}
+}
+
+/*
+ * align the team in the punt formation
+ * */
+void TYFTeam::setupPuntFormation()
+{
+	int PU = 1;
+	int QB = 1;
+	int HB = 2;
+	int OT = 2;
+	int OG = 2;
+	int CE = 1;
+	int DT = 2;
+	
+	for (int i = 0; i < 11; i++)
+		this->OnField[i] = NULL;
+	
+	for (int i = 0; i <= this->Players.size() - 1; i++)
+	{
+		this->addPlayer(this->Players[i], "PU", &PU);
+		this->addPlayer(this->Players[i], "QB", &QB);
+		this->addPlayer(this->Players[i], "HB", &HB);
+		this->addPlayer(this->Players[i], "OT", &OT);
+		this->addPlayer(this->Players[i], "OG", &OG);
+		this->addPlayer(this->Players[i], "CE", &CE);
+		this->addPlayer(this->Players[i], "DT", &DT);
+	}
+}
+
+/*
+ * align the team in the field goal formation
+ * */
+void TYFTeam::setupFieldGoalFormation()
+{
+	this->setupKickoffFormation();
+}
+
+/*
+ * align the team in the kickoff formation
+ * */
+void TYFTeam::setupKickoffFormation()
+{
+	int KI = 1;
+	int QB = 1;
+	int HB = 2;
+	int OT = 2;
+	int OG = 2;
+	int CE = 1;
+	int DT = 2;
+	
+	for (int i = 0; i < 11; i++)
+		this->OnField[i] = NULL;
+	
+	for (int i = 0; i <= this->Players.size() - 1; i++)
+	{
+		this->addPlayer(this->Players[i], "KI", &KI);
+		this->addPlayer(this->Players[i], "QB", &QB);
+		this->addPlayer(this->Players[i], "HB", &HB);
+		this->addPlayer(this->Players[i], "OT", &OT);
+		this->addPlayer(this->Players[i], "OG", &OG);
+		this->addPlayer(this->Players[i], "CE", &CE);
+		this->addPlayer(this->Players[i], "DT", &DT);
+	}
 }

@@ -29,10 +29,9 @@ using namespace std;
 
 class TYFPlayer
 {
-	private:
+	public:
 		string FName, LName, Position;
 		int Years, Durability, Run, Pass, Catch, RunBlock, PassBlock, RunDefense, PassDefense, Blitz, Punt, Kick, PuntReturn, KickReturn, Speed, Power;
-	public:
 		TYFPlayer();
 		int getRunRating();
 		int getDefenseRating();

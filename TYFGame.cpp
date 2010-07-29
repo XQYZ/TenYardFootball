@@ -40,8 +40,6 @@
 
 using namespace std;
 
-//#define DEBUG 1
-
 /*
  * constructor
  * */
@@ -60,31 +58,31 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needPunt = false;
 	
 	// init teams
-	this->Teams[0] = new TYFTeam("Chicago Bears");
-	this->Teams[1] = new TYFTeam("Green Bay Packers");
+	this->Teams[0] = new TYFTeam("Chicago Bears", "CHI");
+	this->Teams[1] = new TYFTeam("Green Bay Packers", "GB");
 	
 	this->UI = UI;
 	
-	//                                             name, pass,run,blitz
-	DefensiveFormations.push_back(new DefFormation("3-2",  2, -1, 1));
-	DefensiveFormations.push_back(new DefFormation("3-3",  1,  0, 0));
-	DefensiveFormations.push_back(new DefFormation("3-4",  0,  1, 2));
-	DefensiveFormations.push_back(new DefFormation("4-1",  3, -2, 2));
-	DefensiveFormations.push_back(new DefFormation("4-2",  2, -2, 1));
-	DefensiveFormations.push_back(new DefFormation("4-3",  0,  1, 0));
-	DefensiveFormations.push_back(new DefFormation("4-4", -3,  3, 0));
+	//                                             name,pass,run,blz,  CB,LB,SA,DE,DT
+	DefensiveFormations.push_back(new DefFormation("3-2",  2, -2, 2,   3, 2, 3, 2, 1));
+	DefensiveFormations.push_back(new DefFormation("3-3",  1,  0, 0,   2, 3, 3, 2, 1));
+	DefensiveFormations.push_back(new DefFormation("3-4",  0,  1, 2,   2, 4, 2, 2, 1));
+	DefensiveFormations.push_back(new DefFormation("4-1",  3, -2, 2,   4, 1, 2, 2, 2));
+	DefensiveFormations.push_back(new DefFormation("4-2",  2, -2, 1,   3, 2, 2, 2, 2));
+	DefensiveFormations.push_back(new DefFormation("4-3",  0,  1, 0,   1, 3, 3, 2, 2));
+	DefensiveFormations.push_back(new DefFormation("4-4", -3,  3, 0,   2, 4, 1, 2, 2));
 	
-	//                                           pass,run,blz,hb,fb,wr,te
-	OffensiveFormations.push_back(new OffFormation( 3, -1,  1, 1, 0, 2, 2));
-	OffensiveFormations.push_back(new OffFormation( 3, -1, -1, 1, 0, 3, 1));
-	OffensiveFormations.push_back(new OffFormation( 2, -3, -2, 1, 0, 4, 0));
-	OffensiveFormations.push_back(new OffFormation( 2,  1,  1, 2, 0, 2, 1));
-	OffensiveFormations.push_back(new OffFormation( 1,  2,  2, 1, 1, 1, 2));
-	OffensiveFormations.push_back(new OffFormation( 2,  1,  1, 1, 1, 2, 1));
-	OffensiveFormations.push_back(new OffFormation( 3,  2, -2, 2, 1, 3, 0));
-	OffensiveFormations.push_back(new OffFormation( 1,  2,  1, 2, 1, 0, 2));
-	OffensiveFormations.push_back(new OffFormation( 0,  3,  2, 2, 1, 1, 1));
-	OffensiveFormations.push_back(new OffFormation( 1,  3,  2, 2, 1, 2, 0));
+	//                                           pass,run,blz,  hb,fb,wr,te,OG,OT,QB,CE
+	OffensiveFormations.push_back(new OffFormation( 3, -1,  1,   1, 0, 2, 2, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 3, -1, -1,   1, 0, 3, 1, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 2, -3, -2,   1, 0, 4, 0, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 2,  1,  1,   2, 0, 2, 1, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 1,  2,  2,   1, 1, 1, 2, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 2,  1,  1,   1, 1, 2, 1, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 3,  2, -2,   2, 1, 3, 0, 2, 1, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 1,  2,  1,   2, 1, 0, 2, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 0,  3,  2,   2, 1, 1, 1, 2, 2, 1, 1));
+	OffensiveFormations.push_back(new OffFormation( 1,  3,  2,   2, 1, 2, 0, 2, 2, 1, 1));
 }
 
 /*
@@ -98,6 +96,7 @@ void TYFGame::chooseOffFormation(PlayType type)
 		{
 			this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
 		} while ((*this->OffensiveFormation).Pass <= 0);
+		this->getThisTeam()->setupOffFormation(*this->OffensiveFormation);
 	}
 	else if (type == PLAY_RUN)
 	{
@@ -105,13 +104,15 @@ void TYFGame::chooseOffFormation(PlayType type)
 		{
 			this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
 		} while ((*this->OffensiveFormation).Run <= 0);
+		this->getThisTeam()->setupOffFormation(*this->OffensiveFormation);
 	}
-	else
-		this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
 	
-	#ifdef DEBUG
-		cout << "[DEBUG] " << this->matchupFormations(MATCH_PASS) << " " << this->matchupFormations(MATCH_RUN) << " " << this->matchupFormations(MATCH_BLITZ) << endl;
-	#endif
+	if (type == PLAY_PUNT)
+		this->getThisTeam()->setupPuntFormation();
+	else if (type == PLAY_KICKOFF)
+		this->getThisTeam()->setupKickoffFormation();
+	else if (type == PLAY_FIELDGOAL)
+		this->getThisTeam()->setupFieldGoalFormation();
 }
 
 /*
@@ -120,6 +121,7 @@ void TYFGame::chooseOffFormation(PlayType type)
 void TYFGame::chooseDefFormation()
 {
 	this->DefensiveFormation = this->DefensiveFormations[random(0, this->DefensiveFormations.size() - 1)];
+	this->getOtherTeam()->setupDefFormation(*this->DefensiveFormation);
 }
 
 /*
@@ -347,9 +349,6 @@ void TYFGame::doAction()
 **/
 void TYFGame::advanceBall(int n)
 {
-	#ifdef DEBUG
-		cout <<	"[DEBUG] Ball +" << n << endl;
-	#endif
 	this->Ball.Position += n;
 	this->Ball.ToGo -= n;
 }
@@ -359,9 +358,6 @@ void TYFGame::advanceBall(int n)
  * */
 int TYFGame::setBallPosition(int n)
 {
-	#ifdef DEBUG
-		cout <<	"[DEBUG] Ball =" << n << endl;
-	#endif
 	this->Ball.Position = n;
 	this->Ball.ToGo = 10;
 }
@@ -409,9 +405,6 @@ void TYFGame::advanceTime(int n)
 void TYFGame::stopClock()
 {
 	this->clockStopped = true;
-	#ifdef DEBUG
-		cout <<	"[DEBUG] Stopped the clock" << endl;
-	#endif
 }
 
 /*
@@ -419,6 +412,8 @@ void TYFGame::stopClock()
  * */
 void TYFGame::doKickOff()
 {
+	this->chooseOffFormation(PLAY_KICKOFF);
+	
 	this->setBallPosition(20);
 	
 	int r = this->getThisTeam()->getKicker()->getKickRating();
@@ -519,6 +514,8 @@ void TYFGame::doPunt()
  * */
 void TYFGame::doFieldGoal()
 {
+	this->chooseOffFormation(PLAY_FIELDGOAL);
+	
 	int r = this->getThisTeam()->getKicker()->getKickRating();
 	int dist = this->getDistanceToEndzone() + 10;
 	this->advanceTime(random(17, 35));
@@ -619,9 +616,6 @@ bool TYFGame::isStillRunning()
  * */
 void TYFGame::changeBallPossession()
 {
-	#ifdef DEBUG
-		cout <<	"[DEBUG] Change Ball Possession" << endl;
-	#endif
 	this->Ball.Possession = !this->Ball.Possession;
 	this->Ball.Position = 100 - this->Ball.Position;
 	this->Ball.Down = 1;
