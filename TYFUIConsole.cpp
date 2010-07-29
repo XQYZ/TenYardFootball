@@ -175,3 +175,16 @@ void TYFUIConsole::callOutOfBounds()
 	GameInfo info = this->Game->getGameInfo();
 	cout << "Ran out of bounds at " << this->getBallPosition() << endl;
 }
+
+void TYFUIConsole::playReturn(int distance, bool faircatch)
+{
+	GameInfo info = this->Game->getGameInfo();
+	if (faircatch)
+	{
+		cout << "Faircatch at " << this->getBallPosition() << endl;
+	}
+	else
+	{
+		cout << "A return of " << distance << " yards." << endl;
+	}
+}

@@ -42,6 +42,7 @@ class TYFUIConsole : public TYFUITemplate
 		void playSack(int loss);
 		void playRun(int distance);
 		void playFumble(bool recovered);
+		void playReturn(int distance, bool faircatch);
 		void callTwoMinuteWarning();
 		void callOutOfBounds();
 };

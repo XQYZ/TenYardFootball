@@ -29,7 +29,7 @@
 
 enum PassType { PASS_LONG, PASS_NORMAL, PASS_SHORT };
 enum PlayReturn { PL_GAME_OVER, PL_OK };
-enum PlayType { PLAY_RUN, PLAY_PASS };
+enum PlayType { PLAY_RUN, PLAY_PASS, PLAY_PUNT, PLAY_KICKOFF };
 
 struct GameTime
 {
@@ -108,6 +108,7 @@ class TYFGame
 		void doKickOff();
 		void doPass(PassType type);
 		void doPunt();
+		void doReturn(PlayType type);
 		void doRun();
 		void getBallPosition(int n);
 		void stopClock();

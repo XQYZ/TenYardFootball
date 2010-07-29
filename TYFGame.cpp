@@ -77,85 +77,88 @@ PlayReturn TYFGame::nextPlay()
 	{
 		// the other team kicks now
 		this->Ball.Possession = !this->firstKickoff;
+		this->Ball.Down = 1;
+		this->Ball.ToGo = 10;
 		this->setBallPosition(20);
 		this->UI->beginPlay();
 		this->doKickOff();
 		this->UI->endPlay(PLAY_NOTHING);
 		return PL_OK;
 	}
-	else
+	// game not started yet? Kickoff firsts
+	else if (this->Time.Quarter == 0)
+	{
+		this->Ball.Possession = this->firstKickoff;
+		this->UI->beginPlay();
+		this->setBallPosition(20);
+		this->doKickOff();
+		this->Time.Quarter = 1;
+		this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
+	}
+	// need a kickoff after a touchdown?
+	else if (this->needKickoff)
+	{
+		this->setBallPosition(20);
+		this->UI->beginPlay();
+		this->needKickoff = false;
+		this->doKickOff();
+		this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
+	}
+	// need a punt after a safety?
+	else if (this->needPunt)
 	{
 		this->UI->beginPlay();
-		// game not started yet? Kickoff firsts
-		if (this->Time.Quarter == 0)
+		this->needPunt = false;
+		this->doPunt();
+		this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
+	}
+	// if the game is still running, then do stuff
+	else if (this->isStillRunning())
+	{
+		this->UI->beginPlay();
+		this->doAction();
+		
+		// touchdown check
+		if (this->Ball.Position > 100)
 		{
-			this->Ball.Possession = this->firstKickoff;
-			this->doKickOff();
-			this->Time.Quarter = 1;
-			this->UI->endPlay(PLAY_NOTHING);
-			return PL_OK;
+			this->getThisTeam()->scorePoints(7);
+			this->needKickoff = true;
+			this->UI->endPlay(PLAY_TOUCHDOWN);
 		}
-		// need a kickoff after a touchdown?
-		else if (this->needKickoff)
+		
+		// safety check
+		else if (this->Ball.Position < 0)
 		{
-			this->needKickoff = false;
-			this->doKickOff();
-			this->UI->endPlay(PLAY_NOTHING);
-			return PL_OK;
+			this->getOtherTeam()->scorePoints(2);
+			this->setBallPosition(20);
+			this->needPunt = true;
+			this->UI->endPlay(PLAY_SAFETY);
 		}
-		// need a punt after a safety?
-		else if (this->needKickoff)
+		
+		// first down check
+		else if (this->getDistanceToFirstDown() < 0)
 		{
-			this->needPunt = false;
-			this->doPunt();
-			this->UI->endPlay(PLAY_NOTHING);
-			return PL_OK;
+			this->Ball.Down = 1;
+			this->Ball.ToGo = 10;
+			this->UI->endPlay(PLAY_FIRST_DOWN);
+		}
+		
+		// turnover on downs check
+		else if (this->Ball.Down == 5)
+		{
+			this->changeBallPossession();
+			this->UI->endPlay(PLAY_TURNOVER_ON_DOWNS);
 		}
 		else
-			if (this->isStillRunning())
-			{
-				// if the game is still running, then do stuff
-				this->doAction();
-				
-				// touchdown check
-				if (this->Ball.Position > 100)
-				{
-					this->getThisTeam()->scorePoints(7);
-					this->needKickoff = true;
-					this->UI->endPlay(PLAY_TOUCHDOWN);
-				}
-				
-				// safety check
-				else if (this->Ball.Position < 0)
-				{
-					this->getOtherTeam()->scorePoints(2);
-					this->setBallPosition(20);
-					this->needPunt = true;
-					this->UI->endPlay(PLAY_SAFETY);
-				}
-				
-				// first down check
-				else if (this->getDistanceToFirstDown() < 0)
-				{
-					this->Ball.Down = 1;
-					this->Ball.ToGo = 10;
-					this->UI->endPlay(PLAY_FIRST_DOWN);
-				}
-				
-				// turnover on downs check
-				else if (this->Ball.Down == 5)
-				{
-					this->changeBallPossession();
-					this->UI->endPlay(PLAY_TURNOVER_ON_DOWNS);
-				}
-				else
-					this->UI->endPlay(PLAY_NOTHING);
-				return PL_OK;
-			}
-			else
-				// game is not running anymore
-				return PL_GAME_OVER;
+			this->UI->endPlay(PLAY_NOTHING);
+		return PL_OK;
 	}
+	// game is not running anymore
+	else
+		return PL_GAME_OVER;
 }
 
 /**
@@ -371,6 +374,7 @@ void TYFGame::doKickOff()
 	this->advanceBall(kick);
 	this->UI->playKickOff(kick);
 	this->changeBallPossession();
+	this->doReturn(PLAY_KICKOFF);
 }
 
 /*
@@ -429,6 +433,8 @@ void TYFGame::doPunt()
 		this->setBallPosition(80);
 	this->UI->playPunt(kick, touchback);
 	this->changeBallPossession();
+	if (!touchback)
+		this->doReturn(PLAY_PUNT);
 }
 
 /*
@@ -465,6 +471,59 @@ void TYFGame::doFieldGoal()
 	}
 	else
 		this->changeBallPossession();
+}
+
+/*
+ * return the Ball for a couple of yards
+ * */
+void TYFGame::doReturn(PlayType type)
+{
+	bool fairCatch = false;
+	int distance = 0;
+	int r = random(1, 100);
+	if (type == PLAY_KICKOFF)
+	{
+		fairCatch = (random(0, 10) == 0);
+		if (r < 10)
+			distance = random(0, 10);
+		else if (r < 50)
+			distance = 10 + random(0, 10);
+		else if (r < 70)
+			distance = 20 + random(0, 10);
+		else if (r < 90)
+			distance = 30 + random(0, 10);
+		else
+		{
+			int n = random(0, 9);
+			if (n < 4)
+				n = 4;
+			distance = n*10+random(0, 10);
+		}
+	}
+	else if (type == PLAY_PUNT)
+	{
+		fairCatch = (random(0, 1) == 0);
+		if (r < 30)
+			distance = random(0, 10);
+		else if (r < 70)
+			distance = 10 + random(0, 10);
+		else if (r < 80)
+			distance = 20 + random(0, 10);
+		else if (r < 90)
+			distance = 30 + random(0, 10);
+		else
+		{
+			int n = random(0, 9);
+			if (n < 4)
+				n = 4;
+			distance = n*10+random(0, 10);
+		}
+	}
+	if (fairCatch)
+		distance = 0;
+	this->advanceBall(distance);
+	this->UI->playReturn(distance, fairCatch);
+	this->Ball.ToGo = 10;
 }
 
 /*
