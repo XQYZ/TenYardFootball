@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include "TYFPlayer.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -78,8 +79,8 @@ class TYFTeam
 		~TYFTeam(void);
 		vector<TYFPlayer* > Players;
 		TYFPlayer *OnField[11];
-		int getDefenseRating();
-		int getOffenseRating();
+		double getDefenseRating(PlayType type);
+		double getOffenseRating(PlayType type);
 		void scorePoints(int n);
 		int getPoints();
 		void loadFromFile(string filename);

@@ -24,6 +24,7 @@
 #include <string>
 #define TIXML_USE_STL
 #include "tinyxml.h" 
+#include "helper.h"
 
 using namespace std;
 
@@ -34,8 +35,8 @@ class TYFPlayer
 		int Years, Durability, Run, Pass, Catch, RunBlock, PassBlock, RunDefense, PassDefense, Blitz, Punt, Kick, PuntReturn, KickReturn, Speed, Power;
 		TYFPlayer(TiXmlElement *pParm);
 		int getRunRating();
-		int getDefenseRating();
-		int getOffenseRating();
+		int getDefenseRating(PlayType type);
+		int getOffenseRating(PlayType type);
 		int getKickRating();
 		void loadPlayerFromXMLNode(TiXmlElement *pParm);
 		string getFullName();

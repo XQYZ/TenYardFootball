@@ -58,8 +58,8 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needPunt = false;
 	
 	// init teams
-	this->Teams[0] = new TYFTeam("Chicago Bears", "CHI");
-	this->Teams[1] = new TYFTeam("Green Bay Packers", "GB");
+	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI");
+	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF");
 	
 	this->UI = UI;
 	
@@ -801,7 +801,7 @@ int TYFGame::pass(PassType type)
  * */
 bool TYFGame::isIntercepted(int pass, PassType type)
 {
-	int diff = this->getOffDefDifferences();
+	int diff = this->getOffDefDifferences(PLAY_PASS);
 	int rand = random(0, 100);
 
 	switch (type)
@@ -820,7 +820,7 @@ bool TYFGame::isIntercepted(int pass, PassType type)
  * */
 bool TYFGame::isIncomplete(PassType type)
 {
-	int diff = this->getOffDefDifferences() + (this->matchupFormations(MATCH_PASS)/2);
+	int diff = this->getOffDefDifferences(PLAY_PASS) + (this->matchupFormations(MATCH_PASS)/2);
 	int rand = random(0, 100);
 	
 	switch (type)
@@ -839,7 +839,7 @@ bool TYFGame::isIncomplete(PassType type)
  * */
 bool TYFGame::isSacked(PassType type)
 {
-	int diff = this->getOffDefDifferences() + (this->matchupFormations(MATCH_BLITZ)/2);
+	int diff = this->getOffDefDifferences(PLAY_PASS) + (this->matchupFormations(MATCH_BLITZ)/2);
 	int rand = random(0, 100);
 	
 	switch (type)
@@ -858,7 +858,7 @@ bool TYFGame::isSacked(PassType type)
  * */
 int TYFGame::sacked(PassType type)
 {
-	int diff = this->getOffDefDifferences();
+	int diff = this->getOffDefDifferences(PLAY_PASS);
 	int min = 0;
 
 	switch (type)
@@ -880,9 +880,14 @@ int TYFGame::sacked(PassType type)
  * more than 0 means better offense than defense
  * less than 0 means, well you can figure that one out yourself
  * */
-int TYFGame::getOffDefDifferences()
+int TYFGame::getOffDefDifferences(PlayType type)
 {
-	return this->getThisTeam()->getOffenseRating() - this->getOtherTeam()->getDefenseRating();
+	int diff = this->getThisTeam()->getOffenseRating(type)*3 - this->getOtherTeam()->getDefenseRating(type)*3;
+	if (diff > 5)
+		diff = 5;
+	if (diff < -5)
+		diff = -5;
+	return diff;
 }
 
 /*
@@ -890,7 +895,7 @@ int TYFGame::getOffDefDifferences()
  * */
 bool TYFGame::isFumble()
 {
-	int diff = this->getOffDefDifferences();
+	int diff = this->getOffDefDifferences(PLAY_RUN);
 	int rand = random(0, 100);
 	return (rand < 3 - diff/2);
 }
@@ -962,7 +967,7 @@ int TYFGame::run()
 	int run = 0;
 
 	// offense / defense differences
-	int diff = this->getOffDefDifferences();
+	int diff = this->getOffDefDifferences(PLAY_RUN);
 
 	switch(per)
 	{

@@ -30,7 +30,6 @@
 
 enum PassType { PASS_LONG, PASS_NORMAL, PASS_SHORT };
 enum PlayReturn { PL_GAME_OVER, PL_OK };
-enum PlayType { PLAY_RUN, PLAY_PASS, PLAY_PUNT, PLAY_KICKOFF, PLAY_FIELDGOAL };
 enum MatchupType { MATCH_PASS, MATCH_RUN, MATCH_BLITZ };
 
 struct GameTime
@@ -103,7 +102,7 @@ class TYFGame
 		bool isPlayOutOfBounds(PlayType type);
 		int getDistanceToEndzone();
 		int getDistanceToFirstDown();
-		int getOffDefDifferences();
+		int getOffDefDifferences(PlayType type);
 		int pass(PassType type);
 		int run();
 		int sacked(PassType type);

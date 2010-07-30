@@ -37,14 +37,57 @@ int TYFPlayer::getRunRating()
 	return this->Run;
 }
 
-int TYFPlayer::getDefenseRating()
+int TYFPlayer::getDefenseRating(PlayType type)
 {
-	return 5;
+	string p = this->Position;
+	int r = 0;
+	if ((p == "DT") || (p == "DE") || (p == "OT") || (p == "OG") || (p == "LB"))
+	{
+		if (type == PLAY_PASS)
+			r = this->PassDefense;
+		else if (type == PLAY_RUN)
+			r = this->RunDefense;
+	}
+	
+	if ((p == "CB") || (p == "SA"))
+	{
+		if (type == PLAY_PASS)
+			r = this->PassDefense;
+	}
+	
+	if (r == 4) r= 5;
+	if (r == 2) r= 1;
+	
+	if (r != 0)
+		return r;
+	return -1;
 }
 
-int TYFPlayer::getOffenseRating()
+int TYFPlayer::getOffenseRating(PlayType type)
 {
-	return 5;
+	string p = this->Position;
+	int r = 0;
+	
+	if ((p == "DT") || (p == "DE") || (p == "OT") || (p == "OG"))
+	{
+		if (type == PLAY_PASS)
+			r = this->PassBlock;
+		else if (type == PLAY_RUN)
+			r = this->RunBlock;
+	}
+	
+	if ((p == "HB") || (p == "FB"))
+	{
+		if (type == PLAY_PASS)
+			r = this->PassBlock;
+	}
+	
+	if (r == 4) r= 5;
+	if (r == 2) r= 1;
+	
+	if (r != 0)
+		return r;
+	return -1;
 }
 
 int TYFPlayer::getKickRating()

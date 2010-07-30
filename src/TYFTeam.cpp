@@ -101,28 +101,40 @@ string TYFTeam::getName()
 /*
  * gets the average defense rating of the current field players
  * */
-int TYFTeam::getDefenseRating()
+double TYFTeam::getDefenseRating(PlayType type)
 {
-	int sum = 0;
+	double sum = 0;
+	double count = 0;
 	for (int i = 0; i < 11; i++)
 	{
-		sum += this->OnField[i]->getDefenseRating();
+		int r = this->OnField[i]->getDefenseRating(type);
+		if (r != -1)
+		{
+			sum += r;
+			count += 1;
+		}
 	}
-	int average = sum / 11;
+	double average = sum / (count);
 	return average;
 }
 
 /*
  * gets the average offense rating of the current field players
  * */
-int TYFTeam::getOffenseRating()
+double TYFTeam::getOffenseRating(PlayType type)
 {
-	int sum = 0;
+	double sum = 0;
+	double count = 0;
 	for (int i = 0; i < 11; i++)
 	{
-		sum += this->OnField[i]->getOffenseRating();
+		int r = this->OnField[i]->getOffenseRating(type);
+		if (r != -1)
+		{
+			sum += r;
+			count += 1;
+		}
 	}
-	int average = sum / 11;
+	double average = sum / (count);
 	return average;
 }
 
@@ -138,7 +150,7 @@ TYFPlayer* TYFTeam::getKicker()
 }
 
 /*
- * return all TYFPlayer instances, whcih are available to run the ball
+ * return all TYFPlayer instances, which are available to run the ball
  * */
 vector<TYFPlayer* > TYFTeam::getRunners()
 {

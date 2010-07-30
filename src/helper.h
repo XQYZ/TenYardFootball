@@ -25,6 +25,9 @@
 #include <string>
 #include <sstream>
 #include <stdlib.h>
+#include "helper.h"
+
+enum PlayType { PLAY_RUN, PLAY_PASS, PLAY_PUNT, PLAY_KICKOFF, PLAY_FIELDGOAL };
 
 template <class T>
 /*
