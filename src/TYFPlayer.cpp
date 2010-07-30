@@ -27,9 +27,9 @@
 
 using namespace std;
 
-TYFPlayer::TYFPlayer()
+TYFPlayer::TYFPlayer(TiXmlElement *pParm)
 {
-
+	this->loadPlayerFromXMLNode(pParm);
 }
 
 int TYFPlayer::getRunRating()
@@ -78,4 +78,20 @@ void TYFPlayer::loadPlayerFromXMLNode(TiXmlElement *pParm)
 	this->Kick        = getValue(pParm, "kick");
 	this->PuntReturn  = getValue(pParm, "puntRet");
 	this->KickReturn  = getValue(pParm, "kickRet");	
+}
+
+string TYFPlayer::getFullName()
+{
+	string name = this->FName;
+	name.append(" ");
+	name.append(this->LName);
+	name.append(" (");
+	name.append(this->Position);
+	name.append(")");
+	return name;
+}
+
+string TYFPlayer::getPosition()
+{
+	return this->Position;
 }

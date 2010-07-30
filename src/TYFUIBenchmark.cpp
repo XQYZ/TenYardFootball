@@ -27,6 +27,7 @@
 #include "helper.h"
 #include <iostream>
 #include <iomanip>
+#include <time.h>
 
 using namespace std;
 
@@ -36,19 +37,23 @@ using namespace std;
  * */
 void TYFUIBenchmark::run()
 {
+	clock_t start, finish;
+	start = clock();
+	
 	int Team1Sum = 0;
 	int Team2Sum = 0;
 	int Team1Win = 0;
 	int Team2Win = 0;
 	int Ties = 0;
-	int count = 10000;
+	int count = 1000;
 	
-	for (int i = 1; i <= count; i++)
+	for (int c = 1; c <= count; c++)
 	{
 		while (this->Game->nextPlay() == PL_OK) {}
 		
 		GameInfo info = this->Game->getGameInfo();
 		
+		cout << "Game " << c << " ";
 		for (int i = 0; i <= 1; i++)
 			cout << info.Scores[i].Name << " " << info.Scores[i].Points << " ";
 		cout << endl;
@@ -66,9 +71,13 @@ void TYFUIBenchmark::run()
 		this->Game = NULL;
 		this->Game = new TYFGame(this);
 	}
-	cout << "Team1 Average:.. " << Team1Sum / count << endl;
-	cout << "Team2 Average..: " << Team2Sum / count << endl;
-	cout << "Team1 Wins.....: " << Team1Win << endl;
-	cout << "Team2 Wins.....: " << Team2Win << endl;
-	cout << "Ties...........: " << Ties << endl;
+	finish = clock();
+
+	cout << endl;
+	cout << "Simulation Speed:..." << ( count / ((finish - start) / CLOCKS_PER_SEC )) << " games/sec" << endl;
+	cout << "Team1 Average:..... " << Team1Sum / count << " pts/game" << endl;
+	cout << "Team2 Average:..... " << Team2Sum / count << " pts/game"<< endl;
+	cout << "Team1 Wins:........ " << Team1Win << endl;
+	cout << "Team2 Wins:........ " << Team2Win << endl;
+	cout << "Ties:.............. " << Ties << endl;
 }

@@ -91,4 +91,5 @@ class TYFTeam
 		void addPlayer(TYFPlayer *p, string pos, int* formvar);
 		string getName();
 		TYFPlayer* getKicker();
+		vector<TYFPlayer* > getRunners();
 };

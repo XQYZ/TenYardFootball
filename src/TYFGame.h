@@ -117,7 +117,7 @@ class TYFGame
 		void doPass(PassType type);
 		void doPunt();
 		void doReturn(PlayType type);
-		void doRun();
+		void doRun(TYFPlayer* runner);
 		void getBallPosition(int n);
 		void stopClock();
 		

@@ -40,7 +40,7 @@ class TYFUIConsole : public TYFUITemplate
 		void playFieldGoal(int distance, bool good);
 		void playPass(int distance, PASS_FLAG flag);
 		void playSack(int loss);
-		void playRun(int distance);
+		void playRun(TYFPlayer* runner, int distance);
 		void playFumble(bool recovered);
 		void playReturn(int distance, bool faircatch);
 		void callTwoMinuteWarning();

@@ -32,10 +32,12 @@ class TYFPlayer
 	public:
 		string FName, LName, Position;
 		int Years, Durability, Run, Pass, Catch, RunBlock, PassBlock, RunDefense, PassDefense, Blitz, Punt, Kick, PuntReturn, KickReturn, Speed, Power;
-		TYFPlayer();
+		TYFPlayer(TiXmlElement *pParm);
 		int getRunRating();
 		int getDefenseRating();
 		int getOffenseRating();
 		int getKickRating();
 		void loadPlayerFromXMLNode(TiXmlElement *pParm);
+		string getFullName();
+		string getPosition();
 };

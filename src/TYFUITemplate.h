@@ -27,6 +27,7 @@ enum PLAY_RESULT { PLAY_NOTHING, PLAY_FIRST_DOWN, PLAY_TOUCHDOWN, PLAY_SAFETY, P
 
 class TYFGame;
 class TYFTeam;
+class TYFPlayer;
 class TYFUITemplate
 {
 	protected:
@@ -41,7 +42,7 @@ class TYFUITemplate
 		virtual void playFieldGoal(int distance, bool good) {};
 		virtual void playPass(int distance, PASS_FLAG flag) {};
 		virtual void playSack(int loss) {};
-		virtual void playRun(int distance) {};
+		virtual void playRun(TYFPlayer* runner, int distance) {};
 		virtual void playFumble(bool recovered) {};
 		virtual void playReturn(int distance, bool faircatch) {};
 		virtual void callTwoMinuteWarning() {};

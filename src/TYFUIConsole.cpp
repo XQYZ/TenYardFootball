@@ -146,14 +146,28 @@ void TYFUIConsole::playSack(int loss)
 	cout << "QB sacked; a loss of " << loss << " yards" << endl;
 }
 
-void TYFUIConsole::playRun(int distance)
+void TYFUIConsole::playRun(TYFPlayer* runner, int distance)
 {
-	if (distance == 0)
-		cout << "Rushing attempt with no gain" << endl;
-	else if (distance > 0)
-		cout << "Run for " << distance << " yards" << endl;
+	if (runner->getPosition() == "QB")
+	{
+		cout << runner->getFullName();
+		if (distance > 0)
+			cout << " running for a gain of " << distance << " yards" << endl;
+		else if (distance == 0)
+			cout << " running for no gain" << endl;
+		else
+			cout << " running for a loss of " << distance << " yards" << endl;
+	}
 	else
-		cout << "Run for a loss of " << -distance << " yards" << endl;
+	{
+		cout << "Ball handed off to " << runner->getFullName();
+		if (distance > 0)
+			cout << " for a run of " << distance << " yards" << endl;
+		else if (distance == 0)
+			cout << " for no gain" << endl;
+		else
+			cout << " for a loss of " << distance << " yards" << endl;
+	}
 }
 
 void TYFUIConsole::playFumble(bool recovered)

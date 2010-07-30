@@ -62,8 +62,7 @@ void TYFTeam::loadFromFile(string filename)
 			pParm = pRoot->FirstChildElement("player");
 			while ( pParm )
 			{
-				TYFPlayer* p = new TYFPlayer();
-				p->loadPlayerFromXMLNode(pParm);
+				TYFPlayer* p = new TYFPlayer(pParm);
 				this->Players.push_back(p);
 				pParm = pParm->NextSiblingElement("player");
 			}
@@ -136,6 +135,20 @@ TYFPlayer* TYFTeam::getKicker()
 		if ((this->OnField[i]->Position == "KI") || (this->OnField[i]->Position == "PU"))
 			return this->OnField[i];
 	return NULL;
+}
+
+/*
+ * return all TYFPlayer instances, whcih are available to run the ball
+ * */
+vector<TYFPlayer* > TYFTeam::getRunners()
+{
+	vector<TYFPlayer* > players;
+	for (int i = 0; i < 11; i++)
+	{
+		if ((this->OnField[i]->Position == "HB") || (this->OnField[i]->Position == "FB") || (this->OnField[i]->Position == "QB"))
+			players.push_back(this->OnField[i]);
+	}
+	return players;
 }
 
 /*

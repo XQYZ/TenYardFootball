@@ -340,7 +340,30 @@ void TYFGame::doAction()
 			}
 		}
 		else
-			this->doRun();
+		{
+			this->chooseOffFormation(PLAY_RUN);
+			
+			// who will run the ball?
+			vector<TYFPlayer* > players = this->getThisTeam()->getRunners();
+			
+			// random selection
+			TYFPlayer* runner = NULL;
+			TYFPlayer* temprunner;
+			do
+			{
+				temprunner = players[random(0, players.size() - 1)];
+				if (temprunner->getPosition() == "QB")
+				{
+					// QB runs should be rare
+					if (random(0, 30) == 0)
+						runner = temprunner;
+				}
+				else
+					runner = temprunner;
+			} while (runner == NULL);
+
+			this->doRun(runner);
+		}
 	}
 }
 
@@ -895,16 +918,15 @@ bool TYFGame::isRecovered(int run)
 /*
  * Let's run the ball
  * */
-void TYFGame::doRun()
+void TYFGame::doRun(TYFPlayer* runner)
 {
-	this->chooseOffFormation(PLAY_RUN);
 	int run = this->run();
 	
 	// end zone run (trim if too long)
 	if (this->getDistanceToEndzone() < run)
 		run = this->getDistanceToEndzone() + random(1, 10);
 	
-	this->UI->playRun(run);
+	this->UI->playRun(runner, run);
 	
 	this->advanceBall(run);
 	this->advanceTime(random(30, 45));
