@@ -114,7 +114,7 @@ double TYFTeam::getDefenseRating(PlayType type)
 			count += 1;
 		}
 	}
-	double average = sum / (count);
+	double average = sum / count;
 	return average;
 }
 
@@ -134,7 +134,7 @@ double TYFTeam::getOffenseRating(PlayType type)
 			count += 1;
 		}
 	}
-	double average = sum / (count);
+	double average = sum / count;
 	return average;
 }
 

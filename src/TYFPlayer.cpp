@@ -55,9 +55,6 @@ int TYFPlayer::getDefenseRating(PlayType type)
 			r = this->PassDefense;
 	}
 	
-	if (r == 4) r= 5;
-	if (r == 2) r= 1;
-	
 	if (r != 0)
 		return r;
 	return -1;

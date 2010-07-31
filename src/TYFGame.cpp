@@ -201,6 +201,8 @@ PlayReturn TYFGame::nextPlay()
 		{
 			this->getThisTeam()->scorePoints(7);
 			this->needKickoff = true;
+			this->Ball.Down = 1;
+			this->Ball.ToGo = 10;
 			this->UI->endPlay(PLAY_TOUCHDOWN);
 		}
 		
@@ -584,7 +586,7 @@ void TYFGame::doReturn(PlayType type)
 	}
 	else if (type == PLAY_PUNT)
 	{
-		fairCatch = (random(0, 1) == 0);
+		fairCatch = (random(0, 2) == 0);
 		if (r < 30)
 			distance = random(0, 10);
 		else if (r < 70)
@@ -696,7 +698,7 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 	}
 	else if (this->isIncomplete(type))
 	{
-		this->UI->playPass(sender, receiver, pass, PASS_INCOMPLETE);
+		this->UI->playPass(sender, receiver, NULL, pass, PASS_INCOMPLETE);
 		this->stopClock();
 		this->advanceTime(random(20, 36));
 		this->Ball.Down++;
@@ -710,12 +712,12 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 		
 		if (intercepted)
 		{
-			this->UI->playPass(sender, this->getOtherTeam()->getRandomReceiver(), pass, PASS_INTERCEPTED);
+			this->UI->playPass(sender, receiver, this->getOtherTeam()->getRandomReceiver(), pass, PASS_INTERCEPTED);
 			this->changeBallPossession();
 		}
 		else
 		{
-			this->UI->playPass(sender, receiver, pass, PASS_OK);
+			this->UI->playPass(sender, receiver, NULL, pass, PASS_OK);
 			if (this->isPlayOutOfBounds(PLAY_PASS))
 			{
 				this->UI->callOutOfBounds();

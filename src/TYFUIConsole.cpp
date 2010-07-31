@@ -130,14 +130,14 @@ void TYFUIConsole::playFieldGoal(int distance, bool good)
 		cout << "Kick is no good!" << endl;
 }
 
-void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, int distance, PASS_FLAG flag)
+void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance, PASS_FLAG flag)
 {
 	if (flag == PASS_INCOMPLETE)
 		cout << "Incomplete Pass intended for " << receiver->getFullName() << endl;
 	else
 		cout << "Pass of " << distance << " yards to " << receiver->getFullName() << endl;
 	if (flag == PASS_INTERCEPTED)
-		cout << "Ball intercepted by " << receiver->getFullName() << "!" << endl;
+		cout << "Ball intercepted by " << intercepter->getFullName() << "!" << endl;
 }
 
 void TYFUIConsole::playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss)
