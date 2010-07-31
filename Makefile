@@ -1,7 +1,7 @@
 all: TYF
 
 TYF:
-	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -ggdb
+	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -ggdb -Wall
 	
 release:
 	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -O2 -pipe -march=native

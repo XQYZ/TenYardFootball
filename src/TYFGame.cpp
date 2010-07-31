@@ -379,7 +379,7 @@ void TYFGame::advanceBall(int n)
 /*
  * Puts the Ball n yards from the current teams end zone
  * */
-int TYFGame::setBallPosition(int n)
+void TYFGame::setBallPosition(int n)
 {
 	this->Ball.Position = n;
 	this->Ball.ToGo = 10;
@@ -813,6 +813,7 @@ bool TYFGame::isIntercepted(int pass, PassType type)
 		case PASS_LONG:
 			return (rand < 8 - diff / 2);
 	}
+	return false;
 }
 
 /*
@@ -832,6 +833,7 @@ bool TYFGame::isIncomplete(PassType type)
 		case PASS_LONG:
 			return (rand > 55 + diff * 2);
 	}
+	return false;
 }
 
 /*
@@ -851,6 +853,7 @@ bool TYFGame::isSacked(PassType type)
 		case PASS_LONG:
 			return (rand < 13 - diff);
 	}
+	return false;
 }
 
 /*

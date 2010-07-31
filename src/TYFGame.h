@@ -106,7 +106,7 @@ class TYFGame
 		int pass(PassType type);
 		int run();
 		int sacked(PassType type);
-		int setBallPosition(int n);
+		void setBallPosition(int n);
 		void advanceBall(int n);
 		void advanceTime(int n);
 		void changeBallPossession();

@@ -188,7 +188,7 @@ void TYFTeam::setupDefFormation(DefFormation form)
 	for (int i = 0; i < 11; i++)
 		this->OnField[i] = NULL;
 	
-	for (int i = 0; i <= this->Players.size() - 1; i++)
+	for (unsigned int i = 0; i <= this->Players.size() - 1; i++)
 	{
 		this->addPlayer(this->Players[i], "CB", &form.CB);
 		this->addPlayer(this->Players[i], "LB", &form.LB);
@@ -206,7 +206,7 @@ void TYFTeam::setupOffFormation(OffFormation form)
 	for (int i = 0; i < 11; i++)
 		this->OnField[i] = NULL;
 	
-	for (int i = 0; i <= this->Players.size() - 1; i++)
+	for (unsigned int i = 0; i <= this->Players.size() - 1; i++)
 	{
 		this->addPlayer(this->Players[i], "HB", &form.HB);
 		this->addPlayer(this->Players[i], "FB", &form.FB);
@@ -235,7 +235,7 @@ void TYFTeam::setupPuntFormation()
 	for (int i = 0; i < 11; i++)
 		this->OnField[i] = NULL;
 	
-	for (int i = 0; i <= this->Players.size() - 1; i++)
+	for (unsigned int i = 0; i <= this->Players.size() - 1; i++)
 	{
 		this->addPlayer(this->Players[i], "PU", &PU);
 		this->addPlayer(this->Players[i], "QB", &QB);
@@ -271,7 +271,7 @@ void TYFTeam::setupKickoffFormation()
 	for (int i = 0; i < 11; i++)
 		this->OnField[i] = NULL;
 	
-	for (int i = 0; i <= this->Players.size() - 1; i++)
+	for (unsigned int i = 0; i <= this->Players.size() - 1; i++)
 	{
 		this->addPlayer(this->Players[i], "KI", &KI);
 		this->addPlayer(this->Players[i], "QB", &QB);
