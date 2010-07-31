@@ -196,11 +196,20 @@ TYFPlayer* TYFTeam::getRandomRunner()
 }
 
 /*
+ * get a random person for a blitz
+ * */
+TYFPlayer* TYFTeam::getRandomTackle()
+{
+	vector<TYFPlayer* > players = this->getTackles();
+	
+	return players[random(0, players.size() - 1)];
+}
+
+/*
  * get a random receiver on the field
  * */
 TYFPlayer* TYFTeam::getRandomReceiver()
 {
-	// who will run the ball?
 	vector<TYFPlayer* > players = this->getReceivers();
 	
 	// random selection
@@ -242,6 +251,20 @@ TYFPlayer* TYFTeam::getRandomReturner(PlayType type)
 }
 
 /*
+ * return all TYFPlayer instances, which are available to tackle in a blitz
+ * */
+vector<TYFPlayer* > TYFTeam::getTackles()
+{
+	vector<TYFPlayer* > players;
+	for (int i = 0; i < 11; i++)
+	{
+		if (this->OnField[i]->getBlitzRating() > 0)
+			players.push_back(this->OnField[i]);
+	}
+	return players;
+}
+
+/*
  * return all TYFPlayer instances, which are available to run the ball
  * */
 vector<TYFPlayer* > TYFTeam::getRunners()
@@ -249,7 +272,8 @@ vector<TYFPlayer* > TYFTeam::getRunners()
 	vector<TYFPlayer* > players;
 	for (int i = 0; i < 11; i++)
 	{
-		if ((this->OnField[i]->Position == "HB") || (this->OnField[i]->Position == "FB") || (this->OnField[i]->Position == "QB"))
+		if ((this->OnField[i]->Position == "HB") || (this->OnField[i]->Position == "FB") ||
+		    (this->OnField[i]->Position == "QB"))
 			players.push_back(this->OnField[i]);
 	}
 	return players;

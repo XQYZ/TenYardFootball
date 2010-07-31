@@ -38,6 +38,26 @@ int TYFPlayer::getRunRating()
 	return this->Run;
 }
 
+int TYFPlayer::getPassRating()
+{
+	return this->Pass;
+}
+
+int TYFPlayer::getCatchRating()
+{
+	return this->Catch;
+}
+
+int TYFPlayer::getBlitzRating()
+{
+	return this->Blitz;
+}
+
+int TYFPlayer::getSpeedRating()
+{
+	return this->Speed;
+}
+
 int TYFPlayer::getDefenseRating(PlayType type)
 {
 	string p = this->Position;

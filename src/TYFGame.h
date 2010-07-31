@@ -94,17 +94,17 @@ class TYFGame
 		bool needPunt;
 		
 		bool isFumble();
-		bool isIncomplete(PassType type);
-		bool isIntercepted(int pass, PassType type);
+		bool isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PassType type);
+		bool isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, PassType type);
 		bool isRecovered(int run);
-		bool isSacked(PassType type);
+		bool isSacked(TYFPlayer* sender, TYFPlayer* tackler, PassType type);
 		bool isStillRunning();
 		bool isPlayOutOfBounds(PlayType type);
 		int getDistanceToEndzone();
 		int getDistanceToFirstDown();
 		int getOffDefDifferences(PlayType type);
-		int pass(PassType type);
-		int run();
+		int pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type);
+		int run(TYFPlayer* runner);
 		int sacked(PassType type);
 		void setBallPosition(int n);
 		void advanceBall(int n);

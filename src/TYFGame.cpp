@@ -686,13 +686,13 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 {
 	this->chooseOffFormation(PLAY_PASS);
 	
-	int pass = this->pass(type);
+	int pass = this->pass(sender, receiver, type);
 	
 	// end zone pass (trim if too long)
 	if (this->getDistanceToEndzone() < pass)
 		pass = this->getDistanceToEndzone() + random(1, 10);
 	
-	if (this->isSacked(type))
+	if (this->isSacked(sender, this->getOtherTeam()->getRandomTackle(), type))
 	{
 		int sack = this->sacked(type);
 		this->UI->playSack(this->getThisTeam()->getQuarterback(), this->getOtherTeam()->getRandomPlayer(), -sack);
@@ -701,7 +701,7 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 		this->advanceTime(random(20, 30));
 		this->Ball.Down++;
 	}
-	else if (this->isIncomplete(type))
+	else if (this->isIncomplete(sender, receiver, type))
 	{
 		this->UI->playPass(sender, receiver, NULL, pass, PASS_INCOMPLETE);
 		this->stopClock();
@@ -711,7 +711,7 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 	else
 	{
 		this->advanceBall(pass);
-		bool intercepted = this->isIntercepted(pass, type);
+		bool intercepted = this->isIntercepted(sender, receiver, pass, type);
 		
 		this->advanceTime(random(20, 36));
 		
@@ -736,13 +736,25 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 /*
  * this here handles all the pass action
  * */
-int TYFGame::pass(PassType type)
+int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 {
 	int pass = 0;
 	int rand = random(0, 9);
 	
 	if (this->matchupFormations(MATCH_PASS) >= 4)
 		rand += random(0, this->matchupFormations(MATCH_PASS) - 3);
+		
+	int average = (sender->getPassRating() + receiver->getCatchRating()) / 2;
+	if (type != PASS_SHORT)
+	{
+		if (average < 3)
+			rand -= random(0, 3-average);
+		if (average > 3)
+			rand += random(0, average-3);
+	}
+	
+	if (rand < 0)
+		rand = 0;
 	if (rand > 9)
 		rand = 9;
 	
@@ -791,9 +803,12 @@ int TYFGame::pass(PassType type)
 /*
  * Did that dude just steal my ball?!
  * */
-bool TYFGame::isIntercepted(int pass, PassType type)
+bool TYFGame::isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, PassType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS);
+	int average = (sender->getPassRating() + receiver->getCatchRating()) / 2;
+	diff += (average+1/2);
+	
 	int rand = random(0, 100);
 
 	switch (type)
@@ -811,9 +826,12 @@ bool TYFGame::isIntercepted(int pass, PassType type)
 /*
  * Was a Pass Completed?
  * */
-bool TYFGame::isIncomplete(PassType type)
+bool TYFGame::isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS) + (this->matchupFormations(MATCH_PASS)/2);
+	int average = (sender->getPassRating() + receiver->getCatchRating()) / 2;
+	diff += (average+1/2)-1;
+
 	int rand = random(0, 100);
 	
 	switch (type)
@@ -831,9 +849,10 @@ bool TYFGame::isIncomplete(PassType type)
 /*
  * QB Sacked?
  * */
-bool TYFGame::isSacked(PassType type)
+bool TYFGame::isSacked(TYFPlayer* sender, TYFPlayer* tackler, PassType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS) + (this->matchupFormations(MATCH_BLITZ)/2);
+	diff += sender->getSpeedRating() - tackler->getBlitzRating();
 	int rand = random(0, 100);
 	
 	switch (type)
@@ -920,7 +939,7 @@ bool TYFGame::isRecovered(int run)
  * */
 void TYFGame::doRun(TYFPlayer* runner)
 {
-	int run = this->run();
+	int run = this->run(runner);
 	
 	// end zone run (trim if too long)
 	if (this->getDistanceToEndzone() < run)
@@ -963,13 +982,14 @@ void TYFGame::doRun(TYFPlayer* runner)
 /*
  * This function is responsible for run actions
  * */
-int TYFGame::run()
+int TYFGame::run(TYFPlayer* runner)
 {
 	int per = random(1, 10);
 	int run = 0;
 
 	// offense / defense differences
 	int diff = this->getOffDefDifferences(PLAY_RUN);
+	diff += (runner->getRunRating()+1)/2;
 
 	switch(per)
 	{

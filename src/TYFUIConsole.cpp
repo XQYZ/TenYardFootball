@@ -67,7 +67,8 @@ void TYFUIConsole::beginPlay()
 	
 	string down[4] = {"1st", "2nd", "3rd", "4th"};
 	cout << setfill('0');
-	cout << "Q" << info.Time.Quarter << " " << (int)info.Time.Time/60 << ":" << setw(2) << (int)info.Time.Time%60 << " - ";
+	cout << "Q" << info.Time.Quarter << " " << (int)info.Time.Time/60 << ":";
+	cout << setw(2) << (int)info.Time.Time%60 << " - ";
 	cout << down[info.Ball.Down-1] << "&";
 	if (info.Ball.ToGo == 0)
 		cout << "inches";
@@ -130,7 +131,8 @@ void TYFUIConsole::playFieldGoal(TYFPlayer* kicker, int distance, bool good)
 		cout << "Kick is no good!" << endl;
 }
 
-void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance, PASS_FLAG flag)
+void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance,
+							PASS_FLAG flag)
 {
 	if (flag == PASS_INCOMPLETE)
 		cout << "Incomplete Pass intended for " << receiver->getFullName() << endl;
@@ -142,7 +144,8 @@ void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* i
 
 void TYFUIConsole::playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss)
 {
-	cout << quarterback->getFullName() << " sacked by " << tackler->getFullName() << "; a loss of " << loss << " yards" << endl;
+	cout << quarterback->getFullName() << " sacked by " << tackler->getFullName();
+	cout << "; a loss of " << loss << " yards" << endl;
 }
 
 void TYFUIConsole::playRun(TYFPlayer* runner, int distance)
