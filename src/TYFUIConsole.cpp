@@ -130,20 +130,19 @@ void TYFUIConsole::playFieldGoal(int distance, bool good)
 		cout << "Kick is no good!" << endl;
 }
 
-void TYFUIConsole::playPass(int distance, PASS_FLAG flag)
+void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, int distance, PASS_FLAG flag)
 {
-	
 	if (flag == PASS_INCOMPLETE)
-		cout << "Incomplete Pass" << endl;
+		cout << "Incomplete Pass intended for " << receiver->getFullName() << endl;
 	else
-		cout << "Pass of " << distance << " yards" << endl;
+		cout << "Pass of " << distance << " yards to " << receiver->getFullName() << endl;
 	if (flag == PASS_INTERCEPTED)
-		cout << "Ball intercepted!" << endl;
+		cout << "Ball intercepted by " << receiver->getFullName() << "!" << endl;
 }
 
-void TYFUIConsole::playSack(int loss)
+void TYFUIConsole::playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss)
 {
-	cout << "QB sacked; a loss of " << loss << " yards" << endl;
+	cout << quarterback->getFullName() << " sacked by " << tackler->getFullName() << "; a loss of " << loss << " yards" << endl;
 }
 
 void TYFUIConsole::playRun(TYFPlayer* runner, int distance)
@@ -156,7 +155,7 @@ void TYFUIConsole::playRun(TYFPlayer* runner, int distance)
 		else if (distance == 0)
 			cout << " running for no gain" << endl;
 		else
-			cout << " running for a loss of " << distance << " yards" << endl;
+			cout << " running for a loss of " << -distance << " yards" << endl;
 	}
 	else
 	{
@@ -166,17 +165,17 @@ void TYFUIConsole::playRun(TYFPlayer* runner, int distance)
 		else if (distance == 0)
 			cout << " for no gain" << endl;
 		else
-			cout << " for a loss of " << distance << " yards" << endl;
+			cout << " for a loss of " << -distance << " yards" << endl;
 	}
 }
 
-void TYFUIConsole::playFumble(bool recovered)
+void TYFUIConsole::playFumble(TYFPlayer* player, bool recovered)
 {
 	cout << "Ball fumbled!" << endl;
 	if (recovered)
-		cout << "Recovered!" << endl;
+		cout << "Recovered by " << player->getFullName() << "!" << endl;
 	else
-		cout << "Recovered by the opposing team!" << endl;
+		cout << "Recovered by " << player->getFullName() << " of the opposing team!" << endl;
 }
 
 void TYFUIConsole::callTwoMinuteWarning()

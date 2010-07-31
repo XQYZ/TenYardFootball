@@ -295,6 +295,11 @@ void TYFGame::doAction()
 		int r = random(1, 10);
 		if (r <= 6)
 		{
+			this->chooseOffFormation(PLAY_PASS);
+			
+			TYFPlayer* receiver = this->getThisTeam()->getRandomReceiver();
+			TYFPlayer* sender = this->getThisTeam()->getQuarterback();
+			
 			if (this->getDistanceToFirstDown() >= 8)
 			{
 				// long yardage 8-10 yards
@@ -302,18 +307,18 @@ void TYFGame::doAction()
 				{
 					r = random(1, 10);
 					if (r <= 4)
-						this->doPass(PASS_SHORT);
+						this->doPass(sender, receiver, PASS_SHORT);
 					else if (r <= 8)
-						this->doPass(PASS_NORMAL);
+						this->doPass(sender, receiver, PASS_NORMAL);
 					else
-						this->doPass(PASS_LONG);
+						this->doPass(sender, receiver, PASS_LONG);
 				}
 				else
 				{
 					if (random(0, 1) == 0)
-						this->doPass(PASS_LONG);
+						this->doPass(sender, receiver, PASS_LONG);
 					else
-						this->doPass(PASS_NORMAL);
+						this->doPass(sender, receiver, PASS_NORMAL);
 				}
 			}
 			else if (this->getDistanceToFirstDown() >= 4)
@@ -321,48 +326,28 @@ void TYFGame::doAction()
 				// middle yardage 4-7 yards
 				r = random(1, 10);
 				if (r <= 3)
-					this->doPass(PASS_LONG);
+					this->doPass(sender, receiver, PASS_LONG);
 				else if (r <= 8)
-					this->doPass(PASS_NORMAL);
+					this->doPass(sender, receiver, PASS_NORMAL);
 				else
-					this->doPass(PASS_SHORT);
+					this->doPass(sender, receiver, PASS_SHORT);
 			}
 			else
 			{
 				// short yardage 0 - 3 yards
 				r = random(1, 10);
 				if (r <= 6)
-					this->doPass(PASS_SHORT);
+					this->doPass(sender, receiver, PASS_SHORT);
 				else if (r <= 9)
-					this->doPass(PASS_NORMAL);
+					this->doPass(sender, receiver, PASS_NORMAL);
 				else
-					this->doPass(PASS_LONG);
+					this->doPass(sender, receiver, PASS_LONG);
 			}
 		}
 		else
 		{
 			this->chooseOffFormation(PLAY_RUN);
-			
-			// who will run the ball?
-			vector<TYFPlayer* > players = this->getThisTeam()->getRunners();
-			
-			// random selection
-			TYFPlayer* runner = NULL;
-			TYFPlayer* temprunner;
-			do
-			{
-				temprunner = players[random(0, players.size() - 1)];
-				if (temprunner->getPosition() == "QB")
-				{
-					// QB runs should be rare
-					if (random(0, 30) == 0)
-						runner = temprunner;
-				}
-				else
-					runner = temprunner;
-			} while (runner == NULL);
-
-			this->doRun(runner);
+			this->doRun(this->getThisTeam()->getRandomRunner());
 		}
 	}
 }
@@ -690,7 +675,7 @@ TYFTeam* TYFGame::getOtherTeam()
 /*
  * Pass that Ball
  * */
-void TYFGame::doPass(PassType type)
+void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 {
 	this->chooseOffFormation(PLAY_PASS);
 	
@@ -703,7 +688,7 @@ void TYFGame::doPass(PassType type)
 	if (this->isSacked(type))
 	{
 		int sack = this->sacked(type);
-		this->UI->playSack(-sack);
+		this->UI->playSack(this->getThisTeam()->getQuarterback(), this->getOtherTeam()->getRandomPlayer(), -sack);
 		this->advanceBall(sack);
 		this->stopClock();
 		this->advanceTime(random(20, 30));
@@ -711,7 +696,7 @@ void TYFGame::doPass(PassType type)
 	}
 	else if (this->isIncomplete(type))
 	{
-		this->UI->playPass(pass, PASS_INCOMPLETE);
+		this->UI->playPass(sender, receiver, pass, PASS_INCOMPLETE);
 		this->stopClock();
 		this->advanceTime(random(20, 36));
 		this->Ball.Down++;
@@ -725,12 +710,12 @@ void TYFGame::doPass(PassType type)
 		
 		if (intercepted)
 		{
-			this->UI->playPass(pass, PASS_INTERCEPTED);
+			this->UI->playPass(sender, this->getOtherTeam()->getRandomReceiver(), pass, PASS_INTERCEPTED);
 			this->changeBallPossession();
 		}
 		else
 		{
-			this->UI->playPass(pass, PASS_OK);
+			this->UI->playPass(sender, receiver, pass, PASS_OK);
 			if (this->isPlayOutOfBounds(PLAY_PASS))
 			{
 				this->UI->callOutOfBounds();
@@ -944,7 +929,14 @@ void TYFGame::doRun(TYFPlayer* runner)
 		this->advanceTime(random(5, 10));
 		this->stopClock();
 		bool recovered = this->isRecovered(run);
-		this->UI->playFumble(recovered);
+		
+		TYFPlayer *player;
+		if (recovered)
+			player = this->getThisTeam()->getRandomPlayer();
+		else
+			player = this->getOtherTeam()->getRandomPlayer();
+		
+		this->UI->playFumble(player, recovered);
 		
 		// not recovered
 		if (!recovered)

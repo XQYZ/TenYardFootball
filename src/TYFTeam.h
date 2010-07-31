@@ -92,5 +92,10 @@ class TYFTeam
 		void addPlayer(TYFPlayer *p, string pos, int* formvar);
 		string getName();
 		TYFPlayer* getKicker();
+		TYFPlayer* getQuarterback();
+		TYFPlayer* getRandomPlayer();
+		TYFPlayer* getRandomRunner();
+		TYFPlayer* getRandomReceiver();
 		vector<TYFPlayer* > getRunners();
+		vector<TYFPlayer* > getReceivers();
 };

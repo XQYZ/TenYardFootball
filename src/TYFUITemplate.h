@@ -40,10 +40,10 @@ class TYFUITemplate
 		virtual void playKickOff(int yards) {};
 		virtual void playPunt(int yards, bool touchback) {};
 		virtual void playFieldGoal(int distance, bool good) {};
-		virtual void playPass(int distance, PASS_FLAG flag) {};
-		virtual void playSack(int loss) {};
+		virtual void playPass(TYFPlayer* sender, TYFPlayer* receiver, int distance, PASS_FLAG flag) {};
+		virtual void playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss) {};
 		virtual void playRun(TYFPlayer* runner, int distance) {};
-		virtual void playFumble(bool recovered) {};
+		virtual void playFumble(TYFPlayer* player, bool recovered) {};
 		virtual void playReturn(int distance, bool faircatch) {};
 		virtual void callTwoMinuteWarning() {};
 		virtual void callOutOfBounds() {};

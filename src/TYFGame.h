@@ -113,7 +113,7 @@ class TYFGame
 		void doAction();
 		void doFieldGoal();
 		void doKickOff();
-		void doPass(PassType type);
+		void doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type);
 		void doPunt();
 		void doReturn(PlayType type);
 		void doRun(TYFPlayer* runner);

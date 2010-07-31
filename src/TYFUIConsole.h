@@ -38,10 +38,10 @@ class TYFUIConsole : public TYFUITemplate
 		void playKickOff(int yards);
 		void playPunt(int yards, bool touchback);
 		void playFieldGoal(int distance, bool good);
-		void playPass(int distance, PASS_FLAG flag);
-		void playSack(int loss);
+		void playPass(TYFPlayer* sender, TYFPlayer* receiver, int distance, PASS_FLAG flag);
+		void playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss);
 		void playRun(TYFPlayer* runner, int distance);
-		void playFumble(bool recovered);
+		void playFumble(TYFPlayer* player, bool recovered);
 		void playReturn(int distance, bool faircatch);
 		void callTwoMinuteWarning();
 		void callOutOfBounds();

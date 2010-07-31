@@ -150,6 +150,79 @@ TYFPlayer* TYFTeam::getKicker()
 }
 
 /*
+ * return the TYFPlayer instance of the QB
+ * */
+TYFPlayer* TYFTeam::getQuarterback()
+{
+	for (int i = 0; i < 11; i++)
+		if (this->OnField[i]->Position == "QB")
+			return this->OnField[i];
+	return NULL;
+}
+
+/*
+ * return a random player who is on the field
+ * */
+TYFPlayer* TYFTeam::getRandomPlayer()
+{
+	return this->OnField[random(0, 10)];
+}
+
+/*
+ * get a random runner on the field
+ * */
+TYFPlayer* TYFTeam::getRandomRunner()
+{
+	// who will run the ball?
+	vector<TYFPlayer* > players = this->getRunners();
+	
+	// random selection
+	TYFPlayer* runner = NULL;
+	TYFPlayer* temprunner;
+	do
+	{
+		temprunner = players[random(0, players.size() - 1)];
+		if (temprunner->getPosition() == "QB")
+		{
+			// QB runs should be rare
+			if (random(0, 30) == 0)
+				runner = temprunner;
+		}
+		else
+			runner = temprunner;
+	} while (runner == NULL);
+	
+	return runner;
+}
+
+/*
+ * get a random receiver on the field
+ * */
+TYFPlayer* TYFTeam::getRandomReceiver()
+{
+	// who will run the ball?
+	vector<TYFPlayer* > players = this->getReceivers();
+	
+	// random selection
+	TYFPlayer* receiver = NULL;
+	TYFPlayer* tempreceiver;
+	do
+	{
+		tempreceiver = players[random(0, players.size() - 1)];
+		if ((tempreceiver->getPosition() == "HB") || (tempreceiver->getPosition() == "FB"))
+		{
+			// HB/FB passes should be rarer
+			if (random(0, 5) == 0)
+				receiver = tempreceiver;
+		}
+		else
+			receiver = tempreceiver;
+	} while (receiver == NULL);
+	
+	return receiver;
+}
+
+/*
  * return all TYFPlayer instances, which are available to run the ball
  * */
 vector<TYFPlayer* > TYFTeam::getRunners()
@@ -158,6 +231,23 @@ vector<TYFPlayer* > TYFTeam::getRunners()
 	for (int i = 0; i < 11; i++)
 	{
 		if ((this->OnField[i]->Position == "HB") || (this->OnField[i]->Position == "FB") || (this->OnField[i]->Position == "QB"))
+			players.push_back(this->OnField[i]);
+	}
+	return players;
+}
+
+/*
+ * return all TYFPlayer instances, which are available to receive the ball
+ * */
+vector<TYFPlayer* > TYFTeam::getReceivers()
+{
+	vector<TYFPlayer* > players;
+	for (int i = 0; i < 11; i++)
+	{
+		if ((this->OnField[i]->Position == "HB") || (this->OnField[i]->Position == "FB") || 
+		    (this->OnField[i]->Position == "WR") || (this->OnField[i]->Position == "TE") ||
+		    (this->OnField[i]->Position == "CB") || (this->OnField[i]->Position == "SA") || 
+		    (this->OnField[i]->Position == "LB"))
 			players.push_back(this->OnField[i]);
 	}
 	return players;
