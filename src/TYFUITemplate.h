@@ -22,11 +22,14 @@
 
 #pragma once
 
+#include "helper.h"
+#include "TYFTeam.h"
+#include "TYFGame.h"
+
 enum PASS_FLAG { PASS_OK, PASS_INTERCEPTED, PASS_INCOMPLETE };
 enum PLAY_RESULT { PLAY_NOTHING, PLAY_FIRST_DOWN, PLAY_TOUCHDOWN, PLAY_SAFETY, PLAY_TURNOVER_ON_DOWNS };
 
 class TYFGame;
-class TYFTeam;
 class TYFPlayer;
 class TYFUITemplate
 {
@@ -48,4 +51,5 @@ class TYFUITemplate
 		virtual void playReturn(TYFPlayer* returner, int distance, bool faircatch) {};
 		virtual void callTwoMinuteWarning() {};
 		virtual void callOutOfBounds() {};
+		virtual OffensePlay pickOffensePlay(TYFTeam* team) { return OffensePlay(NULL, PLAY_PASS, team->getRandomReceiver()); };
 };

@@ -24,6 +24,7 @@
 
 #include <string>
 #include "TYFUITemplate.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ class TYFUIConsole : public TYFUITemplate
 {
 	private:
 		string getBallPosition();
+		string header;
+		void cls();
 	public:
 		void beginPlay();
 		void endPlay(PLAY_RESULT result);
@@ -45,4 +48,5 @@ class TYFUIConsole : public TYFUITemplate
 		void playReturn(TYFPlayer* returner, int distance, bool faircatch);
 		void callTwoMinuteWarning();
 		void callOutOfBounds();
+		OffensePlay pickOffensePlay(TYFTeam* team);
 };

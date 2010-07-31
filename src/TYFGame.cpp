@@ -58,8 +58,8 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needPunt = false;
 	
 	// init teams
-	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI");
-	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF");
+	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI", true);
+	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF", false);
 	
 	this->UI = UI;
 	
@@ -259,97 +259,124 @@ void TYFGame::doAction()
 {
 	this->chooseDefFormation();
 	
-	bool action = true;
-	if (this->Ball.Down == 4)
+	if (this->getThisTeam()->isPlayerControlled())
 	{
-		action = false;
-		// consider going for it
-		if ((this->getDistanceToFirstDown() <= 3) && (this->Ball.Position >= 50))
+		OffensePlay play = this->UI->pickOffensePlay(this->getThisTeam());
+		
+		switch (play.Type)
 		{
-			if (random(0, 3) == 0)
-				action = true;
-			if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
-			{
-				if (random(0, 2) == 0)
-					action = true;
-				if (this->Time.Quarter == 4)
-					action = true;
-			}
-		}
-		// not going for it after all
-		if (!action)
-		{
-			int maxDistanceForFG = 33;			
-			if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
-			{
-				// we REALLY need those points
-				maxDistanceForFG = 50;
-			}
-			if (this->getDistanceToEndzone() + 10 <= maxDistanceForFG)
-				this->doFieldGoal();
-			else
+			case PLAY_PASS:
+				this->chooseOffFormation(PLAY_PASS);
+				this->doPass(this->getThisTeam()->getQuarterback(), play.Player, PASS_SHORT);
+				break;
+			case PLAY_RUN:
+				this->chooseOffFormation(PLAY_RUN);
+				this->doRun(play.Player);
+				break;
+			case PLAY_PUNT:
 				this->doPunt();
+				break;
+			case PLAY_FIELDGOAL:
+				this->doFieldGoal();
+				break;
+			default:
+				cout << "If you see this the UI fracked up" << endl;
 		}
 	}
-	
-	if (action)
+	else
 	{
-		int r = random(1, 10);
-		if (r <= 6)
+		bool action = true;
+		if (this->Ball.Down == 4)
 		{
-			this->chooseOffFormation(PLAY_PASS);
-			
-			TYFPlayer* receiver = this->getThisTeam()->getRandomReceiver();
-			TYFPlayer* sender = this->getThisTeam()->getQuarterback();
-			
-			if (this->getDistanceToFirstDown() >= 8)
+			action = false;
+			// consider going for it
+			if ((this->getDistanceToFirstDown() <= 3) && (this->Ball.Position >= 50))
 			{
-				// long yardage 8-10 yards
-				if (this->Ball.Down == 1)
+				if (random(0, 3) == 0)
+					action = true;
+				if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
 				{
+					if (random(0, 2) == 0)
+						action = true;
+					if (this->Time.Quarter == 4)
+						action = true;
+				}
+			}
+			// not going for it after all
+			if (!action)
+			{
+				int maxDistanceForFG = 33;			
+				if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
+				{
+					// we REALLY need those points
+					maxDistanceForFG = 50;
+				}
+				if (this->getDistanceToEndzone() + 10 <= maxDistanceForFG)
+					this->doFieldGoal();
+				else
+					this->doPunt();
+			}
+		}
+		
+		if (action)
+		{
+			int r = random(1, 10);
+			if (r <= 6)
+			{
+				this->chooseOffFormation(PLAY_PASS);
+				
+				TYFPlayer* receiver = this->getThisTeam()->getRandomReceiver();
+				TYFPlayer* sender = this->getThisTeam()->getQuarterback();
+				
+				if (this->getDistanceToFirstDown() >= 8)
+				{
+					// long yardage 8-10 yards
+					if (this->Ball.Down == 1)
+					{
+						r = random(1, 10);
+						if (r <= 4)
+							this->doPass(sender, receiver, PASS_SHORT);
+						else if (r <= 8)
+							this->doPass(sender, receiver, PASS_NORMAL);
+						else
+							this->doPass(sender, receiver, PASS_LONG);
+					}
+					else
+					{
+						if (random(0, 1) == 0)
+							this->doPass(sender, receiver, PASS_LONG);
+						else
+							this->doPass(sender, receiver, PASS_NORMAL);
+					}
+				}
+				else if (this->getDistanceToFirstDown() >= 4)
+				{
+					// middle yardage 4-7 yards
 					r = random(1, 10);
-					if (r <= 4)
-						this->doPass(sender, receiver, PASS_SHORT);
+					if (r <= 3)
+						this->doPass(sender, receiver, PASS_LONG);
 					else if (r <= 8)
 						this->doPass(sender, receiver, PASS_NORMAL);
 					else
-						this->doPass(sender, receiver, PASS_LONG);
+						this->doPass(sender, receiver, PASS_SHORT);
 				}
 				else
 				{
-					if (random(0, 1) == 0)
-						this->doPass(sender, receiver, PASS_LONG);
-					else
+					// short yardage 0 - 3 yards
+					r = random(1, 10);
+					if (r <= 6)
+						this->doPass(sender, receiver, PASS_SHORT);
+					else if (r <= 9)
 						this->doPass(sender, receiver, PASS_NORMAL);
+					else
+						this->doPass(sender, receiver, PASS_LONG);
 				}
-			}
-			else if (this->getDistanceToFirstDown() >= 4)
-			{
-				// middle yardage 4-7 yards
-				r = random(1, 10);
-				if (r <= 3)
-					this->doPass(sender, receiver, PASS_LONG);
-				else if (r <= 8)
-					this->doPass(sender, receiver, PASS_NORMAL);
-				else
-					this->doPass(sender, receiver, PASS_SHORT);
 			}
 			else
 			{
-				// short yardage 0 - 3 yards
-				r = random(1, 10);
-				if (r <= 6)
-					this->doPass(sender, receiver, PASS_SHORT);
-				else if (r <= 9)
-					this->doPass(sender, receiver, PASS_NORMAL);
-				else
-					this->doPass(sender, receiver, PASS_LONG);
+				this->chooseOffFormation(PLAY_RUN);
+				this->doRun(this->getThisTeam()->getRandomRunner());
 			}
-		}
-		else
-		{
-			this->chooseOffFormation(PLAY_RUN);
-			this->doRun(this->getThisTeam()->getRandomRunner());
 		}
 	}
 }
@@ -684,8 +711,6 @@ TYFTeam* TYFGame::getOtherTeam()
  * */
 void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 {
-	this->chooseOffFormation(PLAY_PASS);
-	
 	int pass = this->pass(sender, receiver, type);
 	
 	// end zone pass (trim if too long)
@@ -1045,4 +1070,9 @@ int TYFGame::run(TYFPlayer* runner)
 		run += random(0, this->matchupFormations(MATCH_RUN)*2);
 	
 	return run;
+}
+
+vector<OffFormation* > TYFGame::getOffensiveFormations()
+{
+	return this->OffensiveFormations;
 }

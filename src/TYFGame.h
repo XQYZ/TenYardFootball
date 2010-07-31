@@ -71,6 +71,21 @@ struct GameInfo
 	TeamScore Scores[2];
 };
 
+struct OffensePlay
+{
+	PlayType Type;
+	TYFPlayer* Player;
+	OffFormation* Formation;
+	
+	OffensePlay(OffFormation* fo, PlayType ty, TYFPlayer* pl)
+	{
+		this->Formation = fo;
+		this->Type = ty;
+		this->Player = pl;
+	}
+};
+
+
 // forward declaration
 class TYFUITemplate;
 
@@ -131,5 +146,6 @@ class TYFGame
 		~TYFGame(void);
 		PlayReturn nextPlay();
 		GameInfo getGameInfo();
+		vector<OffFormation* > getOffensiveFormations();
 };
 

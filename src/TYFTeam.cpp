@@ -30,7 +30,7 @@ using namespace std;
 /*
  * create a team
  * */
-TYFTeam::TYFTeam(string name, string shortname)
+TYFTeam::TYFTeam(string name, string shortname, bool controlled)
 {
 	string filename = "teams/";
 	filename.append(name);
@@ -43,6 +43,12 @@ TYFTeam::TYFTeam(string name, string shortname)
 	this->score = 0;
 	this->name = name;
 	this->shortname = shortname;
+	this->controlled = controlled;
+}
+
+bool TYFTeam::isPlayerControlled()
+{
+	return this->controlled;
 }
 
 /*

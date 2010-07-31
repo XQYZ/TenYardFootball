@@ -30,6 +30,11 @@
 
 using namespace std;
 
+void TYFUIConsole::cls()
+{
+	cout << string( 100, '\n' ) << this->header;
+}
+
 /*
  * returns the position of the Ball in the "CHI 17" format
  * */
@@ -66,22 +71,28 @@ void TYFUIConsole::beginPlay()
 	GameInfo info = this->Game->getGameInfo();
 	
 	string down[4] = {"1st", "2nd", "3rd", "4th"};
-	cout << setfill('0');
-	cout << "Q" << info.Time.Quarter << " " << (int)info.Time.Time/60 << ":";
-	cout << setw(2) << (int)info.Time.Time%60 << " - ";
-	cout << down[info.Ball.Down-1] << "&";
+	
+	stringstream ss;
+	
+	ss << setfill('0');
+	ss << "Q" << info.Time.Quarter << " " << (int)info.Time.Time/60 << ":";
+	ss << setw(2) << (int)info.Time.Time%60 << " - ";
+	ss << down[info.Ball.Down-1] << "&";
 	if (info.Ball.ToGo == 0)
-		cout << "inches";
+		ss << "inches";
 	else
-		cout << info.Ball.ToGo;
-	cout << " - ";
+		ss << info.Ball.ToGo;
+	ss << " - ";
 	for (int i = 0; i <= 1; i++)
 	{
 		if (i == info.Ball.Possession)
-			cout << "@";
-		cout << info.Scores[i].Name << " " << info.Scores[i].Points << " ";
+			ss << "@";
+		ss << info.Scores[i].Name << " " << info.Scores[i].Points << " ";
 	}
-	cout << "- " << this->getBallPosition() << endl;
+	ss << "- " << this->getBallPosition() << endl;
+	
+	this->header = ss.str();
+	this->cls();
 }
 
 /**
@@ -98,7 +109,8 @@ void TYFUIConsole::endPlay(PLAY_RESULT result)
 		cout << "Safety!" << endl;
 	else if (result == PLAY_TURNOVER_ON_DOWNS)
 		cout << "Turnover on Downs!" << endl;
-	cout << endl;
+	fflush (stdin);
+	cin.get();
 }
 
 /**
@@ -199,4 +211,78 @@ void TYFUIConsole::playReturn(TYFPlayer* returner, int distance, bool faircatch)
 		cout << "Faircatch at " << this->getBallPosition() << " by " << returner->getFullName() << endl;
 	else
 		cout << "A return of " << distance << " yards by " << returner->getFullName() << endl;
+}
+
+void printTimes(string name, int count, int max)
+{
+	for (int j = 0; j < count; j++)
+		cout << " " << name << (j+1);
+	for (int j = 0; j < max-count; j++)
+		cout << "    ";
+}
+
+OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
+{
+	unsigned int type;
+	unsigned int play;
+	vector<OffFormation* > formations = this->Game->getOffensiveFormations();
+	while (true)
+	{
+		this->cls();
+		cout << "Choose Offense Formation:" << endl;
+		unsigned int j;
+		for (j = 0; j < formations.size(); j++)
+		{
+			cout << setw(2) << (j + 1) << ")";
+			printTimes("HB", formations[j]->HB, 2);
+			printTimes("FB", formations[j]->FB, 1);
+			printTimes("WR", formations[j]->WR, 4);
+			printTimes("TE", formations[j]->TE, 2);
+			cout << endl;
+		}
+		cout << setw(2) << formations.size() + 1 << ") Punt" << endl;
+		cout << setw(2) << formations.size() + 2 << ") Field Goal" << endl;
+		
+		cout << "# ";
+		(cin >> type).get();
+		while ((0 < type) && (type <= formations.size()))
+		{
+			this->cls();
+			cout << "Choose your play:" << endl;
+			cout << " 0) Go back to Formation Menu" << endl;
+			team->setupOffFormation(*formations[type-1]);
+			vector<TYFPlayer* > runners = team->getRunners();
+			for (unsigned int i = 0; i < runners.size(); i++)
+			{
+				cout << setw(2) << (i + 1) << ") ";
+				cout << "Run by " << runners[i]->getFullName() << endl;
+			}
+				
+			vector<TYFPlayer* > receivers = team->getReceivers();
+			for (unsigned int i = 0; i < receivers.size(); i++)
+			{
+				cout << setw(2) << (runners.size() + i + 1) << ") ";
+				cout << "Pass to " << receivers[i]->getFullName() << endl;
+			}
+			cout << "# ";
+			(cin >> play).get();
+			this->cls();
+			if (play == 0)
+				type = 0;
+			else
+			{
+				play -= 1;
+				if (play < runners.size())
+					return OffensePlay(formations[type], PLAY_RUN, runners[play]);
+				else if (play < runners.size() + receivers.size())
+					return OffensePlay(formations[type], PLAY_PASS, receivers[play-runners.size()]);
+			}
+		}
+		this->cls();
+		if (type == formations.size() + 1)
+			return OffensePlay(NULL, PLAY_PUNT, NULL);
+		else if (type == formations.size() + 2)
+			return OffensePlay(NULL, PLAY_FIELDGOAL, NULL);
+	}
+	return OffensePlay(NULL, PLAY_PASS, NULL);
 }

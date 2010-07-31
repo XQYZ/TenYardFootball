@@ -23,9 +23,11 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 #include <sstream>
 #include <stdlib.h>
-#include "helper.h"
+
+using namespace std;
 
 enum PlayType { PLAY_RUN, PLAY_PASS, PLAY_PUNT, PLAY_KICKOFF, PLAY_FIELDGOAL };
 

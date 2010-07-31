@@ -74,8 +74,9 @@ class TYFTeam
 		int score;
 		string name;
 		string shortname;
+		bool controlled;
 	public:
-		TYFTeam(string name, string shortname);
+		TYFTeam(string name, string shortname, bool controlled);
 		~TYFTeam(void);
 		vector<TYFPlayer* > Players;
 		TYFPlayer *OnField[11];
@@ -83,6 +84,7 @@ class TYFTeam
 		double getOffenseRating(PlayType type);
 		void scorePoints(int n);
 		int getPoints();
+		bool isPlayerControlled();
 		void loadFromFile(string filename);
 		void setupDefFormation(DefFormation form);
 		void setupOffFormation(OffFormation form);
