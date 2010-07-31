@@ -223,6 +223,25 @@ TYFPlayer* TYFTeam::getRandomReceiver()
 }
 
 /*
+ * get a random return runner
+ * */
+TYFPlayer* TYFTeam::getRandomReturner(PlayType type)
+{
+	// random selection
+	TYFPlayer* returner = NULL;
+	TYFPlayer* tempreturner;
+	do
+	{
+		tempreturner = this->Players[random(0, this->Players.size() - 1)];
+		int r = tempreturner->getReturnRating(type);
+		if (r > 0)
+			returner = tempreturner;
+	} while (returner == NULL);
+	
+	return returner;
+}
+
+/*
  * return all TYFPlayer instances, which are available to run the ball
  * */
 vector<TYFPlayer* > TYFTeam::getRunners()

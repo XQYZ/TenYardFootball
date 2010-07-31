@@ -452,7 +452,7 @@ void TYFGame::doKickOff()
 	int kick = 65 + mod;
 	this->advanceTime(random(15, 26));
 	this->advanceBall(kick);
-	this->UI->playKickOff(kick);
+	this->UI->playKickOff(this->getThisTeam()->getKicker(), kick);
 	this->changeBallPossession();
 	this->doReturn(PLAY_KICKOFF);
 }
@@ -513,7 +513,7 @@ void TYFGame::doPunt()
 	bool touchback = (this->Ball.Position > 100);
 	if (touchback)
 		this->setBallPosition(80);
-	this->UI->playPunt(kick, touchback);
+	this->UI->playPunt(this->getThisTeam()->getKicker(), kick, touchback);
 	this->changeBallPossession();
 	if (!touchback)
 		this->doReturn(PLAY_PUNT);
@@ -547,7 +547,7 @@ void TYFGame::doFieldGoal()
 		good = (x < 8 + r*2);
 	// anything longer is always failed. I mean seriously who would even try?
 	
-	this->UI->playFieldGoal(dist, good);
+	this->UI->playFieldGoal(this->getThisTeam()->getKicker(), dist, good);
 	if (good)
 	{
 		this->getThisTeam()->scorePoints(3);
@@ -564,10 +564,15 @@ void TYFGame::doReturn(PlayType type)
 {
 	bool fairCatch = false;
 	int distance = 0;
-	int r = random(1, 100);
+	
+	TYFPlayer *returner = this->getThisTeam()->getRandomReturner(type);
+	int diff = returner->getReturnRating(type);
+	
+	int r = random(1 + diff, 100);
+	
 	if (type == PLAY_KICKOFF)
 	{
-		fairCatch = (random(0, 10) == 0);
+		fairCatch = (random(0, 6 + diff) == 0);
 		if (r < 10)
 			distance = random(0, 10);
 		else if (r < 50)
@@ -586,7 +591,7 @@ void TYFGame::doReturn(PlayType type)
 	}
 	else if (type == PLAY_PUNT)
 	{
-		fairCatch = (random(0, 2) == 0);
+		fairCatch = (random(0, min(3, diff)) == 0);
 		if (r < 30)
 			distance = random(0, 10);
 		else if (r < 70)
@@ -606,7 +611,7 @@ void TYFGame::doReturn(PlayType type)
 	if (fairCatch)
 		distance = 0;
 	this->advanceBall(distance);
-	this->UI->playReturn(distance, fairCatch);
+	this->UI->playReturn(returner, distance, fairCatch);
 	this->Ball.ToGo = 10;
 }
 

@@ -37,14 +37,14 @@ class TYFUITemplate
 		virtual void run() {};
 		virtual void beginPlay() {};
 		virtual void endPlay(PLAY_RESULT result) {};
-		virtual void playKickOff(int yards) {};
-		virtual void playPunt(int yards, bool touchback) {};
-		virtual void playFieldGoal(int distance, bool good) {};
+		virtual void playKickOff(TYFPlayer* kicker, int yards) {};
+		virtual void playPunt(TYFPlayer* kicker, int yards, bool touchback) {};
+		virtual void playFieldGoal(TYFPlayer* kicker, int distance, bool good) {};
 		virtual void playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance, PASS_FLAG flag) {};
 		virtual void playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss) {};
 		virtual void playRun(TYFPlayer* runner, int distance) {};
 		virtual void playFumble(TYFPlayer* player, bool recovered) {};
-		virtual void playReturn(int distance, bool faircatch) {};
+		virtual void playReturn(TYFPlayer* returner, int distance, bool faircatch) {};
 		virtual void callTwoMinuteWarning() {};
 		virtual void callOutOfBounds() {};
 };

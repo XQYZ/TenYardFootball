@@ -21,6 +21,7 @@
  * */
 
 #include "TYFPlayer.h"
+#include "helper.h" 
 #include <iostream>
 #define TIXML_USE_STL
 #include "tinyxml.h" 
@@ -90,6 +91,16 @@ int TYFPlayer::getOffenseRating(PlayType type)
 int TYFPlayer::getKickRating()
 {
 	return this->Kick;
+}
+
+int TYFPlayer::getReturnRating(PlayType type)
+{
+	if (type == PLAY_PUNT)
+		return this->PuntReturn;
+	else if (type == PLAY_KICKOFF)
+		return this->KickReturn;
+	else
+		return -1;
 }
 
 int getValue(TiXmlElement *pParm, string name)

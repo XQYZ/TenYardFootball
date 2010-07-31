@@ -109,21 +109,21 @@ void TYFUIConsole::run()
 	while (this->Game->nextPlay() == PL_OK) {}
 }
 
-void TYFUIConsole::playKickOff(int yards)
+void TYFUIConsole::playKickOff(TYFPlayer* kicker, int yards)
 {
-	cout << "Kickoff of " << yards << " yards" << endl;
+	cout << "Kickoff of " << yards << " yards by " << kicker->getFullName() << endl;
 }
 
-void TYFUIConsole::playPunt(int yards, bool touchback)
+void TYFUIConsole::playPunt(TYFPlayer* kicker, int yards, bool touchback)
 {
-	cout << "A Punt of " << yards << " yards" << endl;
+	cout << "A Punt of " << yards << " yards by " << kicker->getFullName() << endl;
 	if (touchback)
 		cout << "Touchback!" << endl;
 }
 
-void TYFUIConsole::playFieldGoal(int distance, bool good)
+void TYFUIConsole::playFieldGoal(TYFPlayer* kicker, int distance, bool good)
 {
-	cout << "A " << distance << " yard fieldgoal attempt" << endl;
+	cout << "A " << distance << " yard fieldgoal attempt by " << kicker->getFullName() << endl;
 	if (good)
 		cout << "Kick is good!" << endl;
 	else
@@ -189,15 +189,11 @@ void TYFUIConsole::callOutOfBounds()
 	cout << "Ran out of bounds at " << this->getBallPosition() << endl;
 }
 
-void TYFUIConsole::playReturn(int distance, bool faircatch)
+void TYFUIConsole::playReturn(TYFPlayer* returner, int distance, bool faircatch)
 {
 	GameInfo info = this->Game->getGameInfo();
 	if (faircatch)
-	{
-		cout << "Faircatch at " << this->getBallPosition() << endl;
-	}
+		cout << "Faircatch at " << this->getBallPosition() << " by " << returner->getFullName() << endl;
 	else
-	{
-		cout << "A return of " << distance << " yards." << endl;
-	}
+		cout << "A return of " << distance << " yards by " << returner->getFullName() << endl;
 }

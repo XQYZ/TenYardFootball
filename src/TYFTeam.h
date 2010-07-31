@@ -96,6 +96,7 @@ class TYFTeam
 		TYFPlayer* getRandomPlayer();
 		TYFPlayer* getRandomRunner();
 		TYFPlayer* getRandomReceiver();
+		TYFPlayer* getRandomReturner(PlayType type);
 		vector<TYFPlayer* > getRunners();
 		vector<TYFPlayer* > getReceivers();
 };

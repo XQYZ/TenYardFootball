@@ -38,6 +38,7 @@ class TYFPlayer
 		int getDefenseRating(PlayType type);
 		int getOffenseRating(PlayType type);
 		int getKickRating();
+		int getReturnRating(PlayType type);
 		void loadPlayerFromXMLNode(TiXmlElement *pParm);
 		string getFullName();
 		string getPosition();
