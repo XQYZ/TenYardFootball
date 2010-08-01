@@ -128,7 +128,9 @@ void TYFUIConsole::endPlay(PLAY_RESULT result)
 	if (result == PLAY_FIRST_DOWN)
 		cout << "First Down!" << endl;
 	else if (result == PLAY_TOUCHDOWN)
-		cout << "Touchdown!" << endl;
+		cout << "Touchdown!" << endl << "Extra Point is NOT good!" << endl;
+	else if (result == PLAY_TOUCHDOWN_XP)
+		cout << "Touchdown!" << endl << "Extra Point is good!" << endl;
 	else if (result == PLAY_SAFETY)
 		cout << "Safety!" << endl;
 	else if (result == PLAY_TURNOVER_ON_DOWNS)

@@ -45,7 +45,6 @@ using namespace std;
  * */
 TYFGame::TYFGame(TYFUITemplate *UI)
 {
-	// CAN I HAZ RANDOM?	
 	this->firstKickoff = TEAM1;
 	this->Ball.Position = 20;
 	this->Ball.ToGo = 10;
@@ -209,11 +208,17 @@ PlayReturn TYFGame::nextPlay()
 		// touchdown check
 		if (this->Ball.Position > 100)
 		{
-			this->getThisTeam()->scorePoints(7, this->Time.Quarter);
+			this->getThisTeam()->scorePoints(6, this->Time.Quarter);
 			this->needKickoff = true;
 			this->Ball.Down = 1;
 			this->Ball.ToGo = 10;
-			this->UI->endPlay(PLAY_TOUCHDOWN);
+			if (random(0, 100) > 2)
+			{
+				this->getThisTeam()->scorePoints(1, this->Time.Quarter);
+				this->UI->endPlay(PLAY_TOUCHDOWN_XP);
+			}
+			else
+				this->UI->endPlay(PLAY_TOUCHDOWN);
 		}
 		
 		// safety check
