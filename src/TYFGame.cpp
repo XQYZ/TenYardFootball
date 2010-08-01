@@ -746,8 +746,6 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type)
 	else
 	{
 		this->advanceBall(pass);
-		if (this->getBallPosition() < 0)
-			this->setBallPosition(0);
 		bool intercepted = this->isIntercepted(sender, receiver, pass, type);
 		
 		this->advanceTime(random(20, 36));
@@ -756,6 +754,8 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type)
 		{
 			this->UI->playPass(sender, receiver, this->getOtherTeam()->getRandomReceiver(), pass, PASS_INTERCEPTED);
 			this->changeBallPossession();
+			if (this->getBallPosition() < 0)
+				this->setBallPosition(0);
 		}
 		else
 		{
