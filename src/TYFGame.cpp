@@ -58,10 +58,13 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needPunt = false;
 	
 	// init teams
-	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI", true);
-	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF", false);
+	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI");
+	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF");
 	
 	this->UI = UI;
+	
+	this->Teams[0]->setController(this->UI->setPlayerControl(this->Teams[0]));
+	this->Teams[1]->setController(this->UI->setPlayerControl(this->Teams[1]));
 	
 	//                                             name,pass,run,blz,  CB,LB,SA,DE,DT
 	DefensiveFormations.push_back(new DefFormation("3-2",  2, -2, 2,   3, 2, 3, 2, 1));
@@ -96,7 +99,7 @@ void TYFGame::chooseOffFormation(PlayType type)
 		{
 			this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
 		} while ((*this->OffensiveFormation).Pass <= 0);
-		this->getThisTeam()->setupOffFormation(*this->OffensiveFormation);
+		this->getThisTeam()->setupOffFormation(this->OffensiveFormation);
 	}
 	else if (type == PLAY_RUN)
 	{
@@ -104,7 +107,7 @@ void TYFGame::chooseOffFormation(PlayType type)
 		{
 			this->OffensiveFormation = this->OffensiveFormations[random(0, this->OffensiveFormations.size() - 1)];
 		} while ((*this->OffensiveFormation).Run <= 0);
-		this->getThisTeam()->setupOffFormation(*this->OffensiveFormation);
+		this->getThisTeam()->setupOffFormation(this->OffensiveFormation);
 	}
 	
 	if (type == PLAY_PUNT)
@@ -121,7 +124,7 @@ void TYFGame::chooseOffFormation(PlayType type)
 void TYFGame::chooseDefFormation()
 {
 	this->DefensiveFormation = this->DefensiveFormations[random(0, this->DefensiveFormations.size() - 1)];
-	this->getOtherTeam()->setupDefFormation(*this->DefensiveFormation);
+	this->getOtherTeam()->setupDefFormation(this->DefensiveFormation);
 	int r = random(0, 10);
 	if (r == 0)
 		this->DefensivePlay = DPLAY_BLITZ;
@@ -264,21 +267,23 @@ GameInfo TYFGame::getGameInfo()
  * */
 void TYFGame::doAction()
 {
-	if (this->getOtherTeam()->isPlayerControlled())
+	if (this->getOtherTeam()->isPlayerControlled(CONTROL_PLAYER_DEFENSE))
 	{
 		DefensePlay defplay = this->UI->pickDefensePlay(this->getOtherTeam());
 		this->DefensiveFormation = defplay.Formation;
 		this->DefensivePlay = defplay.Type;
-		this->getOtherTeam()->setupDefFormation(*this->DefensiveFormation);
+		if (this->DefensiveFormation != NULL)
+			this->getOtherTeam()->setupDefFormation(this->DefensiveFormation);
 	}
 	else
 		this->chooseDefFormation();
-	
-	if (this->getThisTeam()->isPlayerControlled())
+		
+	if (this->getThisTeam()->isPlayerControlled(CONTROL_PLAYER_OFFENSE))
 	{
 		OffensePlay offplay = this->UI->pickOffensePlay(this->getThisTeam());
 		this->OffensiveFormation = offplay.Formation;
-		this->getThisTeam()->setupOffFormation(*this->OffensiveFormation);
+		if (this->OffensiveFormation != NULL)
+			this->getThisTeam()->setupOffFormation(this->OffensiveFormation);
 		
 		switch (offplay.Type)
 		{
@@ -740,7 +745,7 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type)
 	
 	// end zone pass (trim if too long)
 	if (this->getDistanceToEndzone() < pass)
-		pass = this->getDistanceToEndzone() + random(1, 10);
+		pass = this->getDistanceToEndzone() + random(1, 8);
 	
 	if (this->isSacked(sender, this->getOtherTeam()->getRandomTackle(), type))
 	{
@@ -1015,7 +1020,7 @@ void TYFGame::doRun(TYFPlayer* runner)
 	
 	// end zone run (trim if too long)
 	if (this->getDistanceToEndzone() < run)
-		run = this->getDistanceToEndzone() + random(1, 10);
+		run = this->getDistanceToEndzone() + random(1, 8);
 	
 	this->UI->playRun(runner, run);
 	
@@ -1024,6 +1029,11 @@ void TYFGame::doRun(TYFPlayer* runner)
 	
 	if (this->isFumble())
 	{
+		// can one fumble in the endzone?
+		// probably not
+		// TODO: check it
+		if (this->getBallPosition() < 0)
+			this->setBallPosition(0);
 		this->advanceTime(random(5, 10));
 		this->stopClock();
 		bool recovered = this->isRecovered(run);

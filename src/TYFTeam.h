@@ -68,15 +68,18 @@ struct OffFormation
 	}
 };
 
+enum ControlFlag { CONTROL_COMPUTER, CONTROL_PLAYER, CONTROL_PLAYER_OFFENSE, CONTROL_PLAYER_DEFENSE };
+
 class TYFTeam
 {
 	private:
 		int score;
 		string name;
 		string shortname;
-		bool controlled;
+		ControlFlag controlled;
 	public:
-		TYFTeam(string name, string shortname, bool controlled);
+		TYFTeam(string name, string shortname);
+		void setController(ControlFlag controlled);
 		~TYFTeam(void);
 		vector<TYFPlayer* > Players;
 		TYFPlayer *OnField[11];
@@ -84,10 +87,10 @@ class TYFTeam
 		double getOffenseRating(PlayType type);
 		void scorePoints(int n);
 		int getPoints();
-		bool isPlayerControlled();
+		bool isPlayerControlled(ControlFlag controlled);
 		void loadFromFile(string filename);
-		void setupDefFormation(DefFormation form);
-		void setupOffFormation(OffFormation form);
+		void setupDefFormation(DefFormation *form);
+		void setupOffFormation(OffFormation *form);
 		void setupPuntFormation();
 		void setupFieldGoalFormation();
 		void setupKickoffFormation();

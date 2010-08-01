@@ -53,4 +53,5 @@ class TYFUITemplate
 		virtual void callOutOfBounds() {};
 		virtual OffensePlay pickOffensePlay(TYFTeam* team) { return OffensePlay(NULL, PLAY_PASS_SHORT, team->getRandomReceiver()); };
 		virtual DefensePlay pickDefensePlay(TYFTeam* team) { return DefensePlay(NULL, DPLAY_PASSBLOCK); };
+		virtual ControlFlag setPlayerControl(TYFTeam* team) { return CONTROL_COMPUTER; };
 };

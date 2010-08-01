@@ -76,7 +76,7 @@ struct OffensePlay
 	TYFPlayer* Player;
 	OffFormation* Formation;
 	
-	OffensePlay(OffFormation* fo, PlayType ty, TYFPlayer* pl)
+	OffensePlay(OffFormation *fo, PlayType ty, TYFPlayer* pl)
 	{
 		this->Formation = fo;
 		this->Type = ty;
@@ -89,7 +89,7 @@ struct DefensePlay
 	DefFormation* Formation;
 	DefPlayType Type;
 	
-	DefensePlay(DefFormation* fo, DefPlayType ty)
+	DefensePlay(DefFormation *fo, DefPlayType ty)
 	{
 		this->Formation = fo;
 		this->Type = ty;

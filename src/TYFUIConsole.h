@@ -25,6 +25,7 @@
 #include <string>
 #include "TYFUITemplate.h"
 #include "helper.h"
+#include <streambuf> 
 
 using namespace std;
 
@@ -36,6 +37,7 @@ class TYFUIConsole : public TYFUITemplate
 		void cls();
 		int displayMenu(string title, vector<string> menuItems, bool back);
 	public:
+		TYFUIConsole(void);
 		void beginPlay();
 		void endPlay(PLAY_RESULT result);
 		void run();
@@ -51,4 +53,5 @@ class TYFUIConsole : public TYFUITemplate
 		void callOutOfBounds();
 		OffensePlay pickOffensePlay(TYFTeam* team);
 		DefensePlay pickDefensePlay(TYFTeam* team);
+		ControlFlag setPlayerControl(TYFTeam* team);
 };

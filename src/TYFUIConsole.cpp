@@ -29,8 +29,15 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <fstream> 
 
 using namespace std;
+
+TYFUIConsole::TYFUIConsole(void)
+{
+	srand((int)time(NULL));
+	this->Game = new TYFGame(this);
+}
 
 /*
  * this clears the screen on the console
@@ -91,6 +98,8 @@ void TYFUIConsole::beginPlay()
 	ss << down[info.Ball.Down-1] << "&";
 	if (info.Ball.ToGo == 0)
 		ss << "inches";
+	else if (100 - info.Ball.Position < info.Ball.ToGo)
+		ss << "goal";
 	else
 		ss << info.Ball.ToGo;
 	ss << " - ";
@@ -131,6 +140,13 @@ void TYFUIConsole::endPlay(PLAY_RESULT result)
 void TYFUIConsole::run()
 {
 	while (this->Game->nextPlay() == PL_OK) {}
+	
+	// game is over, -> overview table
+	GameInfo info = this->Game->getGameInfo();
+	cout << endl << "Game Over" << endl;
+	cout << info.Scores[0].Name << ": " << info.Scores[0].Points << endl;
+	cout << info.Scores[1].Name << ": " << info.Scores[1].Points << endl;
+	while (cin.get()) {}
 }
 
 void TYFUIConsole::playKickOff(TYFPlayer* kicker, int yards)
@@ -218,7 +234,7 @@ void TYFUIConsole::playReturn(TYFPlayer* returner, int distance, bool faircatch)
 {
 	GameInfo info = this->Game->getGameInfo();
 	if (faircatch)
-		cout << "Faircatch at " << this->getBallPosition() << " by " << returner->getFullName() << endl;
+		cout << "Fair Catch at " << this->getBallPosition() << " by " << returner->getFullName() << endl;
 	else
 		cout << "A return of " << distance << " yards by " << returner->getFullName() << endl;
 }
@@ -322,7 +338,7 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 		while (formation != 0)
 		{
 			vector<string> PlayMenu;
-			team->setupOffFormation(*formations[formation-1]);
+			team->setupOffFormation(formations[formation-1]);
 			
 			vector<TYFPlayer* > runners = team->getRunners();
 			for (unsigned int i = 0; i < runners.size(); i++)
@@ -347,7 +363,7 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 				if (play <= (int)runners.size())
 				{
 					this->cls();
-					return OffensePlay(formations[formation], PLAY_RUN, runners[play-1]);
+					return OffensePlay(formations[formation-1], PLAY_RUN, runners[play-1]);
 				}
 				while (play <= (int)runners.size() + (int)receivers.size() && play != 0)
 				{
@@ -413,4 +429,32 @@ DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
 			}
 		}
 	} while (true);
+}
+
+/*
+ * Ask the Player if and how much he wants to control the team
+ * */
+ControlFlag TYFUIConsole::setPlayerControl(TYFTeam* team)
+{
+	this->cls();
+	vector<string> ControlMenu;
+	ControlMenu.push_back("Computer Controlled");
+	ControlMenu.push_back("Head Coach");
+	ControlMenu.push_back("Offensive Coach");
+	ControlMenu.push_back("Defensive Coach");
+	stringstream ss;
+	ss << "Control Setting for " << team->getName() << ":";
+	switch (this->displayMenu(ss.str(), ControlMenu, false))
+	{
+		case 1:
+			return CONTROL_COMPUTER;
+		case 2:
+			return CONTROL_PLAYER;
+		case 3:
+			return CONTROL_PLAYER_OFFENSE;
+		case 4:
+			return CONTROL_PLAYER_DEFENSE;
+		default:
+			return CONTROL_COMPUTER;
+	}
 }

@@ -30,7 +30,7 @@ using namespace std;
 /*
  * create a team
  * */
-TYFTeam::TYFTeam(string name, string shortname, bool controlled)
+TYFTeam::TYFTeam(string name, string shortname)
 {
 	string filename = "teams/";
 	filename.append(name);
@@ -43,15 +43,25 @@ TYFTeam::TYFTeam(string name, string shortname, bool controlled)
 	this->score = 0;
 	this->name = name;
 	this->shortname = shortname;
+}
+
+/*
+ * sets who controlls this team
+ * */
+void TYFTeam::setController(ControlFlag controlled)
+{
 	this->controlled = controlled;
 }
 
 /*
  * returns true if the player controls this team
  * */
-bool TYFTeam::isPlayerControlled()
+bool TYFTeam::isPlayerControlled(ControlFlag controlled)
 {
-	return this->controlled;
+	if (this->controlled == CONTROL_PLAYER)
+		return true;
+	else 
+		return (this->controlled == controlled);
 }
 
 /*
@@ -317,7 +327,6 @@ void TYFTeam::addPlayer(TYFPlayer *p, string pos, int* formvar)
 		while (this->OnField[c] != NULL)
 			c++;
 		this->OnField[c] = p;
-		//cout << c << " " << p->LName << " " << p->Position << *formvar << endl;
 		*formvar -= 1;
 	}
 }
@@ -325,39 +334,43 @@ void TYFTeam::addPlayer(TYFPlayer *p, string pos, int* formvar)
 /*
  * align the team in a defense formation
  * */
-void TYFTeam::setupDefFormation(DefFormation form)
+void TYFTeam::setupDefFormation(DefFormation *form)
 {
+	DefFormation formation = *form;
+	
 	for (int i = 0; i < 11; i++)
 		this->OnField[i] = NULL;
 	
 	for (unsigned int i = 0; i <= this->Players.size() - 1; i++)
 	{
-		this->addPlayer(this->Players[i], "CB", &form.CB);
-		this->addPlayer(this->Players[i], "LB", &form.LB);
-		this->addPlayer(this->Players[i], "SA", &form.SA);
-		this->addPlayer(this->Players[i], "DE", &form.DE);
-		this->addPlayer(this->Players[i], "DT", &form.DT);
+		this->addPlayer(this->Players[i], "CB", &formation.CB);
+		this->addPlayer(this->Players[i], "LB", &formation.LB);
+		this->addPlayer(this->Players[i], "SA", &formation.SA);
+		this->addPlayer(this->Players[i], "DE", &formation.DE);
+		this->addPlayer(this->Players[i], "DT", &formation.DT);
 	}
 }
 
 /*
  * align the team in an offense formation
  * */
-void TYFTeam::setupOffFormation(OffFormation form)
+void TYFTeam::setupOffFormation(OffFormation *form)
 {
+	OffFormation formation = *form;
+	
 	for (int i = 0; i < 11; i++)
 		this->OnField[i] = NULL;
 	
 	for (unsigned int i = 0; i <= this->Players.size() - 1; i++)
 	{
-		this->addPlayer(this->Players[i], "HB", &form.HB);
-		this->addPlayer(this->Players[i], "FB", &form.FB);
-		this->addPlayer(this->Players[i], "WR", &form.WR);
-		this->addPlayer(this->Players[i], "TE", &form.TE);
-		this->addPlayer(this->Players[i], "OG", &form.OG);
-		this->addPlayer(this->Players[i], "OT", &form.OT);
-		this->addPlayer(this->Players[i], "QB", &form.QB);
-		this->addPlayer(this->Players[i], "CE", &form.CE);
+		this->addPlayer(this->Players[i], "HB", &formation.HB);
+		this->addPlayer(this->Players[i], "FB", &formation.FB);
+		this->addPlayer(this->Players[i], "WR", &formation.WR);
+		this->addPlayer(this->Players[i], "TE", &formation.TE);
+		this->addPlayer(this->Players[i], "OG", &formation.OG);
+		this->addPlayer(this->Players[i], "OT", &formation.OT);
+		this->addPlayer(this->Players[i], "QB", &formation.QB);
+		this->addPlayer(this->Players[i], "CE", &formation.CE);
 	}
 }
 
