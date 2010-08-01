@@ -74,6 +74,9 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	DefensiveFormations.push_back(new DefFormation("4-3",  0,  1, 0,   1, 3, 3, 2, 2));
 	DefensiveFormations.push_back(new DefFormation("4-4", -3,  3, 0,   2, 4, 1, 2, 2));
 	
+	DefensiveFormations.push_back(new DefFormation("Punt Return",      -3,  -3, -3,   2, 4, 1, 2, 2));
+	DefensiveFormations.push_back(new DefFormation("Field Goal Block", -3,  -3, -3,   2, 4, 1, 2, 2));
+	
 	//                                           pass,run,blz,  hb,fb,wr,te,OG,OT,QB,CE
 	OffensiveFormations.push_back(new OffFormation( 3, -1,  1,   1, 0, 2, 2, 2, 2, 1, 1));
 	OffensiveFormations.push_back(new OffFormation( 3, -1, -1,   1, 0, 3, 1, 2, 2, 1, 1));
@@ -131,6 +134,8 @@ void TYFGame::chooseDefFormation()
 		this->DefensivePlay = DPLAY_PASSBLOCK;
 	else
 		this->DefensivePlay = DPLAY_RUNBLOCK;
+	if (this->Ball.Down == 4)
+		this->DefensivePlay = DPLAY_PUNTRETURN;
 }
 
 /*
@@ -447,9 +452,20 @@ void TYFGame::advanceTime(int n)
 	// the huddle doesn't take time as the clock is stopped
 	if (this->clockStopped)
 		n -= 10;
+	
+	if ((this->Time.Quarter == 2) || (this->Time.Quarter == 4))
+		if (this->Time.Time < 2*60)
+		{
+			if (this->getThisTeam()->getPoints() <= this->getOtherTeam()->getPoints())
+				// hurry up offense when down in Q2/Q4
+				n = n*0.75;
+			else
+				// run down the clock when up in Q2/Q4
+				n = n*1.5;
+		}
 	if (n < 3)
 		n = random(2, 4);
-	
+		
 	// advance the time
 	this->Time.Time -= n;
 	if (this->Time.Time <= 0)
@@ -459,10 +475,19 @@ void TYFGame::advanceTime(int n)
 			this->Time.Quarter += 1;
 			this->Time.Time = 15*60;
 		}
-		else
+		else if (this->Time.Quarter == 4)
 		{
-			this->Time.Time = 0;
+			if (this->getThisTeam()->getPoints() != this->getOtherTeam()->getPoints())
+				this->Time.Time = 0;
+			else
+			{
+				// OVERTIME STARTS HERE, BABY
+				this->Time.Quarter += 1;
+				this->Time.Time = 15*60;
+			}
 		}
+		else
+			this->Time.Time = 0;
 	}
 	bool isTwoMin = (((this->Time.Quarter == 2) || (this->Time.Quarter == 4)) && (this->Time.Time <= 2*60));
 	if (!isTwoMin)
@@ -658,21 +683,29 @@ void TYFGame::doReturn(PlayType type)
 	}
 	else if (type == PLAY_PUNT)
 	{
-		fairCatch = (random(0, min(3, diff)) == 0);
-		if (r < 30)
-			distance = random(0, 10);
-		else if (r < 70)
-			distance = 10 + random(0, 10);
-		else if (r < 80)
-			distance = 20 + random(0, 10);
-		else if (r < 90)
-			distance = 30 + random(0, 10);
+		if (this->DefensivePlay == DPLAY_PUNTRETURN)
+		{
+			fairCatch = (random(0, min(3, diff)) == 0);
+			if (r < 30)
+				distance = random(0, 10);
+			else if (r < 70)
+				distance = 10 + random(0, 10);
+			else if (r < 80)
+				distance = 20 + random(0, 10);
+			else if (r < 90)
+				distance = 30 + random(0, 10);
+			else
+			{
+				int n = random(0, 9);
+				if (n < 4)
+					n = 4;
+				distance = n*10+random(0, 10);
+			}
+		}
 		else
 		{
-			int n = random(0, 9);
-			if (n < 4)
-				n = 4;
-			distance = n*10+random(0, 10);
+			fairCatch = (random(0, 1) == 0);
+			distance = random(0, 5);
 		}
 	}
 	if (fairCatch)
@@ -688,9 +721,13 @@ void TYFGame::doReturn(PlayType type)
 bool TYFGame::isStillRunning()
 {
 	if (this->Time.Quarter == 4)
-		return (this->Time.Time > 0);
-	else
-		return true;
+	{
+		if (this->getThisTeam()->getPoints() != this->getOtherTeam()->getPoints())
+			return (this->Time.Time > 0);
+	}
+	if (this->Time.Quarter == 5)
+		return ((this->getThisTeam()->getPoints() == this->getOtherTeam()->getPoints()) && (this->Time.Time != 0));
+	return true;
 }
 
 /*

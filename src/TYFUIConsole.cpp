@@ -434,6 +434,11 @@ DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
 	{
 		formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false);
 		this->cls();
+		if (FormationMenu[formation-1] == "Punt Return")
+			return DefensePlay(formations[formation-1], DPLAY_PUNTRETURN);
+		else if (FormationMenu[formation-1] == "Field Goal Block")
+			return DefensePlay(formations[formation-1], DPLAY_FIELDGOALBLOCK);
+		
 		while (formation != 0)
 		{
 			play = this->displayMenu("Choose Defensive Play:", PlayMenu, true);
