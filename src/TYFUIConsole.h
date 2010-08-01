@@ -36,6 +36,7 @@ class TYFUIConsole : public TYFUITemplate
 		string header;
 		void cls();
 		int displayMenu(string title, vector<string> menuItems, bool back);
+		bool LogMode;
 	public:
 		TYFUIConsole(void);
 		void beginPlay();

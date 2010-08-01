@@ -209,7 +209,7 @@ PlayReturn TYFGame::nextPlay()
 		// touchdown check
 		if (this->Ball.Position > 100)
 		{
-			this->getThisTeam()->scorePoints(7);
+			this->getThisTeam()->scorePoints(7, this->Time.Quarter);
 			this->needKickoff = true;
 			this->Ball.Down = 1;
 			this->Ball.ToGo = 10;
@@ -219,7 +219,7 @@ PlayReturn TYFGame::nextPlay()
 		// safety check
 		else if (this->Ball.Position < 0)
 		{
-			this->getOtherTeam()->scorePoints(2);
+			this->getOtherTeam()->scorePoints(2, this->Time.Quarter);
 			this->setBallPosition(20);
 			this->needPunt = true;
 			this->UI->endPlay(PLAY_SAFETY);
@@ -256,8 +256,13 @@ GameInfo TYFGame::getGameInfo()
 	GameInfo info;
 	info.Ball = this->Ball;
 	info.Time = this->Time;
-	info.Scores[0] = TeamScore(this->Teams[0]->getName(), this->Teams[0]->getPoints());
-	info.Scores[1] = TeamScore(this->Teams[1]->getName(), this->Teams[1]->getPoints());
+	for (int i = 0; i <= 1; i++)
+	{
+		info.Scores[i] = TeamScore(this->Teams[i]->getName(), this->Teams[i]->getPoints());
+		for (int j = 0; j <= 4; j++)
+			info.Scores[i].PointsQuarter[j] = this->Teams[i]->getPoints(j+1);
+	}
+	
 	return info;
 }
 
@@ -607,7 +612,7 @@ void TYFGame::doFieldGoal()
 	this->UI->playFieldGoal(this->getThisTeam()->getKicker(), dist, good);
 	if (good)
 	{
-		this->getThisTeam()->scorePoints(3);
+		this->getThisTeam()->scorePoints(3, this->Time.Quarter);
 		this->doKickOff();
 	}
 	else

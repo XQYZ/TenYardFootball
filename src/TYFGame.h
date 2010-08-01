@@ -49,6 +49,7 @@ struct TeamScore
 {
 	string Name;
 	int Points;
+	int PointsQuarter[5];
 	
 	TeamScore()
 	{

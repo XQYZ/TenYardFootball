@@ -41,6 +41,8 @@ TYFTeam::TYFTeam(string name, string shortname)
 		this->OnField[i] = this->Players[i];
 	}
 	this->score = 0;
+	for (int i = 0; i <= 4; i++)
+		this->scoreQuarter[i] = 0;
 	this->name = name;
 	this->shortname = shortname;
 }
@@ -96,9 +98,10 @@ void TYFTeam::loadFromFile(string filename)
 /*
  * score n points for this team
  * */
-void TYFTeam::scorePoints(int n)
+void TYFTeam::scorePoints(int n, int q)
 {
 	this->score += n;
+	this->scoreQuarter[q-1] += n;
 }
 
 /*
@@ -107,6 +110,11 @@ void TYFTeam::scorePoints(int n)
 int TYFTeam::getPoints()
 {
 	return this->score;
+}
+
+int TYFTeam::getPoints(int q)
+{
+	return this->scoreQuarter[q-1];
 }
 
 /*

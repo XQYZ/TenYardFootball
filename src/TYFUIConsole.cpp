@@ -44,6 +44,7 @@ TYFUIConsole::TYFUIConsole(void)
  * */
 void TYFUIConsole::cls()
 {
+	if (!this->LogMode)
 	// I know, I know ...
 	#ifdef _WIN32
 		system("cls");
@@ -112,7 +113,10 @@ void TYFUIConsole::beginPlay()
 	ss << "- " << this->getBallPosition() << endl;
 	
 	this->header = ss.str();
-	this->cls();
+	if (!this->LogMode)
+		this->cls();
+	else
+		cout << this->header;
 }
 
 /**
@@ -129,8 +133,11 @@ void TYFUIConsole::endPlay(PLAY_RESULT result)
 		cout << "Safety!" << endl;
 	else if (result == PLAY_TURNOVER_ON_DOWNS)
 		cout << "Turnover on Downs!" << endl;
-	//fflush (stdin);
-	cin.get();
+	
+	if (!this->LogMode)
+		cin.get();
+	else
+		cout << endl;
 }
 
 /**
@@ -139,13 +146,27 @@ void TYFUIConsole::endPlay(PLAY_RESULT result)
  * */
 void TYFUIConsole::run()
 {
+	vector<string> FormatMenu;
+	FormatMenu.push_back("Play-Focused (recommended)");
+	FormatMenu.push_back("Continuous Log (buggy with human players)");
+	
+	int log = this->displayMenu("Select Display Format", FormatMenu, false);
+	this->cls();
+	this->LogMode = (log == 2);
+	
 	while (this->Game->nextPlay() == PL_OK) {}
 	
 	// game is over, -> overview table
 	GameInfo info = this->Game->getGameInfo();
-	cout << endl << "Game Over" << endl;
-	cout << info.Scores[0].Name << ": " << info.Scores[0].Points << endl;
-	cout << info.Scores[1].Name << ": " << info.Scores[1].Points << endl;
+	cout << "Game Over" << endl;
+	cout << "TEAM\t" << "Q1\t" << "Q2\t" << "Q3\t" << "Q4\t" << "OT\t" << "TOTAL" << endl;
+	for (int i = 0; i <= 1; i++)
+	{
+		cout << info.Scores[i].Name << "\t";
+		for (int j = 0; j <= 4; j++)
+			cout << info.Scores[i].PointsQuarter[j] << "\t";
+		cout << info.Scores[i].Points << endl;
+	}
 	while (cin.get()) {}
 }
 

@@ -74,6 +74,7 @@ class TYFTeam
 {
 	private:
 		int score;
+		int scoreQuarter[5];
 		string name;
 		string shortname;
 		ControlFlag controlled;
@@ -85,8 +86,9 @@ class TYFTeam
 		TYFPlayer *OnField[11];
 		double getDefenseRating(PlayType type);
 		double getOffenseRating(PlayType type);
-		void scorePoints(int n);
+		void scorePoints(int n, int q);
 		int getPoints();
+		int getPoints(int q);
 		bool isPlayerControlled(ControlFlag controlled);
 		void loadFromFile(string filename);
 		void setupDefFormation(DefFormation *form);
