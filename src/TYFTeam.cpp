@@ -46,6 +46,9 @@ TYFTeam::TYFTeam(string name, string shortname, bool controlled)
 	this->controlled = controlled;
 }
 
+/*
+ * returns true if the player controls this team
+ * */
 bool TYFTeam::isPlayerControlled()
 {
 	return this->controlled;

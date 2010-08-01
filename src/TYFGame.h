@@ -28,7 +28,6 @@
 #define TEAM1 0
 #define TEAM2 1
 
-enum PassType { PASS_LONG, PASS_NORMAL, PASS_SHORT };
 enum PlayReturn { PL_GAME_OVER, PL_OK };
 enum MatchupType { MATCH_PASS, MATCH_RUN, MATCH_BLITZ };
 
@@ -109,18 +108,18 @@ class TYFGame
 		bool needPunt;
 		
 		bool isFumble();
-		bool isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PassType type);
-		bool isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, PassType type);
+		bool isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PlayType type);
+		bool isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, PlayType type);
 		bool isRecovered(int run);
-		bool isSacked(TYFPlayer* sender, TYFPlayer* tackler, PassType type);
+		bool isSacked(TYFPlayer* sender, TYFPlayer* tackler, PlayType type);
 		bool isStillRunning();
 		bool isPlayOutOfBounds(PlayType type);
 		int getDistanceToEndzone();
 		int getDistanceToFirstDown();
 		int getOffDefDifferences(PlayType type);
-		int pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type);
+		int pass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type);
 		int run(TYFPlayer* runner);
-		int sacked(PassType type);
+		int sacked(PlayType type);
 		void setBallPosition(int n);
 		void advanceBall(int n);
 		void advanceTime(int n);
@@ -128,11 +127,12 @@ class TYFGame
 		void doAction();
 		void doFieldGoal();
 		void doKickOff();
-		void doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type);
+		void doPass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type);
 		void doPunt();
 		void doReturn(PlayType type);
 		void doRun(TYFPlayer* runner);
 		void getBallPosition(int n);
+		int getBallPosition();
 		void stopClock();
 		
 		void chooseOffFormation(PlayType type);

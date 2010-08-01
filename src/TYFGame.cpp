@@ -265,9 +265,11 @@ void TYFGame::doAction()
 		
 		switch (play.Type)
 		{
+			case PLAY_PASS_SHORT:
 			case PLAY_PASS:
+			case PLAY_PASS_LONG:
 				this->chooseOffFormation(PLAY_PASS);
-				this->doPass(this->getThisTeam()->getQuarterback(), play.Player, PASS_SHORT);
+				this->doPass(this->getThisTeam()->getQuarterback(), play.Player, play.Type);
 				break;
 			case PLAY_RUN:
 				this->chooseOffFormation(PLAY_RUN);
@@ -335,18 +337,18 @@ void TYFGame::doAction()
 					{
 						r = random(1, 10);
 						if (r <= 4)
-							this->doPass(sender, receiver, PASS_SHORT);
+							this->doPass(sender, receiver, PLAY_PASS_SHORT);
 						else if (r <= 8)
-							this->doPass(sender, receiver, PASS_NORMAL);
+							this->doPass(sender, receiver, PLAY_PASS);
 						else
-							this->doPass(sender, receiver, PASS_LONG);
+							this->doPass(sender, receiver, PLAY_PASS_LONG);
 					}
 					else
 					{
 						if (random(0, 1) == 0)
-							this->doPass(sender, receiver, PASS_LONG);
+							this->doPass(sender, receiver, PLAY_PASS_LONG);
 						else
-							this->doPass(sender, receiver, PASS_NORMAL);
+							this->doPass(sender, receiver, PLAY_PASS);
 					}
 				}
 				else if (this->getDistanceToFirstDown() >= 4)
@@ -354,22 +356,22 @@ void TYFGame::doAction()
 					// middle yardage 4-7 yards
 					r = random(1, 10);
 					if (r <= 3)
-						this->doPass(sender, receiver, PASS_LONG);
+						this->doPass(sender, receiver, PLAY_PASS_LONG);
 					else if (r <= 8)
-						this->doPass(sender, receiver, PASS_NORMAL);
+						this->doPass(sender, receiver, PLAY_PASS);
 					else
-						this->doPass(sender, receiver, PASS_SHORT);
+						this->doPass(sender, receiver, PLAY_PASS_SHORT);
 				}
 				else
 				{
 					// short yardage 0 - 3 yards
 					r = random(1, 10);
 					if (r <= 6)
-						this->doPass(sender, receiver, PASS_SHORT);
+						this->doPass(sender, receiver, PLAY_PASS_SHORT);
 					else if (r <= 9)
-						this->doPass(sender, receiver, PASS_NORMAL);
+						this->doPass(sender, receiver, PLAY_PASS);
 					else
-						this->doPass(sender, receiver, PASS_LONG);
+						this->doPass(sender, receiver, PLAY_PASS_LONG);
 				}
 			}
 			else
@@ -397,6 +399,14 @@ void TYFGame::setBallPosition(int n)
 {
 	this->Ball.Position = n;
 	this->Ball.ToGo = 10;
+}
+
+/*
+ * gets the Ball Position
+ * */
+int TYFGame::getBallPosition()
+{
+	return this->Ball.Position;
 }
 
 /*
@@ -709,7 +719,7 @@ TYFTeam* TYFGame::getOtherTeam()
 /*
  * Pass that Ball
  * */
-void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
+void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type)
 {
 	int pass = this->pass(sender, receiver, type);
 	
@@ -736,6 +746,8 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 	else
 	{
 		this->advanceBall(pass);
+		if (this->getBallPosition() < 0)
+			this->setBallPosition(0);
 		bool intercepted = this->isIntercepted(sender, receiver, pass, type);
 		
 		this->advanceTime(random(20, 36));
@@ -761,7 +773,7 @@ void TYFGame::doPass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 /*
  * this here handles all the pass action
  * */
-int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
+int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PlayType type)
 {
 	int pass = 0;
 	int rand = random(0, 9);
@@ -770,7 +782,7 @@ int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 		rand += random(0, this->matchupFormations(MATCH_PASS) - 3);
 		
 	int average = (sender->getPassRating() + receiver->getCatchRating()) / 2;
-	if (type != PASS_SHORT)
+	if (type != PLAY_PASS_SHORT)
 	{
 		if (average < 3)
 			rand -= random(0, 3-average);
@@ -784,7 +796,7 @@ int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 		rand = 9;
 	
 	// Short Passes
-	if (type == PASS_SHORT)
+	if (type == PLAY_PASS_SHORT)
 	{
 		if ((0 <= rand) && (rand <= 2))
 			pass = random(0, 2);
@@ -796,7 +808,7 @@ int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 			pass = random(10, 15);
 	}
 	// Normal Range Passes
-	else if (type == PASS_NORMAL)
+	else if (type == PLAY_PASS)
 	{
 		if ((0 <= rand) && (rand <= 1))
 			pass = random(0, 2);
@@ -810,7 +822,7 @@ int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 			pass = random(20, 25);
 	}
 	// Long Passes
-	else if (type == PASS_LONG)
+	else if (type == PLAY_PASS_LONG)
 	{
 		if (0 == rand)
 			pass = random(0, 4);
@@ -828,7 +840,7 @@ int TYFGame::pass(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
 /*
  * Did that dude just steal my ball?!
  * */
-bool TYFGame::isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, PassType type)
+bool TYFGame::isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, PlayType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS);
 	int average = (sender->getPassRating() + receiver->getCatchRating()) / 2;
@@ -838,20 +850,21 @@ bool TYFGame::isIntercepted(TYFPlayer* sender, TYFPlayer* receiver, int pass, Pa
 
 	switch (type)
 	{
-		case PASS_SHORT:
+		case PLAY_PASS_SHORT:
 			return (rand < 4 - diff / 2);
-		case PASS_NORMAL:
+		case PLAY_PASS:
 			return (rand < 6 - diff / 2);
-		case PASS_LONG:
+		case PLAY_PASS_LONG:
 			return (rand < 8 - diff / 2);
+		default:
+			return false;
 	}
-	return false;
 }
 
 /*
  * Was a Pass Completed?
  * */
-bool TYFGame::isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PassType type)
+bool TYFGame::isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PlayType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS) + (this->matchupFormations(MATCH_PASS)/2);
 	int average = (sender->getPassRating() + receiver->getCatchRating()) / 2;
@@ -861,20 +874,21 @@ bool TYFGame::isIncomplete(TYFPlayer* sender, TYFPlayer* receiver, PassType type
 	
 	switch (type)
 	{
-		case PASS_SHORT:
+		case PLAY_PASS_SHORT:
 			return (rand > 38 + diff * 2);
-		case PASS_NORMAL:
+		case PLAY_PASS:
 			return (rand > 44 + diff * 2);
-		case PASS_LONG:
+		case PLAY_PASS_LONG:
 			return (rand > 55 + diff * 2);
+		default:
+			return false;
 	}
-	return false;
 }
 
 /*
  * QB Sacked?
  * */
-bool TYFGame::isSacked(TYFPlayer* sender, TYFPlayer* tackler, PassType type)
+bool TYFGame::isSacked(TYFPlayer* sender, TYFPlayer* tackler, PlayType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS) + (this->matchupFormations(MATCH_BLITZ)/2);
 	diff += sender->getSpeedRating() - tackler->getBlitzRating();
@@ -882,32 +896,38 @@ bool TYFGame::isSacked(TYFPlayer* sender, TYFPlayer* tackler, PassType type)
 	
 	switch (type)
 	{
-		case PASS_SHORT:
+		case PLAY_PASS_SHORT:
 			return (rand < 7 - diff);
-		case PASS_NORMAL:
+		case PLAY_PASS:
 			return (rand < 9 - diff);
-		case PASS_LONG:
+		case PLAY_PASS_LONG:
 			return (rand < 13 - diff);
+		default:
+			return false;
 	}
-	return false;
 }
 
 /*
  * How far back was he?
  * */
-int TYFGame::sacked(PassType type)
+int TYFGame::sacked(PlayType type)
 {
 	int diff = this->getOffDefDifferences(PLAY_PASS);
 	int min = 0;
 
 	switch (type)
 	{
-		case PASS_SHORT:
+		case PLAY_PASS_SHORT:
 			min = -2 - diff;
-		case PASS_NORMAL:
+			break;
+		case PLAY_PASS:
 			min = -4 - diff;
-		case PASS_LONG:
+			break;
+		case PLAY_PASS_LONG:
 			min = -6 - diff;
+			break;
+		default:
+			break;
 	}
 	if (min > -1)
 		min = -1;

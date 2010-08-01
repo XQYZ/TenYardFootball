@@ -34,6 +34,7 @@ class TYFUIConsole : public TYFUITemplate
 		string getBallPosition();
 		string header;
 		void cls();
+		int displayMenu(string title, vector<string> menuItems, bool back);
 	public:
 		void beginPlay();
 		void endPlay(PLAY_RESULT result);

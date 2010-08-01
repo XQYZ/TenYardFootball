@@ -27,12 +27,23 @@
 #include "helper.h"
 #include <iostream>
 #include <iomanip>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
+/*
+ * this clears the screen on the console
+ * */
 void TYFUIConsole::cls()
 {
-	cout << string( 100, '\n' ) << this->header;
+	// I know, I know ...
+	#ifdef _WIN32
+		system("cls");
+	#else
+		system("clear");
+	#endif
+	cout << this->header;
 }
 
 /*
@@ -213,76 +224,138 @@ void TYFUIConsole::playReturn(TYFPlayer* returner, int distance, bool faircatch)
 		cout << "A return of " << distance << " yards by " << returner->getFullName() << endl;
 }
 
-void printTimes(string name, int count, int max)
+/*
+ * used for naming offensive formations
+ * */
+string printTimes(string name, int count, int max)
 {
+	stringstream ss;
 	for (int j = 0; j < count; j++)
-		cout << " " << name << (j+1);
+		ss << name << (j+1) << " " ;
 	for (int j = 0; j < max-count; j++)
-		cout << "    ";
+		ss << "    ";
+	return ss.str();
 }
 
-OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
+/*
+ * Displays a Menu and returns the selected item
+ * back item is 0 if it is enabled
+ * */
+int TYFUIConsole::displayMenu(string title, vector<string> menuItems, bool back)
 {
-	unsigned int type;
-	unsigned int play;
-	vector<OffFormation* > formations = this->Game->getOffensiveFormations();
-	while (true)
+	int ret;
+	do
 	{
 		this->cls();
-		cout << "Choose Offense Formation:" << endl;
-		unsigned int j;
-		for (j = 0; j < formations.size(); j++)
-		{
-			cout << setw(2) << (j + 1) << ")";
-			printTimes("HB", formations[j]->HB, 2);
-			printTimes("FB", formations[j]->FB, 1);
-			printTimes("WR", formations[j]->WR, 4);
-			printTimes("TE", formations[j]->TE, 2);
-			cout << endl;
-		}
-		cout << setw(2) << formations.size() + 1 << ") Punt" << endl;
-		cout << setw(2) << formations.size() + 2 << ") Field Goal" << endl;
+		cout << title << endl;
+		if (back)
+			cout << " 0) Back" << endl;
+		for (unsigned int i = 0; i < menuItems.size(); i++)
+			cout << setw(2) << (i + 1) << ") " << menuItems[i] << endl;
 		
 		cout << "# ";
-		(cin >> type).get();
-		while ((0 < type) && (type <= formations.size()))
+		cin >> ret;
+		
+		if (!cin.good())
 		{
-			this->cls();
-			cout << "Choose your play:" << endl;
-			cout << " 0) Go back to Formation Menu" << endl;
-			team->setupOffFormation(*formations[type-1]);
+			ret = -1;
+			cin.clear();
+			cin.sync();
+		}
+		
+		int ch;
+		while ((ch = cin.get()) != '\n' && ch != EOF) { cin.clear(); };
+		if ((int)menuItems.size() < ret)
+			ret = -1;
+		if ((back && ret < 0) || (!back && ret < 1))
+			ret = -1;
+	} while (ret == -1);
+	return ret;
+}
+
+/*
+ * Let's the player decide on an offensive call
+ * */
+OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
+{
+	vector<OffFormation* > formations = this->Game->getOffensiveFormations();
+	vector<string> FormationMenu;
+	stringstream ss;
+	for (unsigned int j = 0; j < formations.size(); j++)
+	{
+		ss.str("");
+		ss << printTimes("HB", formations[j]->HB, 2);
+		ss << printTimes("FB", formations[j]->FB, 1);
+		ss << printTimes("WR", formations[j]->WR, 4);
+		ss << printTimes("TE", formations[j]->TE, 2);
+		FormationMenu.push_back(ss.str());
+	}
+	FormationMenu.push_back("Punt");
+	FormationMenu.push_back("Field Goal");
+	
+	int formation;
+	int play;
+	int pass;
+	do
+	{
+		formation = this->displayMenu("Choose Offense Formation:", FormationMenu, false);
+		this->cls();
+		if (formation == (int)formations.size() + 1)
+			return OffensePlay(NULL, PLAY_PUNT, NULL);
+		if (formation == (int)formations.size() + 2)
+			return OffensePlay(NULL, PLAY_FIELDGOAL, NULL);
+		while (formation != 0)
+		{
+			vector<string> PlayMenu;
+			team->setupOffFormation(*formations[formation-1]);
+			
 			vector<TYFPlayer* > runners = team->getRunners();
 			for (unsigned int i = 0; i < runners.size(); i++)
 			{
-				cout << setw(2) << (i + 1) << ") ";
-				cout << "Run by " << runners[i]->getFullName() << endl;
+				ss.str("");
+				ss << "Run by " << runners[i]->getFullName();
+				PlayMenu.push_back(ss.str());
 			}
 				
 			vector<TYFPlayer* > receivers = team->getReceivers();
 			for (unsigned int i = 0; i < receivers.size(); i++)
 			{
-				cout << setw(2) << (runners.size() + i + 1) << ") ";
-				cout << "Pass to " << receivers[i]->getFullName() << endl;
+				ss.str("");
+				ss << "Pass to " << receivers[i]->getFullName();
+				PlayMenu.push_back(ss.str());
 			}
-			cout << "# ";
-			(cin >> play).get();
-			this->cls();
+			
+			play = this->displayMenu("Choose your play:", PlayMenu, true);
 			if (play == 0)
-				type = 0;
+				formation = 0;
 			else
 			{
-				play -= 1;
-				if (play < runners.size())
-					return OffensePlay(formations[type], PLAY_RUN, runners[play]);
-				else if (play < runners.size() + receivers.size())
-					return OffensePlay(formations[type], PLAY_PASS, receivers[play-runners.size()]);
+				if (play <= (int)runners.size())
+				{
+					this->cls();
+					return OffensePlay(formations[formation], PLAY_RUN, runners[play-1]);
+				}
+				while (play <= (int)runners.size() + (int)receivers.size() && play != 0)
+				{
+					vector<string> PassMenu;
+					PassMenu.push_back("Short Pass");
+					PassMenu.push_back("Medium Pass");
+					PassMenu.push_back("Long Pass");
+					
+					pass = this->displayMenu("Choose your pass length:", PassMenu, true);
+					
+					this->cls();
+					if (pass == 0)
+						play = 0;
+					else if (pass == 1)
+						return OffensePlay(formations[formation], PLAY_PASS_SHORT, receivers[play-1-runners.size()]);
+					else if (pass == 2)
+						return OffensePlay(formations[formation], PLAY_PASS, receivers[play-1-runners.size()]);
+					else if (pass == 3)
+						return OffensePlay(formations[formation], PLAY_PASS_LONG, receivers[play-1-runners.size()]);
+				}
 			}
 		}
-		this->cls();
-		if (type == formations.size() + 1)
-			return OffensePlay(NULL, PLAY_PUNT, NULL);
-		else if (type == formations.size() + 2)
-			return OffensePlay(NULL, PLAY_FIELDGOAL, NULL);
-	}
-	return OffensePlay(NULL, PLAY_PASS, NULL);
+		
+	} while (true);
 }

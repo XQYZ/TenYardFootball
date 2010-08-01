@@ -29,15 +29,15 @@
 
 using namespace std;
 
-enum PlayType { PLAY_RUN, PLAY_PASS, PLAY_PUNT, PLAY_KICKOFF, PLAY_FIELDGOAL };
+enum PlayType { PLAY_RUN, PLAY_PASS_LONG, PLAY_PASS, PLAY_PASS_SHORT, PLAY_PUNT, PLAY_KICKOFF, PLAY_FIELDGOAL };
 
-template <class T>
 /*
- * converts stuff to strings
+ * converts stuff to a string
  * */
-inline std::string to_string (const T& t)
+template <class T>
+inline string to_string (const T& t)
 {
-	std::stringstream ss;
+	stringstream ss;
 	ss << t;
 	return ss.str();
 }

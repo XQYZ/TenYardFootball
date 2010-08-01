@@ -51,5 +51,5 @@ class TYFUITemplate
 		virtual void playReturn(TYFPlayer* returner, int distance, bool faircatch) {};
 		virtual void callTwoMinuteWarning() {};
 		virtual void callOutOfBounds() {};
-		virtual OffensePlay pickOffensePlay(TYFTeam* team) { return OffensePlay(NULL, PLAY_PASS, team->getRandomReceiver()); };
+		virtual OffensePlay pickOffensePlay(TYFTeam* team) { return OffensePlay(NULL, PLAY_PASS_SHORT, team->getRandomReceiver()); };
 };
