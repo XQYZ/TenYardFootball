@@ -74,7 +74,7 @@ void TYFUIBenchmark::run()
 	finish = clock();
 
 	cout << endl;
-	cout << "Simulation Speed:..." << ( count / ((finish - start) / CLOCKS_PER_SEC )) << " games/sec" << endl;
+	cout << "Simulation Speed:.. " << ( count / ((finish - start) / CLOCKS_PER_SEC )) << " games/sec" << endl;
 	cout << "Team1 Average:..... " << Team1Sum / count << " pts/game" << endl;
 	cout << "Team2 Average:..... " << Team2Sum / count << " pts/game"<< endl;
 	cout << "Team1 Wins:........ " << Team1Win << endl;

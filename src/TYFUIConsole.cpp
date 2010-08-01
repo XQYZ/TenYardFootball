@@ -381,12 +381,36 @@ DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
 {
 	vector<DefFormation* > formations = this->Game->getDefensiveFormations();
 	vector<string> FormationMenu;
-	stringstream ss;
 	for (unsigned int j = 0; j < formations.size(); j++)
 		FormationMenu.push_back(formations[j]->name);
 	
+	vector<string> PlayMenu;
+	PlayMenu.push_back("Pass Block");
+	PlayMenu.push_back("Run Block");
+	PlayMenu.push_back("Blitz");
+	
 	int formation;
-	formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false);
-	this->cls();
-	return DefensePlay(formations[formation-1]);
+	int play;
+	do
+	{
+		formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false);
+		this->cls();
+		while (formation != 0)
+		{
+			play = this->displayMenu("Choose Defensive Play:", PlayMenu, true);
+			
+			if (play == 0)
+				formation = 0;
+			else
+			{
+				this->cls();
+				if (play == 1)
+					return DefensePlay(formations[formation-1], DPLAY_PASSBLOCK);
+				else if (play == 2)
+					return DefensePlay(formations[formation-1], DPLAY_RUNBLOCK);
+				else if (play == 3)
+					return DefensePlay(formations[formation-1], DPLAY_BLITZ);
+			}
+		}
+	} while (true);
 }

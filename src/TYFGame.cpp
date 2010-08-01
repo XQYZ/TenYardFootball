@@ -58,7 +58,7 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needPunt = false;
 	
 	// init teams
-	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI", true);
+	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI", false);
 	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF", false);
 	
 	this->UI = UI;
@@ -122,6 +122,13 @@ void TYFGame::chooseDefFormation()
 {
 	this->DefensiveFormation = this->DefensiveFormations[random(0, this->DefensiveFormations.size() - 1)];
 	this->getOtherTeam()->setupDefFormation(*this->DefensiveFormation);
+	int r = random(0, 10);
+	if (r == 0)
+		this->DefensivePlay = DPLAY_BLITZ;
+	else if (r <= 5)
+		this->DefensivePlay = DPLAY_PASSBLOCK;
+	else
+		this->DefensivePlay = DPLAY_RUNBLOCK;
 }
 
 /*
@@ -261,6 +268,7 @@ void TYFGame::doAction()
 	{
 		DefensePlay defplay = this->UI->pickDefensePlay(this->getOtherTeam());
 		this->DefensiveFormation = defplay.Formation;
+		this->DefensivePlay = defplay.Type;
 		this->getOtherTeam()->setupDefFormation(*this->DefensiveFormation);
 	}
 	else
@@ -901,14 +909,19 @@ bool TYFGame::isSacked(TYFPlayer* sender, TYFPlayer* tackler, PlayType type)
 	diff += sender->getSpeedRating() - tackler->getBlitzRating();
 	int rand = random(0, 100);
 	
+	if (this->DefensivePlay == DPLAY_BLITZ)
+		diff -= 15;
+	else if (this->DefensivePlay == DPLAY_PASSBLOCK)
+		diff -= 5;
+	
 	switch (type)
 	{
 		case PLAY_PASS_SHORT:
-			return (rand < 7 - diff);
+			return (rand < 3 - diff);
 		case PLAY_PASS:
-			return (rand < 9 - diff);
+			return (rand < 5 - diff);
 		case PLAY_PASS_LONG:
-			return (rand < 13 - diff);
+			return (rand < 10 - diff);
 		default:
 			return false;
 	}
@@ -949,6 +962,13 @@ int TYFGame::sacked(PlayType type)
 int TYFGame::getOffDefDifferences(PlayType type)
 {
 	int diff = this->getThisTeam()->getOffenseRating(type)*3 - this->getOtherTeam()->getDefenseRating(type)*3;
+	
+	if ((type == PLAY_PASS) && (this->DefensivePlay == DPLAY_PASSBLOCK))
+		diff -= 1;
+	
+	if ((type == PLAY_RUN) && (this->DefensivePlay == DPLAY_RUNBLOCK))
+		diff -= 1;
+		
 	if (diff > 5)
 		diff = 5;
 	if (diff < -5)

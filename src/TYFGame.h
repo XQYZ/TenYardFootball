@@ -87,10 +87,12 @@ struct OffensePlay
 struct DefensePlay
 {
 	DefFormation* Formation;
+	DefPlayType Type;
 	
-	DefensePlay(DefFormation* fo)
+	DefensePlay(DefFormation* fo, DefPlayType ty)
 	{
 		this->Formation = fo;
+		this->Type = ty;
 	}
 };
 
@@ -107,6 +109,7 @@ class TYFGame
 		vector<OffFormation* > OffensiveFormations;
 		
 		DefFormation* DefensiveFormation;
+		DefPlayType DefensivePlay;
 		OffFormation* OffensiveFormation;
 		
 		bool clockStopped;

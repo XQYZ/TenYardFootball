@@ -28,7 +28,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	TYFUIConsole *UI = new TYFUIConsole();
-	//TYFUIBenchmark *UI = new TYFUIBenchmark();
+	//TYFUIConsole *UI = new TYFUIConsole();
+	TYFUIBenchmark *UI = new TYFUIBenchmark();
 	UI->run();
 }
