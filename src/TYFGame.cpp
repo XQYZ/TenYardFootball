@@ -257,23 +257,30 @@ GameInfo TYFGame::getGameInfo()
  * */
 void TYFGame::doAction()
 {
-	this->chooseDefFormation();
+	if (this->getOtherTeam()->isPlayerControlled())
+	{
+		DefensePlay defplay = this->UI->pickDefensePlay(this->getOtherTeam());
+		this->DefensiveFormation = defplay.Formation;
+		this->getOtherTeam()->setupDefFormation(*this->DefensiveFormation);
+	}
+	else
+		this->chooseDefFormation();
 	
 	if (this->getThisTeam()->isPlayerControlled())
 	{
-		OffensePlay play = this->UI->pickOffensePlay(this->getThisTeam());
+		OffensePlay offplay = this->UI->pickOffensePlay(this->getThisTeam());
+		this->OffensiveFormation = offplay.Formation;
+		this->getThisTeam()->setupOffFormation(*this->OffensiveFormation);
 		
-		switch (play.Type)
+		switch (offplay.Type)
 		{
 			case PLAY_PASS_SHORT:
 			case PLAY_PASS:
 			case PLAY_PASS_LONG:
-				this->chooseOffFormation(PLAY_PASS);
-				this->doPass(this->getThisTeam()->getQuarterback(), play.Player, play.Type);
+				this->doPass(this->getThisTeam()->getQuarterback(), offplay.Player, offplay.Type);
 				break;
 			case PLAY_RUN:
-				this->chooseOffFormation(PLAY_RUN);
-				this->doRun(play.Player);
+				this->doRun(offplay.Player);
 				break;
 			case PLAY_PUNT:
 				this->doPunt();
@@ -307,7 +314,7 @@ void TYFGame::doAction()
 			// not going for it after all
 			if (!action)
 			{
-				int maxDistanceForFG = 33;			
+				int maxDistanceForFG = 35;			
 				if (this->getThisTeam()->getPoints() < this->getOtherTeam()->getPoints())
 				{
 					// we REALLY need those points
@@ -1095,4 +1102,9 @@ int TYFGame::run(TYFPlayer* runner)
 vector<OffFormation* > TYFGame::getOffensiveFormations()
 {
 	return this->OffensiveFormations;
+}
+
+vector<DefFormation* > TYFGame::getDefensiveFormations()
+{
+	return this->DefensiveFormations;
 }

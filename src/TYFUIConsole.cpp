@@ -211,7 +211,6 @@ void TYFUIConsole::callTwoMinuteWarning()
 
 void TYFUIConsole::callOutOfBounds()
 {
-	GameInfo info = this->Game->getGameInfo();
 	cout << "Ran out of bounds at " << this->getBallPosition() << endl;
 }
 
@@ -300,10 +299,26 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 	{
 		formation = this->displayMenu("Choose Offense Formation:", FormationMenu, false);
 		this->cls();
-		if (formation == (int)formations.size() + 1)
-			return OffensePlay(NULL, PLAY_PUNT, NULL);
-		if (formation == (int)formations.size() + 2)
-			return OffensePlay(NULL, PLAY_FIELDGOAL, NULL);
+		
+		if ((formation == (int)formations.size() + 1) || (formation == (int)formations.size() + 2))
+		{
+			GameInfo info = this->Game->getGameInfo();
+			vector<string> YesNoDialog;
+			YesNoDialog.push_back("Yes");
+			YesNoDialog.push_back("No");
+			if ((info.Ball.Down == 4) || (this->displayMenu("Are you sure you want to Punt/Try for FG now?",
+											YesNoDialog, false)) == 1)
+			{
+				if (formation == (int)formations.size() + 1)
+					return OffensePlay(NULL, PLAY_PUNT, NULL);
+				if (formation == (int)formations.size() + 2)
+					return OffensePlay(NULL, PLAY_FIELDGOAL, NULL);
+			}
+			else
+			{
+				formation = 0;
+			}
+		}
 		while (formation != 0)
 		{
 			vector<string> PlayMenu;
@@ -324,7 +339,6 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 				ss << "Pass to " << receivers[i]->getFullName();
 				PlayMenu.push_back(ss.str());
 			}
-			
 			play = this->displayMenu("Choose your play:", PlayMenu, true);
 			if (play == 0)
 				formation = 0;
@@ -348,14 +362,31 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 					if (pass == 0)
 						play = 0;
 					else if (pass == 1)
-						return OffensePlay(formations[formation], PLAY_PASS_SHORT, receivers[play-1-runners.size()]);
+						return OffensePlay(formations[formation-1], PLAY_PASS_SHORT, receivers[play-1-runners.size()]);
 					else if (pass == 2)
-						return OffensePlay(formations[formation], PLAY_PASS, receivers[play-1-runners.size()]);
+						return OffensePlay(formations[formation-1], PLAY_PASS, receivers[play-1-runners.size()]);
 					else if (pass == 3)
-						return OffensePlay(formations[formation], PLAY_PASS_LONG, receivers[play-1-runners.size()]);
+						return OffensePlay(formations[formation-1], PLAY_PASS_LONG, receivers[play-1-runners.size()]);
 				}
 			}
 		}
 		
 	} while (true);
+}
+
+/*
+ * Let's the player decide on an defensive call
+ * */
+DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
+{
+	vector<DefFormation* > formations = this->Game->getDefensiveFormations();
+	vector<string> FormationMenu;
+	stringstream ss;
+	for (unsigned int j = 0; j < formations.size(); j++)
+		FormationMenu.push_back(formations[j]->name);
+	
+	int formation;
+	formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false);
+	this->cls();
+	return DefensePlay(formations[formation-1]);
 }

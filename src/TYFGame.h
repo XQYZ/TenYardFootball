@@ -84,6 +84,15 @@ struct OffensePlay
 	}
 };
 
+struct DefensePlay
+{
+	DefFormation* Formation;
+	
+	DefensePlay(DefFormation* fo)
+	{
+		this->Formation = fo;
+	}
+};
 
 // forward declaration
 class TYFUITemplate;
@@ -147,5 +156,6 @@ class TYFGame
 		PlayReturn nextPlay();
 		GameInfo getGameInfo();
 		vector<OffFormation* > getOffensiveFormations();
+		vector<DefFormation* > getDefensiveFormations();
 };
 

@@ -50,4 +50,5 @@ class TYFUIConsole : public TYFUITemplate
 		void callTwoMinuteWarning();
 		void callOutOfBounds();
 		OffensePlay pickOffensePlay(TYFTeam* team);
+		DefensePlay pickDefensePlay(TYFTeam* team);
 };
