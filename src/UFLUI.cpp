@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  * */
 
-#include "TYFUIConsole.h"
+#include "UFLUI.h"
 #include "TYFUITemplate.h"
 #include "TYFGame.h"
 #include "TYFTeam.h"
@@ -31,34 +31,79 @@
 #include <string>
 #include <fstream> 
 #include <time.h> 
+#include <wx/wx.h>
+#include <wx/image.h>
+#include "UFLMainDialog.h"
+#include "UFLChoiceDialog.h"
 
 using namespace std;
 
-TYFUIConsole::TYFUIConsole(void)
+class MyApp: public wxApp {
+public:
+    bool OnInit();
+};
+
+bool MyApp::OnInit()
+{
+    wxInitAllImageHandlers();
+    MainDialog* UFL = new MainDialog(NULL, wxID_ANY, wxEmptyString);
+    SetTopWindow(UFL);
+    UFL->Show();
+    return true;
+}
+
+wxAppConsole *wxCreateApp()
+{
+	wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "your program");
+	return new MyApp;
+}
+
+wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);
+extern MyApp& wxGetApp();
+
+MyApp& wxGetApp()
+{
+	return *wx_static_cast(MyApp*, wxApp::GetInstance());
+}
+
+TYFUIUFL::TYFUIUFL(void)
 {
 	srand((int)time(NULL));
 	this->Game = new TYFGame(this);
+	this->choice = false;
+}
+
+/**
+ * this is called when the UI officially takes over as the main thread
+ * Basically it just runs until the game finishes here
+ * */
+void TYFUIUFL::run()
+{
+	int argc = 0;
+	char** argv= NULL;
+	wxEntry(argc, argv);
 }
 
 /*
- * this clears the screen on the console
+ * calls the next play
  * */
-void TYFUIConsole::cls()
+void TYFUIUFL::nextPlay(MainDialog* dialog)
 {
-	if (!this->LogMode)
-	// I know, I know ...
-	#ifdef _WIN32
-		system("cls");
-	#else
-		system("clear");
-	#endif
-	cout << this->header;
+	this->dialog = dialog;
+	if (this->choice)
+		this->Game->nextPlay();
+	else
+	{
+		this->Game->init();
+		this->choice = true;
+		this->Game->nextPlay();
+	}
 }
 
 /*
  * returns the position of the Ball in the "CHI 17" format
  * */
-string TYFUIConsole::getBallPosition()
+string TYFUIUFL::getBallPosition()
 {
 	GameInfo info = this->Game->getGameInfo();
 	
@@ -86,9 +131,12 @@ string TYFUIConsole::getBallPosition()
  * it gives us a nice header like this:
  * "Q4 1:01 - 2nd&10 - @CHI 22 GB 6 - CHI 42"
  * */
-void TYFUIConsole::beginPlay()
+void TYFUIUFL::beginPlay()
 {
+	this->dialog->clearLog();
 	GameInfo info = this->Game->getGameInfo();
+	
+	this->dialog->setScore(info.Scores[0], info.Scores[1], info.Ball.Possession);
 	
 	string down[4] = {"1st", "2nd", "3rd", "4th"};
 	
@@ -97,7 +145,7 @@ void TYFUIConsole::beginPlay()
 	ss << setfill('0');
 	ss << "Q" << info.Time.Quarter << " " << (int)info.Time.Time/60 << ":";
 	ss << setw(2) << (int)info.Time.Time%60 << " - ";
-	ss << down[info.Ball.Down-1] << "&";
+	ss << down[info.Ball.Down-1] << "&&";
 	if (info.Ball.ToGo == 0)
 		ss << "inches";
 	else if (100 - info.Ball.Position < info.Ball.ToGo)
@@ -105,168 +153,155 @@ void TYFUIConsole::beginPlay()
 	else
 		ss << info.Ball.ToGo;
 	ss << " - ";
-	for (int i = 0; i <= 1; i++)
-	{
-		if (i == info.Ball.Possession)
-			ss << "@";
-		ss << info.Scores[i].Name << " " << info.Scores[i].Points << " ";
-	}
-	ss << "- " << this->getBallPosition() << endl;
+	ss << this->getBallPosition() << endl;
 	
 	this->header = ss.str();
-	if (!this->LogMode)
-		this->cls();
-	else
-		cout << this->header;
+	
+	this->dialog->setStatus(this->header);
 }
 
 /**
  * this is called after each play and delivers after-play results to the UI
  * (e.g. a touchdown which was scored)
  * */
-void TYFUIConsole::endPlay(PLAY_RESULT result)
+void TYFUIUFL::endPlay(PLAY_RESULT result)
 {
 	if (result == PLAY_FIRST_DOWN)
-		cout << "First Down!" << endl;
+		this->dialog->addLog("First Down!");
 	else if (result == PLAY_TOUCHDOWN)
-		cout << "Touchdown!" << endl << "Extra Point is NOT good!" << endl;
-	else if (result == PLAY_TOUCHDOWN_XP)
-		cout << "Touchdown!" << endl << "Extra Point is good!" << endl;
-	else if (result == PLAY_SAFETY)
-		cout << "Safety!" << endl;
-	else if (result == PLAY_TURNOVER_ON_DOWNS)
-		cout << "Turnover on Downs!" << endl;
-	
-	if (!this->LogMode)
-		cin.get();
-	else
-		cout << endl;
-}
-
-/**
- * this is called when the UI officially takes over as the main thread
- * Basically it just runs until the game finishes here
- * */
-void TYFUIConsole::run()
-{
-	vector<string> FormatMenu;
-	FormatMenu.push_back("Play-Focused (recommended)");
-	FormatMenu.push_back("Continuous Log (buggy with human players)");
-	
-	int log = this->displayMenu("Select Display Format", FormatMenu, false);
-	this->cls();
-	this->LogMode = (log == 2);
-	
-	while (this->Game->nextPlay() == PL_OK) {}
-	
-	// game is over, -> overview table
-	GameInfo info = this->Game->getGameInfo();
-	cout << "Game Over" << endl;
-	cout << "TEAM\t" << "Q1\t" << "Q2\t" << "Q3\t" << "Q4\t" << "OT\t" << "TOTAL" << endl;
-	for (int i = 0; i <= 1; i++)
 	{
-		cout << info.Scores[i].Name << "\t";
-		for (int j = 0; j <= 4; j++)
-			cout << info.Scores[i].PointsQuarter[j] << "\t";
-		cout << info.Scores[i].Points << endl;
+		this->dialog->addLog("Touchdown!");
+		this->dialog->addLog("Extra Point is NOT good!");
 	}
-	while (cin.get()) {}
+	else if (result == PLAY_TOUCHDOWN_XP)
+	{
+		this->dialog->addLog("Touchdown!");
+		this->dialog->addLog("Extra Point is good!");
+	}
+	else if (result == PLAY_SAFETY)
+		this->dialog->addLog("Safety!");
+	else if (result == PLAY_TURNOVER_ON_DOWNS)
+		this->dialog->addLog("Turnover on Downs!");
 }
 
-void TYFUIConsole::playKickOff(TYFPlayer* kicker, int yards)
+void TYFUIUFL::playKickOff(TYFPlayer* kicker, int yards)
 {
-	cout << "Kickoff of " << yards << " yards by " << kicker->getFullName() << endl;
+	stringstream ss;
+	ss << "Kickoff of " << yards << " yards by " << kicker->getFullName();
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::playPunt(TYFPlayer* kicker, int yards, bool touchback)
+void TYFUIUFL::playPunt(TYFPlayer* kicker, int yards, bool touchback)
 {
-	cout << "A Punt of " << yards << " yards by " << kicker->getFullName() << endl;
+	stringstream ss;
+	ss << "A Punt of " << yards << " yards by " << kicker->getFullName();
 	if (touchback)
-		cout << "Touchback!" << endl;
+		ss << "Touchback!" << endl;
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::playFieldGoal(TYFPlayer* kicker, int distance, bool good)
+void TYFUIUFL::playFieldGoal(TYFPlayer* kicker, int distance, bool good)
 {
-	cout << "A " << distance << " yard fieldgoal attempt by " << kicker->getFullName() << endl;
+	stringstream ss;
+	ss << "A " << distance << " yard fieldgoal attempt by " << kicker->getFullName();
+	this->dialog->addLog(ss.str());
+	ss.str("");
 	if (good)
-		cout << "Kick is good!" << endl;
+		ss << "Kick is good!";
 	else
-		cout << "Kick is no good!" << endl;
+		ss << "Kick is no good!";
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance,
+void TYFUIUFL::playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance,
 							PASS_FLAG flag)
 {
+	stringstream ss;
 	if (flag == PASS_INCOMPLETE)
-		cout << "Incomplete Pass intended for " << receiver->getFullName() << endl;
+		ss << "Incomplete Pass intended for " << receiver->getFullName();
 	else
-		cout << "Pass of " << distance << " yards to " << receiver->getFullName() << endl;
+		ss << "Pass of " << distance << " yards to " << receiver->getFullName();
+	this->dialog->addLog(ss.str());
+	ss.str("");
 	if (flag == PASS_INTERCEPTED)
-		cout << "Ball intercepted by " << intercepter->getFullName() << "!" << endl;
+	{
+		ss << "Ball intercepted by " << intercepter->getFullName() << "!";
+		this->dialog->addLog(ss.str());
+	}
 }
 
-void TYFUIConsole::playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss)
+void TYFUIUFL::playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss)
 {
-	cout << quarterback->getFullName() << " sacked by " << tackler->getFullName();
-	cout << "; a loss of " << loss << " yards" << endl;
+	stringstream ss;
+	ss << quarterback->getFullName() << " sacked by " << tackler->getFullName();
+	ss << "; a loss of " << loss << " yards";
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::playRun(TYFPlayer* runner, int distance)
+void TYFUIUFL::playRun(TYFPlayer* runner, int distance)
 {
+	stringstream ss;
 	if (runner->getPosition() == "QB")
 	{
-		cout << runner->getFullName();
+		ss << runner->getFullName();
 		if (distance > 0)
-			cout << " running for a gain of " << distance << " yards" << endl;
+			ss << " running for a gain of " << distance << " yards";
 		else if (distance == 0)
-			cout << " running for no gain" << endl;
+			ss << " running for no gain";
 		else
-			cout << " running for a loss of " << -distance << " yards" << endl;
+			ss << " running for a loss of " << -distance << " yards";
 	}
 	else
 	{
-		cout << "Ball handed off to " << runner->getFullName();
+		ss << "Ball handed off to " << runner->getFullName();
 		if (distance > 0)
-			cout << " for a run of " << distance << " yards" << endl;
+			ss << " for a run of " << distance << " yards";
 		else if (distance == 0)
-			cout << " for no gain" << endl;
+			ss << " for no gain";
 		else
-			cout << " for a loss of " << -distance << " yards" << endl;
+			ss << " for a loss of " << -distance << " yards";
 	}
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::playFumble(TYFPlayer* player, bool recovered)
+void TYFUIUFL::playFumble(TYFPlayer* player, bool recovered)
 {
-	cout << "Ball fumbled!" << endl;
+	stringstream ss;
+	this->dialog->addLog("Ball fumbled!");
 	if (recovered)
-		cout << "Recovered by " << player->getFullName() << "!" << endl;
+		ss << "Recovered by " << player->getFullName() << "!";
 	else
-		cout << "Recovered by " << player->getFullName() << " of the opposing team!" << endl;
+		ss << "Recovered by " << player->getFullName() << " of the opposing team!";
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::callTwoMinuteWarning()
+void TYFUIUFL::callTwoMinuteWarning()
 {
-	cout << "Two Minute Warning!" << endl;
+	this->dialog->addLog("Two Minute Warning!");
 }
 
-void TYFUIConsole::callOutOfBounds()
+void TYFUIUFL::callOutOfBounds()
 {
-	cout << "Ran out of bounds at " << this->getBallPosition() << endl;
+	stringstream ss;
+	ss << "Ran out of bounds at " << this->getBallPosition();
+	this->dialog->addLog(ss.str());
 }
 
-void TYFUIConsole::playReturn(TYFPlayer* returner, int distance, bool faircatch)
+void TYFUIUFL::playReturn(TYFPlayer* returner, int distance, bool faircatch)
 {
+	stringstream ss;
 	GameInfo info = this->Game->getGameInfo();
 	if (faircatch)
-		cout << "Fair Catch at " << this->getBallPosition() << " by " << returner->getFullName() << endl;
+		ss << "Fair Catch at " << this->getBallPosition() << " by " << returner->getFullName();
 	else
-		cout << "A return of " << distance << " yards by " << returner->getFullName() << endl;
+		ss << "A return of " << distance << " yards by " << returner->getFullName();
+	this->dialog->addLog(ss.str());
 }
 
 /*
  * used for naming offensive formations
  * */
-string TYFUIConsole::printTimes(string name, int count, int max)
+string TYFUIUFL::printTimes(string name, int count, int max)
 {
 	stringstream ss;
 	for (int j = 0; j < count; j++)
@@ -280,42 +315,21 @@ string TYFUIConsole::printTimes(string name, int count, int max)
  * Displays a Menu and returns the selected item
  * back item is 0 if it is enabled
  * */
-int TYFUIConsole::displayMenu(string title, vector<string> menuItems, bool back)
+int TYFUIUFL::displayMenu(string title, vector<string> menuItems, bool back)
 {
-	int ret;
+	ChoiceDialog *dlg = new ChoiceDialog(NULL, 0, wxString(title.c_str(), wxConvUTF8));
+	dlg->setItems(menuItems);
 	do
-	{
-		this->cls();
-		cout << title << endl;
-		if (back)
-			cout << " 0) Back" << endl;
-		for (unsigned int i = 0; i < menuItems.size(); i++)
-			cout << setw(2) << (i + 1) << ") " << menuItems[i] << endl;
-		
-		cout << "# ";
-		cin >> ret;
-		
-		if (!cin.good())
-		{
-			ret = -1;
-			cin.clear();
-			cin.sync();
-		}
-		
-		int ch;
-		while ((ch = cin.get()) != '\n' && ch != EOF) { cin.clear(); };
-		if ((int)menuItems.size() < ret)
-			ret = -1;
-		if ((back && ret < 0) || (!back && ret < 1))
-			ret = -1;
-	} while (ret == -1);
-	return ret;
+		dlg->ShowModal();
+	while (dlg->getSelection() == -1);
+	
+	return dlg->getSelection() + 1;
 }
 
 /*
  * Let's the player decide on an offensive call
  * */
-OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
+OffensePlay TYFUIUFL::pickOffensePlay(TYFTeam* team)
 {
 	vector<OffFormation* > formations = this->Game->getOffensiveFormations();
 	vector<string> FormationMenu;
@@ -338,7 +352,6 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 	do
 	{
 		formation = this->displayMenu("Choose Offense Formation:", FormationMenu, false);
-		this->cls();
 		
 		if ((formation == (int)formations.size() + 1) || (formation == (int)formations.size() + 2))
 		{
@@ -386,7 +399,6 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 			{
 				if (play <= (int)runners.size())
 				{
-					this->cls();
 					return OffensePlay(formations[formation-1], PLAY_RUN, runners[play-1]);
 				}
 				while (play <= (int)runners.size() + (int)receivers.size() && play != 0)
@@ -398,7 +410,6 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 					
 					pass = this->displayMenu("Choose your pass length:", PassMenu, true);
 					
-					this->cls();
 					if (pass == 0)
 						play = 0;
 					else if (pass == 1)
@@ -417,7 +428,7 @@ OffensePlay TYFUIConsole::pickOffensePlay(TYFTeam* team)
 /*
  * Let's the player decide on an defensive call
  * */
-DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
+DefensePlay TYFUIUFL::pickDefensePlay(TYFTeam* team)
 {
 	vector<DefFormation* > formations = this->Game->getDefensiveFormations();
 	vector<string> FormationMenu;
@@ -434,7 +445,6 @@ DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
 	do
 	{
 		formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false);
-		this->cls();
 		if (FormationMenu[formation-1] == "Punt Return")
 			return DefensePlay(formations[formation-1], DPLAY_PUNTRETURN);
 		else if (FormationMenu[formation-1] == "Field Goal Block")
@@ -448,7 +458,6 @@ DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
 				formation = 0;
 			else
 			{
-				this->cls();
 				if (play == 1)
 					return DefensePlay(formations[formation-1], DPLAY_PASSBLOCK);
 				else if (play == 2)
@@ -463,9 +472,8 @@ DefensePlay TYFUIConsole::pickDefensePlay(TYFTeam* team)
 /*
  * Ask the Player if and how much he wants to control the team
  * */
-ControlFlag TYFUIConsole::setPlayerControl(TYFTeam* team)
+ControlFlag TYFUIUFL::setPlayerControl(TYFTeam* team)
 {
-	this->cls();
 	vector<string> ControlMenu;
 	ControlMenu.push_back("Computer Controlled");
 	ControlMenu.push_back("Head Coach");

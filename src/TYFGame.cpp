@@ -62,9 +62,6 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	
 	this->UI = UI;
 	
-	this->Teams[0]->setController(this->UI->setPlayerControl(this->Teams[0]));
-	this->Teams[1]->setController(this->UI->setPlayerControl(this->Teams[1]));
-	
 	//                                             name,pass,run,blz,  CB,LB,SA,DE,DT
 	DefensiveFormations.push_back(new DefFormation("3-2",  2, -2, 2,   3, 2, 3, 2, 1));
 	DefensiveFormations.push_back(new DefFormation("3-3",  1,  0, 0,   2, 3, 3, 2, 1));
@@ -88,6 +85,12 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	OffensiveFormations.push_back(new OffFormation( 1,  2,  1,   2, 1, 0, 2, 2, 2, 1, 1));
 	OffensiveFormations.push_back(new OffFormation( 0,  3,  2,   2, 1, 1, 1, 2, 2, 1, 1));
 	OffensiveFormations.push_back(new OffFormation( 1,  3,  2,   2, 1, 2, 0, 2, 2, 1, 1));
+}
+
+void TYFGame::init()
+{
+	this->Teams[0]->setController(this->UI->setPlayerControl(this->Teams[0]));
+	this->Teams[1]->setController(this->UI->setPlayerControl(this->Teams[1]));
 }
 
 /*
@@ -458,7 +461,7 @@ void TYFGame::advanceTime(int n)
 		{
 			if (this->getThisTeam()->getPoints() <= this->getOtherTeam()->getPoints())
 				// hurry up offense when down in Q2/Q4
-				n = n*0.75;
+				n = n*0.9;
 			else
 				// run down the clock when up in Q2/Q4
 				n = n*1.5;
@@ -1074,13 +1077,8 @@ void TYFGame::doRun(TYFPlayer* runner)
 	this->advanceBall(run);
 	this->advanceTime(random(30, 45));
 	
-	if (this->isFumble())
+	if ((this->getBallPosition() >= 0) && (this->getBallPosition() <= 100) && (this->isFumble()))
 	{
-		// can one fumble in the endzone?
-		// probably not
-		// TODO: check it
-		if (this->getBallPosition() < 0)
-			this->setBallPosition(0);
 		this->advanceTime(random(5, 10));
 		this->stopClock();
 		bool recovered = this->isRecovered(run);
@@ -1118,14 +1116,14 @@ int TYFGame::run(TYFPlayer* runner)
 
 	// offense / defense differences
 	int diff = this->getOffDefDifferences(PLAY_RUN);
-	diff += (runner->getRunRating()+1)/2;
+	diff += (runner->getRunRating()+1)/2 - 3;
 
 	switch(per)
 	{
 		/* 50% runs under 4 yards */
 		case 1: // 10% under 0 yards
-			if (diff <= -2) // even worse for bad defenses
-				run = random(-4 + diff, -1);
+			if (diff <= 0) // even worse for bad defenses
+				run = random(-4 + diff/2, -1);
 			else
 				run = random(-4, -1);
 			break;
@@ -1145,25 +1143,25 @@ int TYFGame::run(TYFPlayer* runner)
 		/* 50% runs equal or more than 4 yards */
 		case 6: // 20% 4-8 yard runs
 		case 7:
-			if (diff >= 2) // better runs for better offenses
+			if (diff >= 3) // better runs for better offenses
 				run = random(4, 8 + diff * 2);
 			else
 				run = random(4, 8);
 			break;
 		case 8: // 10% 9-13 yard runs
-			if (diff >= 3) // better runs for better offenses
+			if (diff >= 4) // better runs for better offenses
 				run = random(9, 13 + diff * 2);
 			else
 				run = random(9, 13);
 			break;
 		case 9: // 10% 14-19 yard runs
-			if (diff >= 4) // better runs for better offenses
+			if (diff >= 5) // better runs for better offenses
 				run = random(14, 19 + diff * 2);
 			else
 				run = random(14, 19);
 			break;
 		case 10: // 10% 20-25 yard runs
-			if (diff >= 4) // better runs for better offenses
+			if (diff >= 5) // better runs for better offenses
 				run = random(20, 25 + diff * 2);
 			else
 				run = random(20, 25);
@@ -1171,8 +1169,7 @@ int TYFGame::run(TYFPlayer* runner)
 	}
 	
 	if (this->matchupFormations(MATCH_RUN) >= 4)
-		run += random(0, this->matchupFormations(MATCH_RUN)*2);
-	
+		run += random(0, this->matchupFormations(MATCH_RUN));
 	return run;
 }
 

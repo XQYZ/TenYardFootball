@@ -26,19 +26,20 @@
 #include "TYFUITemplate.h"
 #include "helper.h"
 #include <streambuf> 
+#include "UFLMainDialog.h"
 
 using namespace std;
 
-class TYFUIConsole : public TYFUITemplate
+class TYFUIUFL : public TYFUITemplate
 {
 	private:
 		string getBallPosition();
 		string header;
-		void cls();
 		int displayMenu(string title, vector<string> menuItems, bool back);
-		bool LogMode;
+		MainDialog* dialog;
+		bool choice;
 	public:
-		TYFUIConsole(void);
+		TYFUIUFL(void);
 		void beginPlay();
 		void endPlay(PLAY_RESULT result);
 		void run();
@@ -52,8 +53,10 @@ class TYFUIConsole : public TYFUITemplate
 		void playReturn(TYFPlayer* returner, int distance, bool faircatch);
 		void callTwoMinuteWarning();
 		void callOutOfBounds();
+		void nextPlay(MainDialog* dialog);
 		string printTimes(string name, int count, int max);
 		OffensePlay pickOffensePlay(TYFTeam* team);
 		DefensePlay pickDefensePlay(TYFTeam* team);
 		ControlFlag setPlayerControl(TYFTeam* team);
+		TYFGame* GGame() { return this->Game; }
 };

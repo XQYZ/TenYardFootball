@@ -157,6 +157,7 @@ class TYFGame
 	public:
 		TYFGame(TYFUITemplate *UI);
 		~TYFGame(void);
+		void init();
 		PlayReturn nextPlay();
 		GameInfo getGameInfo();
 		vector<OffFormation* > getOffensiveFormations();

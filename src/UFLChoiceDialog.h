@@ -21,39 +21,26 @@
  * */
 
 #pragma once
-
+#include <wx/wx.h>
+#include <wx/image.h>
+#include <vector>
 #include <string>
-#include "TYFUITemplate.h"
-#include "helper.h"
-#include <streambuf> 
 
 using namespace std;
 
-class TYFUIConsole : public TYFUITemplate
+class ChoiceDialog: public wxDialog
 {
-	private:
-		string getBallPosition();
-		string header;
-		void cls();
-		int displayMenu(string title, vector<string> menuItems, bool back);
-		bool LogMode;
 	public:
-		TYFUIConsole(void);
-		void beginPlay();
-		void endPlay(PLAY_RESULT result);
-		void run();
-		void playKickOff(TYFPlayer* kicker, int yards);
-		void playPunt(TYFPlayer* kicker, int yards, bool touchback);
-		void playFieldGoal(TYFPlayer* kicker, int distance, bool good);
-		void playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance, PASS_FLAG flag);
-		void playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss);
-		void playRun(TYFPlayer* runner, int distance);
-		void playFumble(TYFPlayer* player, bool recovered);
-		void playReturn(TYFPlayer* returner, int distance, bool faircatch);
-		void callTwoMinuteWarning();
-		void callOutOfBounds();
-		string printTimes(string name, int count, int max);
-		OffensePlay pickOffensePlay(TYFTeam* team);
-		DefensePlay pickDefensePlay(TYFTeam* team);
-		ControlFlag setPlayerControl(TYFTeam* team);
+		ChoiceDialog(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
+		void setItems(vector<string> menuItems);
+		int getSelection();
+		
+	private:
+		void set_properties();
+		void do_layout();
+
+	protected:
+		wxStaticText* label;
+		wxListBox* choices;
+		wxButton* button_1;
 };

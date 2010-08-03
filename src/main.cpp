@@ -23,12 +23,17 @@
 #include <iostream>
 #include "TYFUIConsole.h"
 #include "TYFUIBenchmark.h"
+#include "UFLUI.h"
 
 using namespace std;
 
+TYFUIUFL *DaUI;
+
 int main(int argc, char *argv[])
 {
-	TYFUIConsole *UI = new TYFUIConsole();
 	//TYFUIBenchmark *UI = new TYFUIBenchmark();
-	UI->run();
+	//TYFUIConsole *UI = new TYFUIConsole();
+	//UI->run();
+	DaUI = new TYFUIUFL();
+	DaUI->run();
 }

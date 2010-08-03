@@ -22,38 +22,42 @@
 
 #pragma once
 
+#include <wx/wx.h>
+#include <wx/image.h>
 #include <string>
-#include "TYFUITemplate.h"
-#include "helper.h"
-#include <streambuf> 
+
+#include "TYFGame.h"
 
 using namespace std;
 
-class TYFUIConsole : public TYFUITemplate
+class MainDialog: public wxDialog
 {
-	private:
-		string getBallPosition();
-		string header;
-		void cls();
-		int displayMenu(string title, vector<string> menuItems, bool back);
-		bool LogMode;
 	public:
-		TYFUIConsole(void);
-		void beginPlay();
-		void endPlay(PLAY_RESULT result);
-		void run();
-		void playKickOff(TYFPlayer* kicker, int yards);
-		void playPunt(TYFPlayer* kicker, int yards, bool touchback);
-		void playFieldGoal(TYFPlayer* kicker, int distance, bool good);
-		void playPass(TYFPlayer* sender, TYFPlayer* receiver, TYFPlayer* intercepter, int distance, PASS_FLAG flag);
-		void playSack(TYFPlayer* quarterback, TYFPlayer* tackler, int loss);
-		void playRun(TYFPlayer* runner, int distance);
-		void playFumble(TYFPlayer* player, bool recovered);
-		void playReturn(TYFPlayer* returner, int distance, bool faircatch);
-		void callTwoMinuteWarning();
-		void callOutOfBounds();
-		string printTimes(string name, int count, int max);
-		OffensePlay pickOffensePlay(TYFTeam* team);
-		DefensePlay pickDefensePlay(TYFTeam* team);
-		ControlFlag setPlayerControl(TYFTeam* team);
+		MainDialog(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
+		void setScore(TeamScore Team1, TeamScore Team2, int BallPossession);
+		void setStatus(string str);
+		void clearLog();
+		void addLog(string s);
+		
+	private:
+		void set_properties();
+		void do_layout();
+		void OnClick(wxCommandEvent& event);
+		void OnClose(wxCloseEvent& event);
+		void OnChange(wxCommandEvent& event);
+		
+	protected:
+		wxPanel* panel_1;
+		wxStaticText* team1Name;
+		wxStaticText* team1Score;
+		wxPanel* panel_2;
+		wxStaticBitmap* bitmap_1;
+		wxPanel* panel_1_copy;
+		wxStaticText* team2Name;
+		wxStaticText* team2Score;
+		wxPanel* panel_2_copy;
+		wxStaticText* status;
+		wxListBox* playLog;
+		wxButton* playBtn;
+
 };
