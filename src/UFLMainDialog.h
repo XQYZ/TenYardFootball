@@ -22,6 +22,7 @@
 
 #pragma once
 
+#ifdef GUI
 #include <wx/wx.h>
 #include <wx/image.h>
 #include <string>
@@ -61,3 +62,4 @@ class MainDialog: public wxDialog
 		wxButton* playBtn;
 
 };
+#endif

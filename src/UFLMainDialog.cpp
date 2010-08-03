@@ -20,6 +20,7 @@
  *  THE SOFTWARE.
  * */
 
+#ifdef GUI
 #include "UFLMainDialog.h"
 #include "UFLUI.h"
 #include <wx/wx.h>
@@ -157,4 +158,4 @@ void MainDialog::do_layout()
 	SetSizer(sizer_1);
 	Layout();
 }
-
+#endif

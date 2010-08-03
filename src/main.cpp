@@ -27,13 +27,18 @@
 
 using namespace std;
 
+#ifdef GUI
 TYFUIUFL *DaUI;
+#endif
 
 int main(int argc, char *argv[])
 {
-	//TYFUIBenchmark *UI = new TYFUIBenchmark();
-	//TYFUIConsole *UI = new TYFUIConsole();
-	//UI->run();
+	#ifdef GUI
 	DaUI = new TYFUIUFL();
 	DaUI->run();
+	#else
+	//TYFUIBenchmark *UI = new TYFUIBenchmark();
+	TYFUIConsole *UI = new TYFUIConsole();
+	UI->run();
+	#endif
 }

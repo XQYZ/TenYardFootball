@@ -20,6 +20,7 @@
  *  THE SOFTWARE.
  * */
 
+#ifdef GUI
 #include "UFLChoiceDialog.h"
 #include <vector>
 #include <string>
@@ -75,3 +76,4 @@ int ChoiceDialog::getSelection()
 	else
 		return -1;
 }
+#endif

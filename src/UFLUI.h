@@ -22,6 +22,7 @@
 
 #pragma once
 
+#ifdef GUI
 #include <string>
 #include "TYFUITemplate.h"
 #include "helper.h"
@@ -60,3 +61,4 @@ class TYFUIUFL : public TYFUITemplate
 		ControlFlag setPlayerControl(TYFTeam* team);
 		TYFGame* GGame() { return this->Game; }
 };
+#endif

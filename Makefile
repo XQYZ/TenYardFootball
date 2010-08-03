@@ -1,7 +1,10 @@
 all: TYF
 
 TYF:
-	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -ggdb -Wall `wx-config --cxxflags --libs`
+	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -ggdb -Wall
+	
+gui:
+	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -ggdb -Wall -DGUI `wx-config --cxxflags --libs`
 	
 release:
 	g++ src/*.cpp -o ./TenYardFootball -ltinyxml -O2 -pipe -march=native `wx-config --cxxflags --libs`

@@ -21,6 +21,7 @@
  * */
 
 #pragma once
+#ifdef GUI
 #include <wx/wx.h>
 #include <wx/image.h>
 #include <vector>
@@ -44,3 +45,4 @@ class ChoiceDialog: public wxDialog
 		wxListBox* choices;
 		wxButton* button_1;
 };
+#endif

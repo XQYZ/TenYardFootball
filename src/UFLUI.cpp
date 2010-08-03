@@ -20,6 +20,7 @@
  *  THE SOFTWARE.
  * */
 
+#ifdef GUI
 #include "UFLUI.h"
 #include "TYFUITemplate.h"
 #include "TYFGame.h"
@@ -495,3 +496,4 @@ ControlFlag TYFUIUFL::setPlayerControl(TYFTeam* team)
 			return CONTROL_COMPUTER;
 	}
 }
+#endif

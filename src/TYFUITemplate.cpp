@@ -33,4 +33,5 @@ TYFUITemplate::TYFUITemplate(void)
 {
 	srand((int)time(NULL));
 	this->Game = new TYFGame(this);
+	this->Game->init();
 }
