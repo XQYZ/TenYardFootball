@@ -36,6 +36,7 @@
 #include <wx/image.h>
 #include "UFLMainDialog.h"
 #include "UFLChoiceDialog.h"
+#include "UFLChoiceDialogPlay.h"
 
 using namespace std;
 
@@ -316,15 +317,28 @@ string TYFUIUFL::printTimes(string name, int count, int max)
  * Displays a Menu and returns the selected item
  * back item is 0 if it is enabled
  * */
-int TYFUIUFL::displayMenu(string title, vector<string> menuItems, bool back)
+int TYFUIUFL::displayMenu(string title, vector<string> menuItems, bool back, bool play)
 {
-	ChoiceDialog *dlg = new ChoiceDialog(NULL, 0, wxString(title.c_str(), wxConvUTF8));
-	dlg->setItems(menuItems);
-	do
-		dlg->ShowModal();
-	while (dlg->getSelection() == -1);
-	
-	return dlg->getSelection() + 1;
+	if (play)
+	{
+		ChoiceDialogPlay *dlg = new ChoiceDialogPlay(NULL, 0, wxString(title.c_str(), wxConvUTF8));
+		dlg->setItems(menuItems);
+		do
+			dlg->ShowModal();
+		while (dlg->getSelection() == -1);
+		
+		return dlg->getSelection() + 1;
+	}
+	else
+	{
+		ChoiceDialog *dlg = new ChoiceDialog(NULL, 0, wxString(title.c_str(), wxConvUTF8));
+		dlg->setItems(menuItems);
+		do
+			dlg->ShowModal();
+		while (dlg->getSelection() == -1);
+		
+		return dlg->getSelection() + 1;
+	}
 }
 
 /*
@@ -352,7 +366,7 @@ OffensePlay TYFUIUFL::pickOffensePlay(TYFTeam* team)
 	int pass;
 	do
 	{
-		formation = this->displayMenu("Choose Offense Formation:", FormationMenu, false);
+		formation = this->displayMenu("Choose Offense Formation:", FormationMenu, false, true);
 		
 		if ((formation == (int)formations.size() + 1) || (formation == (int)formations.size() + 2))
 		{
@@ -361,7 +375,7 @@ OffensePlay TYFUIUFL::pickOffensePlay(TYFTeam* team)
 			YesNoDialog.push_back("Yes");
 			YesNoDialog.push_back("No");
 			if ((info.Ball.Down == 4) || (this->displayMenu("Are you sure you want to Punt/Try for FG now?",
-											YesNoDialog, false)) == 1)
+											YesNoDialog, false, false)) == 1)
 			{
 				if (formation == (int)formations.size() + 1)
 					return OffensePlay(NULL, PLAY_PUNT, NULL);
@@ -393,7 +407,7 @@ OffensePlay TYFUIUFL::pickOffensePlay(TYFTeam* team)
 				ss << "Pass to " << receivers[i]->getFullName();
 				PlayMenu.push_back(ss.str());
 			}
-			play = this->displayMenu("Choose your play:", PlayMenu, true);
+			play = this->displayMenu("Choose your play:", PlayMenu, true, true);
 			if (play == 0)
 				formation = 0;
 			else
@@ -409,7 +423,7 @@ OffensePlay TYFUIUFL::pickOffensePlay(TYFTeam* team)
 					PassMenu.push_back("Medium Pass");
 					PassMenu.push_back("Long Pass");
 					
-					pass = this->displayMenu("Choose your pass length:", PassMenu, true);
+					pass = this->displayMenu("Choose your pass length:", PassMenu, true, true);
 					
 					if (pass == 0)
 						play = 0;
@@ -445,7 +459,7 @@ DefensePlay TYFUIUFL::pickDefensePlay(TYFTeam* team)
 	int play;
 	do
 	{
-		formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false);
+		formation = this->displayMenu("Choose Defensive Formation:", FormationMenu, false, true);
 		if (FormationMenu[formation-1] == "Punt Return")
 			return DefensePlay(formations[formation-1], DPLAY_PUNTRETURN);
 		else if (FormationMenu[formation-1] == "Field Goal Block")
@@ -453,7 +467,7 @@ DefensePlay TYFUIUFL::pickDefensePlay(TYFTeam* team)
 		
 		while (formation != 0)
 		{
-			play = this->displayMenu("Choose Defensive Play:", PlayMenu, true);
+			play = this->displayMenu("Choose Defensive Play:", PlayMenu, true, true);
 			
 			if (play == 0)
 				formation = 0;
@@ -482,7 +496,7 @@ ControlFlag TYFUIUFL::setPlayerControl(TYFTeam* team)
 	ControlMenu.push_back("Defensive Coach");
 	stringstream ss;
 	ss << "Control Setting for " << team->getName() << ":";
-	switch (this->displayMenu(ss.str(), ControlMenu, false))
+	switch (this->displayMenu(ss.str(), ControlMenu, false, false))
 	{
 		case 1:
 			return CONTROL_COMPUTER;

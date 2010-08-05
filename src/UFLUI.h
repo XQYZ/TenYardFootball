@@ -36,7 +36,7 @@ class TYFUIUFL : public TYFUITemplate
 	private:
 		string getBallPosition();
 		string header;
-		int displayMenu(string title, vector<string> menuItems, bool back);
+		int displayMenu(string title, vector<string> menuItems, bool back, bool play);
 		MainDialog* dialog;
 		bool choice;
 	public:
