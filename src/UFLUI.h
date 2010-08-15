@@ -39,6 +39,7 @@ class TYFUIUFL : public TYFUITemplate
 		int displayMenu(string title, vector<string> menuItems, bool back, bool play);
 		MainDialog* dialog;
 		bool choice;
+		vector<string> teamFiles;
 	public:
 		TYFUIUFL(void);
 		void beginPlay();

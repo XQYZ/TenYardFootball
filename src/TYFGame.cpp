@@ -630,15 +630,15 @@ void TYFGame::doFieldGoal()
 		good = (x < 98);
 	else if (dist < 30)
 		good = (x < 92);
-	else if (dist < 40)
+	else if (dist < 35)
 		good = (x < 80 + r/2);
-	else if (dist < 50)
+	else if (dist < 40)
 		good = (x < 60 + r);
-	else if (dist < 55)
+	else if (dist < 45)
 		good = (x < 45 + r*2);
-	else if (dist < 60)
+	else if (dist < 50)
 		good = (x < 18 + r*2);
-	else if (dist < 70)
+	else if (dist < 60)
 		good = (x < 8 + r*2);
 	// anything longer is always failed. I mean seriously who would even try?
 	

@@ -38,6 +38,11 @@
 #include "UFLChoiceDialog.h"
 #include "UFLChoiceDialogPlay.h"
 
+#include <stddef.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <dirent.h>
+
 using namespace std;
 
 class MyApp: public wxApp {
@@ -83,6 +88,26 @@ void TYFUIUFL::run()
 {
 	int argc = 0;
 	char** argv= NULL;
+     
+	DIR *dp;
+	struct dirent *ep;
+
+	dp = opendir ("./teams/");
+	if (dp != NULL)
+	{
+		ep = readdir (dp);
+		do
+		{
+			puts (ep->d_name);
+			if ((ep->d_name != ".") && (ep->d_name != ".."))
+				teamFiles.push_back(ep->d_name);
+			ep = readdir (dp);
+		} while (ep);
+		(void) closedir (dp);
+	}
+	else
+		perror ("Couldn't open the directory");
+	
 	wxEntry(argc, argv);
 }
 
