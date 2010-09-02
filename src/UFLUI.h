@@ -56,6 +56,7 @@ class TYFUIUFL : public TYFUITemplate
 		void callTwoMinuteWarning();
 		void callOutOfBounds();
 		void nextPlay(MainDialog* dialog);
+		string setTeam();
 		string printTimes(string name, int count, int max);
 		OffensePlay pickOffensePlay(TYFTeam* team);
 		DefensePlay pickDefensePlay(TYFTeam* team);

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <root>
-  <shortname>ARK</shortname>
+  <shortname>SL</shortname>
   <player>
-    <name>McClendon</name>
-    <firstname>Deke</firstname>
+    <name>Ginger</name>
+    <firstname>Kip</firstname>
     <position>QB</position>
     <years>0</years>
-    <durability>3</durability>
-    <power>5</power>
-    <speed>3</speed>
-    <run>4</run>
-    <pass>5</pass>
+    <durability>1</durability>
+    <power>3</power>
+    <speed>2</speed>
+    <run>2</run>
+    <pass>4</pass>
     <catch>0</catch>
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
@@ -23,39 +23,60 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Steels</name>
-    <firstname>Markish</firstname>
+    <name>Apple</name>
+    <firstname>Levar</firstname>
     <position>QB</position>
+    <years>0</years>
+    <durability>5</durability>
+    <power>2</power>
+    <speed>5</speed>
+    <run>4</run>
+    <pass>3</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Reddick</name>
+    <firstname>Woody</firstname>
+    <position>QB</position>
+    <years>0</years>
+    <durability>5</durability>
+    <power>5</power>
+    <speed>1</speed>
+    <run>2</run>
+    <pass>1</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Smythe</name>
+    <firstname>C J</firstname>
+    <position>FB</position>
     <years>0</years>
     <durability>2</durability>
-    <power>3</power>
-    <speed>5</speed>
-    <run>3</run>
-    <pass>1</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Templin</name>
-    <firstname>Ardell</firstname>
-    <position>QB</position>
-    <years>0</years>
-    <durability>4</durability>
-    <power>1</power>
+    <power>5</power>
     <speed>1</speed>
     <run>3</run>
-    <pass>1</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
+    <pass>2</pass>
+    <catch>3</catch>
+    <runBlock>3</runBlock>
+    <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
@@ -65,16 +86,37 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Baer</name>
-    <firstname>Bart</firstname>
+    <name>Erin</name>
+    <firstname>Moose</firstname>
     <position>FB</position>
     <years>0</years>
     <durability>3</durability>
-    <power>3</power>
-    <speed>4</speed>
-    <run>2</run>
+    <power>4</power>
+    <speed>3</speed>
+    <run>3</run>
     <pass>1</pass>
     <catch>4</catch>
+    <runBlock>2</runBlock>
+    <passBlock>2</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Roads</name>
+    <firstname>Geron</firstname>
+    <position>HB</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>2</power>
+    <speed>2</speed>
+    <run>4</run>
+    <pass>1</pass>
+    <catch>3</catch>
     <runBlock>2</runBlock>
     <passBlock>1</passBlock>
     <runDef>0</runDef>
@@ -86,18 +128,18 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Thorpe</name>
-    <firstname>Geron</firstname>
-    <position>FB</position>
+    <name>Langley</name>
+    <firstname>Rollie</firstname>
+    <position>HB</position>
     <years>0</years>
     <durability>4</durability>
-    <power>4</power>
-    <speed>2</speed>
+    <power>1</power>
+    <speed>3</speed>
     <run>3</run>
-    <pass>1</pass>
-    <catch>1</catch>
+    <pass>2</pass>
+    <catch>2</catch>
     <runBlock>3</runBlock>
-    <passBlock>1</passBlock>
+    <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
@@ -107,100 +149,79 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Dison</name>
-    <firstname>Vladimir</firstname>
+    <name>Springer</name>
+    <firstname>Norm</firstname>
     <position>HB</position>
     <years>0</years>
     <durability>3</durability>
-    <power>1</power>
+    <power>3</power>
     <speed>5</speed>
     <run>3</run>
     <pass>2</pass>
     <catch>2</catch>
-    <runBlock>3</runBlock>
-    <passBlock>4</passBlock>
+    <runBlock>2</runBlock>
+    <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
     <punt>0</punt>
     <kick>0</kick>
     <puntRet>0</puntRet>
-    <kickRet>1</kickRet>
+    <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Thweatt</name>
-    <firstname>Ahmed</firstname>
+    <name>L'Amour</name>
+    <firstname>Charley</firstname>
     <position>HB</position>
     <years>0</years>
-    <durability>1</durability>
-    <power>3</power>
+    <durability>2</durability>
+    <power>4</power>
     <speed>2</speed>
-    <run>4</run>
-    <pass>1</pass>
+    <run>1</run>
+    <pass>3</pass>
     <catch>2</catch>
     <runBlock>1</runBlock>
-    <passBlock>1</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>1</puntRet>
-    <kickRet>2</kickRet>
-  </player>
-  <player>
-    <name>Odell</name>
-    <firstname>Mac</firstname>
-    <position>HB</position>
-    <years>0</years>
-    <durability>3</durability>
-    <power>5</power>
-    <speed>2</speed>
-    <run>5</run>
-    <pass>1</pass>
-    <catch>1</catch>
-    <runBlock>1</runBlock>
-    <passBlock>1</passBlock>
+    <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
     <punt>0</punt>
     <kick>0</kick>
     <puntRet>3</puntRet>
-    <kickRet>4</kickRet>
+    <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Doran</name>
-    <firstname>Eric</firstname>
-    <position>HB</position>
+    <name>Coffey</name>
+    <firstname>Anson</firstname>
+    <position>WR</position>
     <years>0</years>
-    <durability>4</durability>
+    <durability>3</durability>
     <power>3</power>
-    <speed>4</speed>
-    <run>1</run>
-    <pass>2</pass>
-    <catch>3</catch>
-    <runBlock>2</runBlock>
-    <passBlock>3</passBlock>
+    <speed>2</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>4</catch>
+    <runBlock>3</runBlock>
+    <passBlock>0</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
     <punt>0</punt>
     <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
+    <puntRet>2</puntRet>
+    <kickRet>1</kickRet>
   </player>
   <player>
-    <name>Sutherland</name>
-    <firstname>Ahmed</firstname>
+    <name>Hutton</name>
+    <firstname>Shake</firstname>
     <position>WR</position>
     <years>0</years>
-    <durability>4</durability>
+    <durability>3</durability>
     <power>3</power>
-    <speed>3</speed>
+    <speed>4</speed>
     <run>0</run>
     <pass>0</pass>
-    <catch>4</catch>
+    <catch>5</catch>
     <runBlock>1</runBlock>
     <passBlock>0</passBlock>
     <runDef>0</runDef>
@@ -212,16 +233,16 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Quinton</name>
-    <firstname>Garth</firstname>
+    <name>Beyer</name>
+    <firstname>Otha</firstname>
     <position>WR</position>
     <years>0</years>
-    <durability>2</durability>
-    <power>5</power>
-    <speed>2</speed>
+    <durability>1</durability>
+    <power>2</power>
+    <speed>3</speed>
     <run>0</run>
     <pass>0</pass>
-    <catch>3</catch>
+    <catch>5</catch>
     <runBlock>1</runBlock>
     <passBlock>0</passBlock>
     <runDef>0</runDef>
@@ -230,79 +251,16 @@
     <punt>0</punt>
     <kick>0</kick>
     <puntRet>0</puntRet>
-    <kickRet>3</kickRet>
+    <kickRet>1</kickRet>
   </player>
   <player>
-    <name>Headrick</name>
-    <firstname>Jerome</firstname>
+    <name>Grace</name>
+    <firstname>Pat</firstname>
     <position>WR</position>
     <years>0</years>
     <durability>3</durability>
-    <power>3</power>
-    <speed>4</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>4</catch>
-    <runBlock>3</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Deason</name>
-    <firstname>Hodge</firstname>
-    <position>WR</position>
-    <years>0</years>
-    <durability>1</durability>
-    <power>1</power>
-    <speed>2</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>3</catch>
-    <runBlock>2</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Stark</name>
-    <firstname>Arman</firstname>
-    <position>WR</position>
-    <years>0</years>
-    <durability>1</durability>
-    <power>3</power>
-    <speed>2</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>3</catch>
-    <runBlock>2</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Dover</name>
-    <firstname>Harrison</firstname>
-    <position>WR</position>
-    <years>0</years>
-    <durability>5</durability>
-    <power>5</power>
-    <speed>3</speed>
+    <power>2</power>
+    <speed>1</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>2</catch>
@@ -317,58 +275,16 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Stapleton</name>
-    <firstname>Sputnik</firstname>
-    <position>TE</position>
+    <name>Whitby</name>
+    <firstname>Lafe</firstname>
+    <position>WR</position>
     <years>0</years>
-    <durability>4</durability>
-    <power>1</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>5</catch>
-    <runBlock>4</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Mitchell</name>
-    <firstname>Arthur</firstname>
-    <position>TE</position>
-    <years>0</years>
-    <durability>5</durability>
-    <power>3</power>
-    <speed>4</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>1</catch>
-    <runBlock>4</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Click</name>
-    <firstname>Panco</firstname>
-    <position>TE</position>
-    <years>0</years>
-    <durability>3</durability>
+    <durability>2</durability>
     <power>3</power>
     <speed>3</speed>
     <run>0</run>
     <pass>0</pass>
-    <catch>1</catch>
+    <catch>2</catch>
     <runBlock>2</runBlock>
     <passBlock>0</passBlock>
     <runDef>0</runDef>
@@ -380,17 +296,143 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Fearson</name>
-    <firstname>Cordell</firstname>
+    <name>Angel</name>
+    <firstname>Blake</firstname>
+    <position>WR</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>3</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>2</catch>
+    <runBlock>2</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Girten</name>
+    <firstname>Howton</firstname>
+    <position>TE</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>3</power>
+    <speed>5</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>1</catch>
+    <runBlock>4</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Gartman</name>
+    <firstname>Eldron</firstname>
+    <position>TE</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>2</power>
+    <speed>4</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>1</catch>
+    <runBlock>3</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Gipson</name>
+    <firstname>Stanford</firstname>
+    <position>TE</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>2</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>1</catch>
+    <runBlock>1</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Gross</name>
+    <firstname>Ozzie</firstname>
     <position>CE</position>
     <years>0</years>
-    <durability>1</durability>
-    <power>4</power>
+    <durability>4</durability>
+    <power>2</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>4</runBlock>
+    <passBlock>2</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Torch</name>
+    <firstname>Shaun</firstname>
+    <position>CE</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>1</power>
+    <speed>2</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>2</runBlock>
+    <passBlock>2</passBlock>
+    <runDef>0</runDef>
+    <passDef>0</passDef>
+    <blitz>0</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Buford</name>
+    <firstname>Max</firstname>
+    <position>OG</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>1</power>
     <speed>5</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
-    <runBlock>5</runBlock>
+    <runBlock>4</runBlock>
     <passBlock>4</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
@@ -401,17 +443,17 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Frey</name>
-    <firstname>Vic</firstname>
-    <position>CE</position>
+    <name>James</name>
+    <firstname>Flint</firstname>
+    <position>OG</position>
     <years>0</years>
-    <durability>4</durability>
-    <power>2</power>
-    <speed>3</speed>
+    <durability>3</durability>
+    <power>4</power>
+    <speed>4</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
-    <runBlock>4</runBlock>
+    <runBlock>2</runBlock>
     <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
@@ -422,39 +464,18 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Cinders</name>
-    <firstname>Golden</firstname>
+    <name>Sisk</name>
+    <firstname>Richie</firstname>
     <position>OG</position>
     <years>0</years>
-    <durability>3</durability>
-    <power>2</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>4</runBlock>
-    <passBlock>3</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Swane</name>
-    <firstname>Boone</firstname>
-    <position>OG</position>
-    <years>0</years>
-    <durability>3</durability>
+    <durability>2</durability>
     <power>4</power>
-    <speed>3</speed>
+    <speed>4</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
     <runBlock>2</runBlock>
-    <passBlock>3</passBlock>
+    <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
@@ -464,38 +485,17 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Mix</name>
-    <firstname>Reston</firstname>
-    <position>OG</position>
-    <years>0</years>
-    <durability>4</durability>
-    <power>4</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>1</runBlock>
-    <passBlock>3</passBlock>
-    <runDef>0</runDef>
-    <passDef>0</passDef>
-    <blitz>0</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>McElroy</name>
-    <firstname>Loren</firstname>
+    <name>Hagar</name>
+    <firstname>Derward</firstname>
     <position>OT</position>
     <years>0</years>
     <durability>4</durability>
     <power>1</power>
-    <speed>5</speed>
+    <speed>3</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
-    <runBlock>3</runBlock>
+    <runBlock>4</runBlock>
     <passBlock>2</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
@@ -506,18 +506,18 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Gale</name>
-    <firstname>Gato</firstname>
+    <name>Talbert</name>
+    <firstname>Reb</firstname>
     <position>OT</position>
     <years>0</years>
-    <durability>4</durability>
-    <power>2</power>
-    <speed>4</speed>
+    <durability>2</durability>
+    <power>3</power>
+    <speed>3</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
     <runBlock>2</runBlock>
-    <passBlock>2</passBlock>
+    <passBlock>4</passBlock>
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
@@ -527,13 +527,13 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Bannon</name>
-    <firstname>Vito</firstname>
+    <name>Rymen</name>
+    <firstname>Garrett</firstname>
     <position>OT</position>
     <years>0</years>
     <durability>5</durability>
-    <power>4</power>
-    <speed>3</speed>
+    <power>3</power>
+    <speed>1</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
@@ -548,53 +548,11 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Landrum</name>
-    <firstname>Davey</firstname>
+    <name>Staggs</name>
+    <firstname>Ev</firstname>
     <position>DE</position>
     <years>0</years>
-    <durability>2</durability>
-    <power>3</power>
-    <speed>4</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>5</runDef>
-    <passDef>0</passDef>
-    <blitz>5</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Hurry</name>
-    <firstname>Jody</firstname>
-    <position>DE</position>
-    <years>0</years>
-    <durability>4</durability>
-    <power>3</power>
-    <speed>5</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>3</runDef>
-    <passDef>0</passDef>
-    <blitz>3</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Chung</name>
-    <firstname>Ringo</firstname>
-    <position>DE</position>
-    <years>0</years>
-    <durability>4</durability>
+    <durability>5</durability>
     <power>4</power>
     <speed>3</speed>
     <run>0</run>
@@ -611,13 +569,118 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Welch</name>
-    <firstname>J J</firstname>
+    <name>Webber</name>
+    <firstname>Quince</firstname>
     <position>DE</position>
     <years>0</years>
     <durability>4</durability>
     <power>1</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>4</runDef>
+    <passDef>0</passDef>
+    <blitz>3</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Ivey</name>
+    <firstname>Jackie</firstname>
+    <position>DE</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>3</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>5</runDef>
+    <passDef>0</passDef>
+    <blitz>2</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Hearn</name>
+    <firstname>Franco</firstname>
+    <position>DE</position>
+    <years>0</years>
+    <durability>2</durability>
+    <power>4</power>
     <speed>1</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>1</runDef>
+    <passDef>0</passDef>
+    <blitz>1</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Bryant</name>
+    <firstname>Hudson</firstname>
+    <position>DT</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>4</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>4</runDef>
+    <passDef>0</passDef>
+    <blitz>2</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Sage</name>
+    <firstname>Kim</firstname>
+    <position>DT</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>3</power>
+    <speed>1</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>5</runDef>
+    <passDef>0</passDef>
+    <blitz>2</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Hoskins</name>
+    <firstname>Orval</firstname>
+    <position>DT</position>
+    <years>0</years>
+    <durability>5</durability>
+    <power>2</power>
+    <speed>2</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
@@ -632,32 +695,32 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Tucker</name>
-    <firstname>Ellis</firstname>
-    <position>DT</position>
+    <name>Neal</name>
+    <firstname>Ross</firstname>
+    <position>LB</position>
     <years>0</years>
     <durability>4</durability>
     <power>4</power>
-    <speed>3</speed>
+    <speed>5</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
-    <runDef>3</runDef>
-    <passDef>0</passDef>
-    <blitz>4</blitz>
+    <runDef>4</runDef>
+    <passDef>5</passDef>
+    <blitz>2</blitz>
     <punt>0</punt>
     <kick>0</kick>
     <puntRet>0</puntRet>
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Sidney</name>
-    <firstname>Hawk</firstname>
-    <position>DT</position>
+    <name>Elliott</name>
+    <firstname>Tully</firstname>
+    <position>LB</position>
     <years>0</years>
-    <durability>4</durability>
+    <durability>3</durability>
     <power>2</power>
     <speed>3</speed>
     <run>0</run>
@@ -665,8 +728,8 @@
     <catch>0</catch>
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
-    <runDef>2</runDef>
-    <passDef>0</passDef>
+    <runDef>4</runDef>
+    <passDef>3</passDef>
     <blitz>5</blitz>
     <punt>0</punt>
     <kick>0</kick>
@@ -674,181 +737,181 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Van Camp</name>
+    <name>Price</name>
+    <firstname>Clark</firstname>
+    <position>LB</position>
+    <years>0</years>
+    <durability>1</durability>
+    <power>1</power>
+    <speed>5</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>2</runDef>
+    <passDef>4</passDef>
+    <blitz>2</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Standard</name>
+    <firstname>Frank</firstname>
+    <position>LB</position>
+    <years>0</years>
+    <durability>1</durability>
+    <power>4</power>
+    <speed>2</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>1</runDef>
+    <passDef>4</passDef>
+    <blitz>3</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Buckley</name>
+    <firstname>Jess</firstname>
+    <position>LB</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>3</power>
+    <speed>2</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>1</runDef>
+    <passDef>1</passDef>
+    <blitz>3</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Beaumont</name>
+    <firstname>Derward</firstname>
+    <position>LB</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>2</power>
+    <speed>1</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>2</runDef>
+    <passDef>1</passDef>
+    <blitz>3</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Lucas</name>
+    <firstname>Keifer</firstname>
+    <position>LB</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>2</power>
+    <speed>2</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>1</runDef>
+    <passDef>1</passDef>
+    <blitz>2</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Lucas</name>
+    <firstname>Rubin</firstname>
+    <position>CB</position>
+    <years>0</years>
+    <durability>3</durability>
+    <power>2</power>
+    <speed>3</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>3</runDef>
+    <passDef>5</passDef>
+    <blitz>2</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Hoy</name>
+    <firstname>Rudolfo</firstname>
+    <position>CB</position>
+    <years>0</years>
+    <durability>4</durability>
+    <power>1</power>
+    <speed>1</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>3</runDef>
+    <passDef>3</passDef>
+    <blitz>1</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Ohmer</name>
+    <firstname>Thaddeus</firstname>
+    <position>CB</position>
+    <years>0</years>
+    <durability>5</durability>
+    <power>1</power>
+    <speed>4</speed>
+    <run>0</run>
+    <pass>0</pass>
+    <catch>0</catch>
+    <runBlock>0</runBlock>
+    <passBlock>0</passBlock>
+    <runDef>1</runDef>
+    <passDef>3</passDef>
+    <blitz>1</blitz>
+    <punt>0</punt>
+    <kick>0</kick>
+    <puntRet>0</puntRet>
+    <kickRet>0</kickRet>
+  </player>
+  <player>
+    <name>Winn</name>
     <firstname>Mario</firstname>
-    <position>DT</position>
-    <years>0</years>
-    <durability>5</durability>
-    <power>4</power>
-    <speed>1</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>1</runDef>
-    <passDef>0</passDef>
-    <blitz>1</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Karnes</name>
-    <firstname>Breck</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>4</durability>
-    <power>4</power>
-    <speed>2</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>4</runDef>
-    <passDef>2</passDef>
-    <blitz>4</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Pollard</name>
-    <firstname>Dee</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>3</durability>
-    <power>1</power>
-    <speed>1</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>3</runDef>
-    <passDef>5</passDef>
-    <blitz>5</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Eberhard</name>
-    <firstname>Louis</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>3</durability>
-    <power>3</power>
-    <speed>4</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>4</runDef>
-    <passDef>2</passDef>
-    <blitz>4</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Harness</name>
-    <firstname>Douglas</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>1</durability>
-    <power>1</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>5</runDef>
-    <passDef>1</passDef>
-    <blitz>3</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Rusher</name>
-    <firstname>Lloyd</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>1</durability>
-    <power>4</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>1</runDef>
-    <passDef>4</passDef>
-    <blitz>4</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Tennison</name>
-    <firstname>Jerome</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>2</durability>
-    <power>2</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>1</runDef>
-    <passDef>2</passDef>
-    <blitz>3</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Sutherland</name>
-    <firstname>Boyd</firstname>
-    <position>LB</position>
-    <years>0</years>
-    <durability>4</durability>
-    <power>2</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>3</runDef>
-    <passDef>2</passDef>
-    <blitz>3</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Seagraves</name>
-    <firstname>Del</firstname>
     <position>CB</position>
     <years>0</years>
-    <durability>2</durability>
+    <durability>3</durability>
     <power>3</power>
-    <speed>5</speed>
+    <speed>2</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
@@ -856,40 +919,40 @@
     <passBlock>0</passBlock>
     <runDef>2</runDef>
     <passDef>3</passDef>
-    <blitz>1</blitz>
+    <blitz>4</blitz>
     <punt>0</punt>
     <kick>0</kick>
-    <puntRet>0</puntRet>
+    <puntRet>3</puntRet>
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Cunningham</name>
-    <firstname>Tito</firstname>
-    <position>CB</position>
+    <name>Ivanesevic</name>
+    <firstname>Erwin</firstname>
+    <position>SA</position>
     <years>0</years>
-    <durability>4</durability>
-    <power>3</power>
-    <speed>2</speed>
+    <durability>2</durability>
+    <power>4</power>
+    <speed>3</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
-    <runDef>2</runDef>
+    <runDef>1</runDef>
     <passDef>5</passDef>
     <blitz>1</blitz>
     <punt>0</punt>
     <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>1</kickRet>
+    <puntRet>3</puntRet>
+    <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Britt</name>
-    <firstname>Phillip</firstname>
-    <position>CB</position>
+    <name>Poole</name>
+    <firstname>Nolen</firstname>
+    <position>SA</position>
     <years>0</years>
-    <durability>3</durability>
-    <power>1</power>
+    <durability>1</durability>
+    <power>3</power>
     <speed>5</speed>
     <run>0</run>
     <pass>0</pass>
@@ -897,111 +960,48 @@
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
     <runDef>1</runDef>
-    <passDef>3</passDef>
-    <blitz>1</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Sneed</name>
-    <firstname>Elson</firstname>
-    <position>CB</position>
-    <years>0</years>
-    <durability>5</durability>
-    <power>4</power>
-    <speed>3</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>1</runDef>
-    <passDef>1</passDef>
-    <blitz>1</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>1</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Beckley</name>
-    <firstname>Leonard</firstname>
-    <position>SA</position>
-    <years>0</years>
-    <durability>3</durability>
-    <power>4</power>
-    <speed>2</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>2</runDef>
     <passDef>5</passDef>
     <blitz>3</blitz>
     <punt>0</punt>
     <kick>0</kick>
     <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
+    <kickRet>2</kickRet>
   </player>
   <player>
-    <name>Campanelli</name>
-    <firstname>Hal</firstname>
-    <position>SA</position>
-    <years>0</years>
-    <durability>4</durability>
-    <power>3</power>
-    <speed>4</speed>
-    <run>0</run>
-    <pass>0</pass>
-    <catch>0</catch>
-    <runBlock>0</runBlock>
-    <passBlock>0</passBlock>
-    <runDef>2</runDef>
-    <passDef>4</passDef>
-    <blitz>3</blitz>
-    <punt>0</punt>
-    <kick>0</kick>
-    <puntRet>0</puntRet>
-    <kickRet>0</kickRet>
-  </player>
-  <player>
-    <name>Ryder</name>
-    <firstname>Frankie</firstname>
+    <name>Ideal</name>
+    <firstname>Tap</firstname>
     <position>SA</position>
     <years>0</years>
     <durability>2</durability>
-    <power>1</power>
+    <power>5</power>
     <speed>2</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
-    <runDef>2</runDef>
+    <runDef>1</runDef>
     <passDef>4</passDef>
     <blitz>3</blitz>
     <punt>0</punt>
     <kick>0</kick>
-    <puntRet>0</puntRet>
+    <puntRet>5</puntRet>
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Mason</name>
-    <firstname>Alza</firstname>
+    <name>Kirksey</name>
+    <firstname>Hudie</firstname>
     <position>SA</position>
     <years>0</years>
     <durability>3</durability>
     <power>3</power>
-    <speed>3</speed>
+    <speed>1</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
     <runBlock>0</runBlock>
     <passBlock>0</passBlock>
-    <runDef>1</runDef>
+    <runDef>2</runDef>
     <passDef>2</passDef>
     <blitz>2</blitz>
     <punt>0</punt>
@@ -1010,13 +1010,13 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Dalton</name>
-    <firstname>Brad</firstname>
+    <name>Scarbro</name>
+    <firstname>Jake</firstname>
     <position>KI</position>
     <years>0</years>
     <durability>2</durability>
     <power>1</power>
-    <speed>3</speed>
+    <speed>4</speed>
     <run>0</run>
     <pass>0</pass>
     <catch>0</catch>
@@ -1031,11 +1031,11 @@
     <kickRet>0</kickRet>
   </player>
   <player>
-    <name>Crafton</name>
-    <firstname>Vic</firstname>
+    <name>Rudi</name>
+    <firstname>Boyce</firstname>
     <position>PU</position>
     <years>0</years>
-    <durability>1</durability>
+    <durability>2</durability>
     <power>2</power>
     <speed>1</speed>
     <run>0</run>
@@ -1046,7 +1046,7 @@
     <runDef>0</runDef>
     <passDef>0</passDef>
     <blitz>0</blitz>
-    <punt>1</punt>
+    <punt>3</punt>
     <kick>0</kick>
     <puntRet>0</puntRet>
     <kickRet>0</kickRet>

@@ -25,6 +25,7 @@
 #include "helper.h"
 #include "TYFTeam.h"
 #include "TYFGame.h"
+#include <string>
 
 enum PASS_FLAG { PASS_OK, PASS_INTERCEPTED, PASS_INCOMPLETE };
 enum PLAY_RESULT { PLAY_NOTHING, PLAY_FIRST_DOWN, PLAY_TOUCHDOWN, PLAY_TOUCHDOWN_XP, PLAY_SAFETY, PLAY_TURNOVER_ON_DOWNS };
@@ -51,6 +52,7 @@ class TYFUITemplate
 		virtual void playReturn(TYFPlayer* returner, int distance, bool faircatch) {};
 		virtual void callTwoMinuteWarning() {};
 		virtual void callOutOfBounds() {};
+		virtual string setTeam() { return "Arkansas Hogs"; };
 		virtual OffensePlay pickOffensePlay(TYFTeam* team) { return OffensePlay(NULL, PLAY_PASS_SHORT, team->getRandomReceiver()); };
 		virtual DefensePlay pickDefensePlay(TYFTeam* team) { return DefensePlay(NULL, DPLAY_PASSBLOCK); };
 		virtual ControlFlag setPlayerControl(TYFTeam* team) { return CONTROL_COMPUTER; };

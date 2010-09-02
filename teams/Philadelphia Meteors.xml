@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <root>
+  <shortname>PHI</shortname>
   <player>
     <name>Bunch</name>
     <firstname>Ramon</firstname>

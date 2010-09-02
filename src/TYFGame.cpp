@@ -56,10 +56,6 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 	this->needKickoff = false;
 	this->needPunt = false;
 	
-	// init teams
-	this->Teams[0] = new TYFTeam("Chicago Blazers", "CHI");
-	this->Teams[1] = new TYFTeam("San Francisco Dragons", "SF");
-	
 	this->UI = UI;
 	
 	//                                             name,pass,run,blz,  CB,LB,SA,DE,DT
@@ -89,6 +85,10 @@ TYFGame::TYFGame(TYFUITemplate *UI)
 
 void TYFGame::init()
 {
+	// init teams
+	this->Teams[0] = new TYFTeam(this->UI->setTeam());
+	this->Teams[1] = new TYFTeam(this->UI->setTeam());
+	
 	this->Teams[0]->setController(this->UI->setPlayerControl(this->Teams[0]));
 	this->Teams[1]->setController(this->UI->setPlayerControl(this->Teams[1]));
 }

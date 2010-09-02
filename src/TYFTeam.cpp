@@ -30,7 +30,7 @@ using namespace std;
 /*
  * create a team
  * */
-TYFTeam::TYFTeam(string name, string shortname)
+TYFTeam::TYFTeam(string name)
 {
 	string filename = "teams/";
 	filename.append(name);
@@ -44,7 +44,6 @@ TYFTeam::TYFTeam(string name, string shortname)
 	for (int i = 0; i <= 4; i++)
 		this->scoreQuarter[i] = 0;
 	this->name = name;
-	this->shortname = shortname;
 }
 
 /*
@@ -79,6 +78,8 @@ void TYFTeam::loadFromFile(string filename)
 		pRoot = XMLdoc.FirstChildElement("root");
 		if ( pRoot )
 		{
+			this->shortname = pRoot->FirstChildElement("shortname")->GetText();
+			
 			// Parse parameters
 			pParm = pRoot->FirstChildElement("player");
 			while ( pParm )

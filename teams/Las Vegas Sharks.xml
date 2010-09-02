@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <root>
+  <shortname>LV</shortname>
   <player>
     <name>Castle</name>
     <firstname>Tolbert</firstname>

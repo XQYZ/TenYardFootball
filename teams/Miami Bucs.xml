@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <root>
+  <shortname>MIA</shortname>
   <player>
     <name>Stilson</name>
     <firstname>Arthur</firstname>

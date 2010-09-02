@@ -79,7 +79,7 @@ class TYFTeam
 		string shortname;
 		ControlFlag controlled;
 	public:
-		TYFTeam(string name, string shortname);
+		TYFTeam(string name);
 		void setController(ControlFlag controlled);
 		~TYFTeam(void);
 		vector<TYFPlayer* > Players;

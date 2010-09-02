@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <root>
+  <shortname>BOS</shortname>
   <player>
     <name>Brighton</name>
     <firstname>Niles</firstname>

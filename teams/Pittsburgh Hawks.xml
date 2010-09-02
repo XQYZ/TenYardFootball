@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <root>
+  <shortname>PIT</shortname>
   <player>
     <name>Farris</name>
     <firstname>Jimbo</firstname>

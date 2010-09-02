@@ -42,6 +42,12 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <iostream>
+#include <string>
+#include <cstring>
+
+#include <libgen.h>
+#include <stdlib.h> 
 
 using namespace std;
 
@@ -98,9 +104,13 @@ void TYFUIUFL::run()
 		ep = readdir (dp);
 		do
 		{
-			puts (ep->d_name);
-			if ((ep->d_name != ".") && (ep->d_name != ".."))
-				teamFiles.push_back(ep->d_name);
+			stringstream ss;
+			ss << ep->d_name;
+			string::size_type idx = ss.str().find('.');
+			if ((ss.str() != ".") && (ss.str() != ".."))
+			{
+				teamFiles.push_back(ss.str().substr(0, idx));
+			}
 			ep = readdir (dp);
 		} while (ep);
 		(void) closedir (dp);
@@ -534,5 +544,15 @@ ControlFlag TYFUIUFL::setPlayerControl(TYFTeam* team)
 		default:
 			return CONTROL_COMPUTER;
 	}
+}
+
+/*
+ * Ask the Player about the team
+ * */
+string TYFUIUFL::setTeam()
+{
+	stringstream ss;
+	ss << "Select Team:";
+	return this->teamFiles[this->displayMenu(ss.str(), this->teamFiles, false, false) - 1];
 }
 #endif

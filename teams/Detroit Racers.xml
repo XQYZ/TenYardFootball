@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <root>
+  <shortname>DET</shortname>
   <player>
     <name>Mace</name>
     <firstname>Jamie</firstname>
